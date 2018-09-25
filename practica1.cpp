@@ -27,8 +27,8 @@ void P1_Inicializar(  )
 {
    cout << "Creando objetos de la práctica 1 .... " << flush ;
 
-   objeto[0] = new Cubo();
-   objeto[1] = new Tetraedro();
+   objeto[0] = new Tetraedro();
+   objeto[1] = new Cubo();
 
    cout << "hecho." << endl << flush ;
 }

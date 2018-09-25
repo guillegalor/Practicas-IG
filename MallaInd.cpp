@@ -80,8 +80,7 @@ void MallaInd::visualizarGL( ContextoVis & cv )
         glPolygonMode (GL_FRONT_AND_BACK, mode);
 
         if (cv.usarVBOs)
-            	1;
-                // visualizarDE_VBOs (cv);
+                visualizarDE_VBOs (cv);
         else
                 visualizarDE_MI (cv);
 
@@ -90,7 +89,7 @@ void MallaInd::visualizarGL( ContextoVis & cv )
 
 // *****************************************************************************
 
-Cubo::Cubo(Tupla3f main_corner, unsigned edge_size)
+Cubo::Cubo(Tupla3f main_corner, float edge_size)
 :  MallaInd ("malla cubo")
 {
    // Inicialización de vertices del cubo
@@ -131,9 +130,32 @@ Cubo::Cubo()
 {}
 // *****************************************************************************
 
-Tetraedro::Tetraedro()
+Tetraedro::Tetraedro(Tupla3f center, float edge_size)
 :  MallaInd( "malla tetraedro")
 {
+        tabla_verts = {
+                Tupla3f (center(0)+ 1*edge_size/2, center(1), center(2) - 1/sqrt(2)*edge_size/2),
+                Tupla3f (center(0)- 1*edge_size/2, center(1), center(2) - 1/sqrt(2)*edge_size/2),
+                Tupla3f (center(0), center(1)+ 1*edge_size/2, center(2) + 1/sqrt(2)*edge_size/2),
+                Tupla3f (center(0), center(1)- 1*edge_size/2, center(2) + 1/sqrt(2)*edge_size/2)
+        };
+
+        for (auto v : tabla_verts)
+                std::cout << v << std::endl;
+
+        tabla_caras = {
+                Tupla3i (0,1,2),
+                Tupla3i (0,1,3),
+                Tupla3i (0,2,3),
+                Tupla3i (1,2,3)
+        };
+
+        for (auto v : tabla_caras)
+                std::cout << v << std::endl;
 
 }
+
+Tetraedro::Tetraedro ()
+: Tetraedro (Tupla3f(0,0,0), 1)
+{}
 // *****************************************************************************
