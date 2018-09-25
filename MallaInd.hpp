@@ -18,11 +18,9 @@ class MallaInd : public Objeto3D
 {
 
    protected:
-      // COMPLETAR: incluir aquí las variables y métodos privados que sean
-      // necesarios para una malla indexada
-      // ......
-
-
+      // Tablas para modo inmediato
+      std::vector<Tupla3f> tabla_verts;
+      std::vector<Tupla3i> tabla_caras;
 
       // calculo de las normales de esta malla
       void calcular_normales();
@@ -46,6 +44,7 @@ class Cubo : public MallaInd
 {
    public:
       Cubo();
+      Cubo (Tupla3f main_corner, unsigned edge_size);
 };
 // ---------------------------------------------------------------------
 
@@ -54,6 +53,5 @@ class Tetraedro : public MallaInd
    public:
       Tetraedro();
 };
-
 
 #endif

@@ -26,8 +26,9 @@ using namespace std ;
 void P1_Inicializar(  )
 {
    cout << "Creando objetos de la práctica 1 .... " << flush ;
-   // COMPLETAR: práctica 1: asignar valores a 'objeto[0]' y 'objeto[1]'
-   // (punteros a mallas)
+
+   objeto[0] = new Cubo();
+   objeto[1] = new Tetraedro();
 
    cout << "hecho." << endl << flush ;
 }
@@ -56,13 +57,10 @@ bool P1_FGE_PulsarTeclaCaracter( unsigned char tecla )
    return true ;
 }
 
-
 // ---------------------------------------------------------------------
 // Función a implementar en la práctica 1  para dibujar los objetos
 
 void P1_DibujarObjetos( ContextoVis & cv )
 {
-   // COMPLETAR: práctica 1: invocar a 'visualizarGL' para el objeto activo actual
-   // ...
-
+   objeto[objetoActivo]->visualizarGL(cv);
 }
