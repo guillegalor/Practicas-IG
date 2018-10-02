@@ -22,12 +22,9 @@ class MallaRevol : public MallaInd
                 const std::vector<Tupla3f> & perfil_original,
                 const bool crear_tapas,
                 const bool crear_malla);
-
-   private:
-
-   unsigned
-      nper , // numero de perfiles
-      nvp  ; // numero de vertices por perfil
+     unsigned
+          nper , // numero de perfiles
+          nvp  ; // numero de vertices por perfil
 
    public:
       // crea una malla de revolucion
@@ -39,5 +36,32 @@ class MallaRevol : public MallaInd
                   const bool     cerrar_malla ) ;
 
 } ;
+
+class Cilindro : public MallaRevol
+{
+    public:
+        Cilindro(   const unsigned num_verts_per,
+                    const unsigned nperfiles,
+                    const bool crear_tapas,
+                    const bool cerrar_malla);
+};
+
+class Esfera : public MallaRevol
+{
+    public:
+        Esfera( const unsigned num_verts_per,
+                const unsigned nperfiles,
+                const bool crear_tapas,
+                const bool cerrar_malla);
+};
+
+class Cono : public MallaRevol
+{
+    public:
+        Cono(   const unsigned num_verts_per,
+                const unsigned nperfiles,
+                const bool crear_tapas,
+                const bool cerrar_malla);
+};
 
 #endif

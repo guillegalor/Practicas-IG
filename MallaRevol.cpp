@@ -120,3 +120,65 @@ void MallaRevol::crearMallaRevol(
 }
 
 // *****************************************************************************
+// Constructor para el cilindro
+
+Cilindro::Cilindro( const unsigned num_verts_per,
+                    const unsigned nperfiles,
+                    const bool crear_tapas,
+                    const bool cerrar_malla)
+: MallaRevol ("Cilindro")
+{
+    std::vector<Tupla3f> perfil_original;
+
+    for (int i = 0; i < num_verts_per; ++i) {
+        perfil_original.push_back({1,(float) i/(num_verts_per-1), 0});
+    }
+
+    nper = nperfiles;
+
+    crearMallaRevol (perfil_original, crear_tapas, crear_tapas);
+}
+
+// *****************************************************************************
+// Constructor para el cono
+Cono::Cono( const unsigned num_verts_per,
+                    const unsigned nperfiles,
+                    const bool crear_tapas,
+                    const bool cerrar_malla)
+: MallaRevol ("Cono")
+{
+    std::vector<Tupla3f> perfil_original;
+
+    for (int i = 0; i < num_verts_per; ++i) {
+        perfil_original.push_back({1-(float) i/(num_verts_per-1),(float) i/(num_verts_per-1), 0});
+    }
+
+    nper = nperfiles;
+
+    crearMallaRevol (perfil_original, crear_tapas, crear_tapas);
+}
+
+// *****************************************************************************
+// Constructor para la esfera
+
+Esfera::Esfera( const unsigned num_verts_per,
+                    const unsigned nperfiles,
+                    const bool crear_tapas,
+                    const bool cerrar_malla)
+: MallaRevol ("Cono")
+{
+    std::vector<Tupla3f> perfil_original;
+
+    float x, y, z;
+    for (int i = 0; i < num_verts_per; ++i) {
+        z = 0;
+        y = -1 + (float)2*i/(num_verts_per-1);
+        x = sqrt(1 - y*y);
+
+        perfil_original.push_back({x, y, z});
+    }
+
+    nper = nperfiles;
+
+    crearMallaRevol (perfil_original, crear_tapas, crear_tapas);
+}
