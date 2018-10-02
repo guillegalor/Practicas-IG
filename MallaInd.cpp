@@ -77,7 +77,7 @@ void MallaInd::visualizarDE_MI( ContextoVis & cv )
 void MallaInd::visualizarDE_VBOs( ContextoVis & cv )
 {
    crearVBOs();
-    
+
    glBindBuffer (GL_ARRAY_BUFFER, id_vbo_ver);
    glVertexPointer (3, GL_FLOAT, 0, 0);
    glBindBuffer (GL_ARRAY_BUFFER, 0);
@@ -97,6 +97,7 @@ void MallaInd::visualizarGL( ContextoVis & cv )
         // Establecer modo indicado en el contexto
         GLenum mode;
         switch (cv.modoVis){
+                default:
                 case modoSolido:
                         mode = GL_FILL;
                         break;
