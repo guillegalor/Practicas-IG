@@ -1,7 +1,7 @@
 // *********************************************************************
 // **
 // ** Informática Gráfica, curso 2016-17
-// ** Declaraciones de la clase Objeto3D.hpp
+// ** Declaraciones de la clase Objeto3D.hpp)
 // **
 // *********************************************************************
 
@@ -12,21 +12,29 @@
 // *****************************************************************************
 // funciones auxiliares
 
+GLuint VBO_Crear (GLuint tipo, GLuint tamanio, GLvoid *puntero)
+{
+   assert (tipo == GL_ARRAY_BUFFER || tipo == GL_ELEMENT_ARRAY_BUFFER);
+   GLuint id_vbo;
+   glGenBuffers (1, &id_vbo);
+   glBindBuffer (tipo,id_vbo);
+   glBufferData (tipo, tamanio, puntero, GL_STATIC_DRAW);
+
+   glBindBuffer (tipo, 0);
+   return id_vbo;
+}
+
 // *****************************************************************************
 // métodos de la clase MallaInd.
 
-MallaInd::MallaInd()
-{
-   // 'identificador' puesto a 0 por defecto, 'centro_oc' puesto a (0,0,0)
-   ponerNombre("malla indexada, anónima");
-
-}
+MallaInd::MallaInd(): MallaInd("malla indexada, anónima")
+{}
 // -----------------------------------------------------------------------------
 
 MallaInd::MallaInd( const std::string & nombreIni )
 {
-   // 'identificador' puesto a 0 por defecto, 'centro_oc' puesto a (0,0,0)
    ponerNombre(nombreIni) ;
+   id_vbo_ver = id_vbo_tri = 0;
 
 }
 // -----------------------------------------------------------------------------
@@ -37,6 +45,21 @@ void MallaInd::calcular_normales()
    // COMPLETAR: en la práctica 2: calculo de las normales de la malla
    // .......
 
+}
+// -----------------------------------------------------------------------------
+void MallaInd::crearVBOs()
+{
+    if (id_vbo_ver == 0){
+        tam_ver = sizeof(float)*3L*tabla_verts.size();
+        // crear VBO vértices
+        id_vbo_ver = VBO_Crear(GL_ARRAY_BUFFER, tam_ver, tabla_verts.data());
+    }
+
+    if (id_vbo_tri == 0){
+        tam_tri = sizeof(unsigned)*3L*tabla_caras.size();
+        // crear VBO caras
+        id_vbo_tri = VBO_Crear( GL_ELEMENT_ARRAY_BUFFER, tam_tri, tabla_caras.data());
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -53,10 +76,18 @@ void MallaInd::visualizarDE_MI( ContextoVis & cv )
 // ----------------------------------------------------------------------------
 void MallaInd::visualizarDE_VBOs( ContextoVis & cv )
 {
-   // COMPLETAR: práctica 1: visualizar en modo diferido,
-   //                        usando VBOs (Vertex Buffer Objects)
-   // ..........
+   crearVBOs();
+    
+   glBindBuffer (GL_ARRAY_BUFFER, id_vbo_ver);
+   glVertexPointer (3, GL_FLOAT, 0, 0);
+   glBindBuffer (GL_ARRAY_BUFFER, 0);
+   glEnableClientState (GL_VERTEX_ARRAY);
 
+   glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri);
+   glDrawElements (GL_TRIANGLES, 3L*tabla_caras.size(), GL_UNSIGNED_INT, NULL);
+   glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
+
+   glDisableClientState (GL_VERTEX_ARRAY);
 }
 
 // -----------------------------------------------------------------------------
@@ -140,18 +171,12 @@ Tetraedro::Tetraedro(Tupla3f center, float edge_size)
                 Tupla3f (center(0), center(1)- 1*edge_size/2, center(2) + 1/sqrt(2)*edge_size/2)
         };
 
-        for (auto v : tabla_verts)
-                std::cout << v << std::endl;
-
         tabla_caras = {
                 Tupla3i (0,1,2),
                 Tupla3i (0,1,3),
                 Tupla3i (0,2,3),
                 Tupla3i (1,2,3)
         };
-
-        for (auto v : tabla_caras)
-                std::cout << v << std::endl;
 
 }
 
