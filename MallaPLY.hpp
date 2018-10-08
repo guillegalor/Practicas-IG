@@ -18,9 +18,9 @@
 class MallaPLY : public MallaInd
 {
 
-   public:
-      // crea una malla de revolucion
-      MallaPLY( const std::string & nombre_arch ) ;
+    public:
+        // crea una malla de revolucion
+        MallaPLY( const std::string & nombre_arch ) ;
 
 } ;
 

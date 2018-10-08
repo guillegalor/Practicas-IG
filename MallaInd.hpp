@@ -17,56 +17,56 @@
 class MallaInd : public Objeto3D
 {
 
-   protected:
-      // Tablas para modo inmediato
-      std::vector<Tupla3f> tabla_verts;
-      std::vector<Tupla3i> tabla_caras;
+    protected:
+        // Tablas para modo inmediato
+        std::vector<Tupla3f> tabla_verts;
+        std::vector<Tupla3i> tabla_caras;
 
-      // IDs de los VBO de vertices y caras respectivamente
-      GLuint id_vbo_ver, id_vbo_tri;
+        // IDs de los VBO de vertices y caras respectivamente
+        GLuint id_vbo_ver, id_vbo_tri;
 
-      // Tamaño en bytes de las tablas
-      unsigned tam_ver, tam_tri;
+        // Tamaño en bytes de las tablas
+        unsigned tam_ver, tam_tri;
 
-      // Tabla de normales y de colores
-      std::vector<Tupla3f> nor_tri;
-      std::vector<Tupla3f> nor_ver;
-      std::vector<Tupla3f> col_tri;
-      std::vector<Tupla3f> col_ver;
+        // Tabla de normales y de colores
+        std::vector<Tupla3f> nor_tri;
+        std::vector<Tupla3f> nor_ver;
+        std::vector<Tupla3f> col_tri;
+        std::vector<Tupla3f> col_ver;
 
-      // calculo de las normales de esta malla
-      void calcular_normales();
+        // calculo de las normales de esta malla
+        void calcular_normales();
 
-      // crear VBO de caras y VBO de vertices
-      void crearVBOs();
-      // visualizar con 'draw elements', en modo inmediato
-      void visualizarDE_MI( ContextoVis & cv );
-      // visualizar con 'draw elements', en modo diferido (con VBOS)
-      void visualizarDE_VBOs( ContextoVis & cv );
+        // crear VBO de caras y VBO de vertices
+        void crearVBOs();
+        // visualizar con 'draw elements', en modo inmediato
+        void visualizarDE_MI( ContextoVis & cv );
+        // visualizar con 'draw elements', en modo diferido (con VBOS)
+        void visualizarDE_VBOs( ContextoVis & cv );
 
-   public:
-      // crea una malla vacía (nombre: "malla indexada nueva vacía")
-      MallaInd() ;
-      // crea una malla vacía con un nombre concreto:
-      MallaInd( const std::string & nombreIni );
-      // visualizar el objeto con OpenGL
-      virtual void visualizarGL( ContextoVis & cv ) ;
+    public:
+        // crea una malla vacía (nombre: "malla indexada nueva vacía")
+        MallaInd() ;
+        // crea una malla vacía con un nombre concreto:
+        MallaInd( const std::string & nombreIni );
+        // visualizar el objeto con OpenGL
+        virtual void visualizarGL( ContextoVis & cv ) ;
 } ;
 // ---------------------------------------------------------------------
 
 class Cubo : public MallaInd
 {
-   public:
-      Cubo();
-      Cubo (Tupla3f main_corner, float edge_size);
+    public:
+        Cubo ();
+        Cubo (Tupla3f main_corner, float edge_size);
 };
 // ---------------------------------------------------------------------
 
 class Tetraedro : public MallaInd
 {
-   public:
-      Tetraedro ();
-      Tetraedro (Tupla3f center, float edge_size);
+    public:
+        Tetraedro ();
+        Tetraedro (Tupla3f center, float edge_size);
 };
 
 #endif

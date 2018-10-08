@@ -1,34 +1,36 @@
 // *********************************************************************
 // **
-// ** Informática Gráfica, curso 2016-17
-// ** Práctica 1  (implementación)
+// ** Informática Gráfica, curso 2018-19
+// ** Práctica 2  (implementación)
 // **
 // *********************************************************************
 
 #include "aux.hpp"
 #include "tuplasg.hpp"   // Tupla3f
 #include "practicas.hpp"
-#include "practica1.hpp"
+#include "practica2.hpp"
 #include "Objeto3D.hpp"
-#include "MallaInd.hpp"
-
-static unsigned      objetoActivo       = 0 ; // objeto activo: cubo (0), tetraedro (1), otros....
-static constexpr int numObjetos         = 2 ; // numero de objetos creados para esta práctica
-static Objeto3D *    objeto[numObjetos] = { nullptr, nullptr }; // punteros a los objetos
+#include "MallaPLY.hpp"
+#include "MallaRevol.hpp"
 
 using namespace std ;
+
+static unsigned objetoActivo2 = 0 ; // objeto activo: malla ply (0), malla revol (1)
+static constexpr int numObjetos2 = 2 ;
+
+static Objeto3D * objetos2[numObjetos2] = { nullptr, nullptr };
 
 // ---------------------------------------------------------------------
 // Función para implementar en la práctica 1 para inicialización.
 // Se llama una vez al inicio, cuando ya se ha creado la ventana e
 // incializado OpenGL.
 
-void P1_Inicializar(  )
+void P2_Inicializar(  )
 {
-    cout << "Creando objetos de la práctica 1 .... " << flush ;
+    cout << "Creando objetos de la práctica 2 .... " << flush ;
 
-    objeto[0] = new Tetraedro();
-    objeto[1] = new Cubo();
+    objetos2[0] = new MallaPLY("../plys/beethoven.ply");
+    objetos2[1] = new Esfera(20, 20, true, true);
 
     cout << "hecho." << endl << flush ;
 }
@@ -43,15 +45,15 @@ void P1_Inicializar(  )
 //  - devuelve 'false' si la tecla no se usa en esta práctica (no ha
 //    cambiado nada)
 
-bool P1_FGE_PulsarTeclaCaracter( unsigned char tecla )
+bool P2_FGE_PulsarTeclaCaracter( unsigned char tecla )
 {
     if ( toupper(tecla) != 'O')
         return false ;
 
-    objetoActivo = (objetoActivo+1) % numObjetos ;
-    cout << "práctica 1: nuevo objeto activo es: " << objetoActivo ;
-    if ( objeto[objetoActivo] != nullptr )
-        cout << " (" << objeto[objetoActivo]->leerNombre() << ")." << endl ;
+    objetoActivo2 = (objetoActivo2+1) % numObjetos2 ;
+    cout << "práctica 1: nuevo objeto activo es: " << objetoActivo2 ;
+    if ( objetos2[objetoActivo2] != nullptr )
+        cout << " (" << objetos2[objetoActivo2]->leerNombre() << ")." << endl ;
     else
         cout << " (objeto no creado)" << endl ;
     return true ;
@@ -59,8 +61,10 @@ bool P1_FGE_PulsarTeclaCaracter( unsigned char tecla )
 
 // ---------------------------------------------------------------------
 // Función a implementar en la práctica 1  para dibujar los objetos
+// se debe de usar el modo de dibujo que hay en el parámetro 'cv'
+// (se accede con 'cv.modoVisu')
 
-void P1_DibujarObjetos( ContextoVis & cv )
+void P2_DibujarObjetos( ContextoVis & cv )
 {
-    objeto[objetoActivo]->visualizarGL(cv);
+    objetos2[objetoActivo2]->visualizarGL(cv);
 }
