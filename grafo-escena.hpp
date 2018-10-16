@@ -28,6 +28,7 @@
 #include "materiales.hpp"
 #include "Objeto3D.hpp"
 #include "MallaInd.hpp"
+#include "MallaRevol.hpp"
 
 // *********************************************************************
 // declaración adelantada de estructura para un nodo del grafo de escena
@@ -123,7 +124,7 @@ class NodoGrafoEscenaParam : public NodoGrafoEscena
 
 // *********************************************************************
 //
-class Grua : public NodoGrafoEscena{
+class Grua : public NodoGrafoEscenaParam{
     public:
         Grua();
 
@@ -164,4 +165,30 @@ class Grua : public NodoGrafoEscena{
             public:
                 Palo2();
         };
+};
+
+class Muneco : public NodoGrafoEscenaParam{
+    class Brazo1 : public NodoGrafoEscena{
+        int indice_hombro;
+        int indice_codo;
+
+        public:
+            Brazo1();
+
+            Matriz4f* getArticulacionHombro();
+            Matriz4f* getArticulacionCodo();
+    };
+
+    class Brazo2 : public NodoGrafoEscena{
+        int indice_hombro;
+        int indice_codo;
+
+        public:
+            Brazo2();
+
+            Matriz4f* getArticulacionHombro();
+            Matriz4f* getArticulacionCodo();
+    };
+    public:
+        Muneco();
 };

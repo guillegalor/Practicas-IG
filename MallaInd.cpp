@@ -68,15 +68,19 @@ void MallaInd::visualizarDE_MI( ContextoVis & cv )
 {
     glEnableClientState( GL_VERTEX_ARRAY );
     glVertexPointer( 3, GL_FLOAT, 0, tabla_verts.data() );
+
     // Hace falta multiplicar tabla_caras*3 porque es un vector de 3-uplas
     glDrawElements( GL_TRIANGLES, tabla_caras.size()*3, GL_UNSIGNED_INT, tabla_caras.data() );
     glDisableClientState( GL_VERTEX_ARRAY );
+
 }
 
 // ----------------------------------------------------------------------------
 void MallaInd::visualizarDE_VBOs( ContextoVis & cv )
 {
     crearVBOs();
+
+    glColor3f(0.91, 0.96, 0.17);
 
     glBindBuffer (GL_ARRAY_BUFFER, id_vbo_ver);
     glVertexPointer (3, GL_FLOAT, 0, 0);

@@ -12,10 +12,12 @@
 
 using namespace std ;
 
-static unsigned objetoActivo3 = 0 ; // objeto activo: malla ply (0), malla revol (1)
+static unsigned objetoActivo3 = 0 ; // objeto activo: muneco(0)
 static constexpr int numObjetos3 = 1 ;
+static bool animaciones = false;
+static unsigned parametroActivo = 0;
 
-static Objeto3D * objetos3[numObjetos3] = {nullptr};
+static NodoGrafoEscenaParam* objetos3[numObjetos3] = {nullptr};
 
 // ---------------------------------------------------------------------
 // Función para implementar en la práctica 1 para inicialización.
@@ -26,7 +28,7 @@ void P3_Inicializar(  )
 {
     cout << "Creando objetos de la práctica 3 .... " << flush ;
 
-    objetos3[0] = new Grua();
+    objetos3[0] = new Muneco();
 
     cout << "hecho." << endl << flush ;
 }
@@ -47,41 +49,69 @@ bool P3_FGE_PulsarTeclaCaracter( unsigned char tecla )
     switch ( toupper( tecla ) )
     {
         case 'O' :
-            // COMPLETAR: práctica 3: activar siguiente objeto de la práctica
-            //           (solo en el caso de que se incluyan varios objetos en la práctica)
-            // ....
+            objetoActivo3 = (objetoActivo3+1) % numObjetos3 ;
+            cout << "práctica 3: nuevo objeto activo es: " << objetoActivo3 ;
+            if ( objetos3[objetoActivo3] != nullptr )
+                cout << " (" << objetos3[objetoActivo3]->leerNombre() << ")." << endl ;
+            else
+                cout << " (objeto no creado)" << endl ;
+
+            res = true;
 
             break ;
 
         case 'A' :
-            // COMPLETAR: práctica 3: activar o desactivar animaciones
-            // ....
+            animaciones = !animaciones;
+
+            if (animaciones)
+                FijarFuncDesocupado(FGE_Desocupado);
+
+            std::cout << (animaciones
+                ? "Activando "
+                : "Desactivando ")
+            << "animaciones" << std::endl;
+
+            res = true;
 
             break ;
 
         case 'G' :
-            // COMPLETAR: práctica 3: activar siguiente parámetro
-            // ....
+            parametroActivo = (++parametroActivo)%(objetos3[objetoActivo3]->numParametros());
 
+            std::cout << "Parametro activo: " << parametroActivo << std::endl;
             break ;
 
         case 'R' :
-            // COMPLETAR: práctica 3: reset de animaciones
-            // ....
+            for (int i = 0; i < objetos3[objetoActivo3]->numParametros(); ++i){
+                objetos3[objetoActivo3]->leerPtrParametro(i)->reset();
+            }
+
+            std::cout << "Reseteando parámetros" << std::endl;
+
+            res = true;
 
             break ;
 
         case '>' :
-            // COMPLETAR: práctica 3: acelerar o incrementar parámetro
-            // ....
+            if(animaciones)
+                objetos3[objetoActivo3]->leerPtrParametro(parametroActivo)->acelerar();
+            else
+                objetos3[objetoActivo3]->leerPtrParametro(parametroActivo)->incrementar();
+
+            res = true;
 
             break ;
 
         case '<' :
-            // COMPLETAR: práctica 3: decelerar o decrementar parámetro
-            // ....
+            if(animaciones)
+                objetos3[objetoActivo3]->leerPtrParametro(parametroActivo)->decelerar();
+            else
+                objetos3[objetoActivo3]->leerPtrParametro(parametroActivo)->decrementar();
+
+            res = true;
 
             break ;
+
         default :
             break ;
 
@@ -103,9 +133,12 @@ void P3_DibujarObjetos( ContextoVis & cv )
 
 bool P3_FGE_Desocupado()
 {
-    // COMPLETAR: práctica 3: si las animaciones están activadas,
-    // actualizar el objeto activo, forzar redibujado, devolver true.
-    // si las animaciones están desactivadas, devolver false.
-    // ....
+    if (!animaciones)
+        return false;
 
+    /* std::cout << "Test" << std::endl; */
+    objetos3[objetoActivo3]->siguienteCuadro();
+    redibujar_ventana = true;
+
+    return true;
 }

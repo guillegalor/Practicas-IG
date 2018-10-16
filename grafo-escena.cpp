@@ -44,7 +44,7 @@ EntradaNGE::EntradaNGE( const Matriz4f & pMatriz )
 {
     tipo    = TipoEntNGE::transformacion ;
     matriz  = new Matriz4f() ; // matriz en el heap, puntero propietario
-    *matriz = pMatriz ;
+    *matriz = pMatriz;
 }
 
 // ---------------------------------------------------------------------
@@ -204,26 +204,36 @@ Parametro * NodoGrafoEscenaParam::leerPtrParametro( unsigned i )
 
 void NodoGrafoEscenaParam::siguienteCuadro()
 {
-    // COMPLETAR: práctica 3: actualizar todos los parámetros al siguiente cuadro
-    // ........
-
+    for (auto& param: parametros)
+        param.siguiente_cuadro();
 }
 
 //------------------------------------------------------------------------------
 
 Grua::Grua(){
+    int i;
     agregar(new Palo1);
 
     //Palo horizontal
-    glPushMatrix ();
     agregar(MAT_Traslacion(21,0,0));
     agregar(MAT_Traslacion(0,126,0));
     agregar(MAT_Rotacion(90,0,0,1));
+    //Matriz parametro prueba
+    i = agregar(MAT_Ident());
     agregar(new Palo2);
-    glPopMatrix ();
 
-    glPushMatrix ();
+    //Parámetro de prueba
+    Parametro param(
+            "parametro de prueba",
+            leerPtrMatriz(i),
+            [=] (float v) {return MAT_Rotacion(v, 1, 0, 0);},
+            false,
+            0.0,
+            10.0,
+            4
+            );
 
+    parametros.push_back(param);
 }
 
 Grua::Palo2::Palo2() : Palo1(){
@@ -305,4 +315,216 @@ Grua::Palo1::Trozo1::Tapa2::Tapa2(){
     agregar(MAT_Traslacion(0,0,-6));
     agregar(c);
 
+}
+
+Muneco::Muneco(){
+    Cilindro* c = new Cilindro(
+            2,
+            20,
+            true,
+            true
+            );
+    Esfera* e = new Esfera(
+            20,
+            20,
+            false,
+            true
+            );
+
+    int i_rot_principal = agregar(MAT_Ident());
+    agregar(MAT_Escalado(1,2,1));
+
+    // Primer cilindro del cuerpo
+    agregar(c);
+
+    agregar(MAT_Traslacion(0,1,0));
+
+    // Esfera de articulación y rotación
+    agregar(e);
+    int i_rotacion1 = agregar(MAT_Ident());
+
+    // Segundo cilindro del cuerpo
+    agregar(c);
+
+    agregar(MAT_Traslacion(0,1,0));
+
+    // Esfera de articulación y rotación
+    agregar(e);
+    int i_rotacion2 = agregar(MAT_Ident());
+
+    // Tercer cilindro del cuerpo
+    agregar(c);
+
+    agregar(MAT_Traslacion(0,1,0));
+
+    Brazo1* br1 = new Brazo1;
+    Brazo2* br2 = new Brazo2;
+    agregar(br1);
+    agregar(br2);
+
+    // Esfera de articulación y rotación
+    agregar(e);
+    int i_rotacion3 = agregar(MAT_Ident());
+
+    // Cilindro cabeza
+    agregar(c);
+
+    //Rotación de todo el muneco
+    Parametro rot_principal(
+            "Rotacion de todo el objeto",
+            leerPtrMatriz(i_rot_principal),
+            [=] (float v) {return MAT_Rotacion(v, 0, 1, 0);},
+            false,
+            0,
+            10.0,
+            0
+            );
+
+    //Rotación 1
+    Parametro rotacion1(
+            "Rotacion 1",
+            leerPtrMatriz(i_rotacion1),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            0,
+            10,
+            0.1
+            );
+
+    //Rotación 2
+    Parametro rotacion2(
+            "Rotacion 2",
+            leerPtrMatriz(i_rotacion2),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            0,
+            10.0,
+            0.1
+            );
+
+    //Rotación 3
+    Parametro rotacion3(
+            "Rotacion 3",
+            leerPtrMatriz(i_rotacion3),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            0,
+            10.0,
+            0.1
+            );
+
+    //Rotación hombro brazo 1
+    Parametro rotacion_hombro1(
+            "Rotacion hombro brazo 1",
+            br1->getArticulacionHombro(),
+            [=] (float v) {return MAT_Rotacion(v, 0, 1, 0);},
+            true,
+            0,
+            30,
+            0.1
+            );
+
+    //Rotación hombro brazo 2
+    Parametro rotacion_hombro2(
+            "Rotacion hombro brazo 2",
+            br2->getArticulacionHombro(),
+            [=] (float v) {return MAT_Rotacion(v, 0, 1, 0);},
+            true,
+            0,
+            50,
+            0.1
+            );
+
+    // Rotación codo brazo 1
+    Parametro rotacion_codo1(
+            "Rotacion codo brazo 1",
+            br1->getArticulacionCodo(),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            -10,
+            90,
+            0.1
+            );
+
+    //Rotación codo brazo 2
+    Parametro rotacion_codo2(
+            "Rotacion codo brazo 2",
+            br2->getArticulacionCodo(),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            -20,
+            80,
+            0.1
+            );
+
+    /* parametros.push_back(rot_principal); */
+    parametros.push_back(rotacion1);
+    parametros.push_back(rotacion2);
+    parametros.push_back(rotacion3);
+    parametros.push_back(rotacion_hombro1);
+    parametros.push_back(rotacion_hombro2);
+    parametros.push_back(rotacion_codo1);
+    parametros.push_back(rotacion_codo2);
+}
+
+Muneco::Brazo1::Brazo1(){
+    Cilindro* c = new Cilindro(2, 20, true, true);
+    Esfera* e = new Esfera(20, 20, false, true);
+
+    indice_hombro = agregar(MAT_Ident());
+    agregar(MAT_Traslacion(-1, -0.5, 0));
+    agregar(MAT_Rotacion(75, 0, 0, 1));
+    agregar(MAT_Escalado(0.25, 1, 0.25));
+    agregar(e);
+    agregar(c);
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(c);
+    agregar(MAT_Traslacion(0, 1, 0));
+    indice_codo = agregar(MAT_Ident());
+    agregar(e);
+    agregar(c);
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(c);
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(c);
+}
+
+// Igual que el brazo1 solo que simetrico respecto del plano YOZ
+Muneco::Brazo2::Brazo2(){
+    Cilindro* c = new Cilindro(2, 20, true, true);
+    Esfera* e = new Esfera(20, 20, false, true);
+
+    indice_hombro = agregar(MAT_Ident());
+    agregar(MAT_Escalado(-1,1,1));          // Simetría
+    agregar(MAT_Traslacion(-1, -0.5, 0));
+    agregar(MAT_Rotacion(75, 0, 0, 1));
+    agregar(MAT_Escalado(0.25, 1, 0.25));
+    agregar(e);
+    agregar(c);
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(c);
+    agregar(MAT_Traslacion(0, 1, 0));
+    indice_codo = agregar(MAT_Ident());
+    agregar(e);
+    agregar(c);
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(c);
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(c);
+}
+
+Matriz4f* Muneco::Brazo1::getArticulacionHombro(){
+    return leerPtrMatriz(indice_hombro);
+}
+
+Matriz4f* Muneco::Brazo1::getArticulacionCodo(){
+    return leerPtrMatriz(indice_codo);
+}
+
+Matriz4f* Muneco::Brazo2::getArticulacionHombro(){
+    return leerPtrMatriz(indice_hombro);
+}
+
+Matriz4f* Muneco::Brazo2::getArticulacionCodo(){
+    return leerPtrMatriz(indice_codo);
 }
