@@ -471,8 +471,8 @@ Muneco::Brazo1::Brazo1(){
     Cilindro* c = new Cilindro(2, 20, true, true);
     Esfera* e = new Esfera(20, 20, false, true);
 
-    indice_hombro = agregar(MAT_Ident());
     agregar(MAT_Traslacion(-1, -0.5, 0));
+    indice_hombro = agregar(MAT_Ident());   // Articulación hombro
     agregar(MAT_Rotacion(75, 0, 0, 1));
     agregar(MAT_Escalado(0.25, 1, 0.25));
     agregar(e);
@@ -480,7 +480,7 @@ Muneco::Brazo1::Brazo1(){
     agregar(MAT_Traslacion(0, 1, 0));
     agregar(c);
     agregar(MAT_Traslacion(0, 1, 0));
-    indice_codo = agregar(MAT_Ident());
+    indice_codo = agregar(MAT_Ident());     // Articulación codo
     agregar(e);
     agregar(c);
     agregar(MAT_Traslacion(0, 1, 0));
@@ -494,9 +494,9 @@ Muneco::Brazo2::Brazo2(){
     Cilindro* c = new Cilindro(2, 20, true, true);
     Esfera* e = new Esfera(20, 20, false, true);
 
-    indice_hombro = agregar(MAT_Ident());
     agregar(MAT_Escalado(-1,1,1));          // Simetría
     agregar(MAT_Traslacion(-1, -0.5, 0));
+    indice_hombro = agregar(MAT_Ident());   // Articulación hombro
     agregar(MAT_Rotacion(75, 0, 0, 1));
     agregar(MAT_Escalado(0.25, 1, 0.25));
     agregar(e);
@@ -504,7 +504,7 @@ Muneco::Brazo2::Brazo2(){
     agregar(MAT_Traslacion(0, 1, 0));
     agregar(c);
     agregar(MAT_Traslacion(0, 1, 0));
-    indice_codo = agregar(MAT_Ident());
+    indice_codo = agregar(MAT_Ident());     // Articulación codo
     agregar(e);
     agregar(c);
     agregar(MAT_Traslacion(0, 1, 0));
