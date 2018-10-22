@@ -38,6 +38,7 @@ void Parametro::siguiente_cuadro()
 void Parametro::reset()
 {
     valor_norm = 0;
+    velocidad = 0;
 
     actualizar_matriz();
 }

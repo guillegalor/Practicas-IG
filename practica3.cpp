@@ -86,7 +86,9 @@ bool P3_FGE_PulsarTeclaCaracter( unsigned char tecla )
                 objetos3[objetoActivo3]->leerPtrParametro(i)->reset();
             }
 
-            std::cout << "Reseteando parámetros" << std::endl;
+            animaciones = false;
+
+            std::cout << "Reseteando parámetros y desactivando animaciones" << std::endl;
 
             res = true;
 
