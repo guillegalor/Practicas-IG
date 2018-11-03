@@ -140,6 +140,28 @@ Cilindro::Cilindro( const unsigned num_verts_per,
 }
 
 // *****************************************************************************
+// Constructor para el cilindro
+
+Cilindroide::Cilindroide(
+        const float rad_base_sup,
+        const unsigned num_verts_per,
+        const unsigned nperfiles,
+        const bool crear_tapas,
+        const bool cerrar_malla)
+    : MallaRevol ("Cilindroide")
+{
+    std::vector<Tupla3f> perfil_original;
+
+    for (int i = 0; i < num_verts_per; ++i) {
+        perfil_original.push_back({1 - (1-rad_base_sup)*i/(num_verts_per-1) ,(float) i/(num_verts_per-1), 0});
+    }
+
+    nper = nperfiles;
+
+    crearMallaRevol (perfil_original, crear_tapas, crear_tapas);
+}
+// *****************************************************************************
+//
 // Constructor para el cono
 Cono::Cono( const unsigned num_verts_per,
         const unsigned nperfiles,

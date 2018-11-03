@@ -46,6 +46,16 @@ class Cilindro : public MallaRevol
                 const bool cerrar_malla);
 };
 
+class Cilindroide : public MallaRevol
+{
+    public:
+        Cilindroide( const float rad_base_sup,
+                    const unsigned num_verts_per,
+                    const unsigned nperfiles,
+                    const bool crear_tapas,
+                    const bool cerrar_malla);
+};
+
 class Esfera : public MallaRevol
 {
     public:
