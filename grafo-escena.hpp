@@ -168,23 +168,12 @@ class Grua : public NodoGrafoEscenaParam{
 };
 
 class Muneco : public NodoGrafoEscenaParam{
-    class Brazo1 : public NodoGrafoEscena{
+    class Brazo : public NodoGrafoEscena{
         int indice_hombro;
         int indice_codo;
 
         public:
-            Brazo1();
-
-            Matriz4f* getArticulacionHombro();
-            Matriz4f* getArticulacionCodo();
-    };
-
-    class Brazo2 : public NodoGrafoEscena{
-        int indice_hombro;
-        int indice_codo;
-
-        public:
-            Brazo2();
+            Brazo();
 
             Matriz4f* getArticulacionHombro();
             Matriz4f* getArticulacionCodo();
@@ -198,6 +187,16 @@ class Muneco : public NodoGrafoEscenaParam{
 
             unsigned numArticulaciones();
             Matriz4f* getArticulacion(int i);   // Devuelve la articulación i-ésima (i \in {0, ..., numArticulaciones()-1})
+    };
+
+    class Ojo : public NodoGrafoEscena{
+        public:
+            Ojo();
+    };
+
+    class Boca : public NodoGrafoEscena{
+        public:
+            Boca();
     };
 
     public:

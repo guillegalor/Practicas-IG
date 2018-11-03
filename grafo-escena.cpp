@@ -110,8 +110,10 @@ NodoGrafoEscena::NodoGrafoEscena()
 
 void NodoGrafoEscena::fijarColorNodo( const Tupla3f & nuevo_color )
 {
-    // COMPLETAR: práctica 3: asignarle un color plano al nodo, distinto del padre
-    // ........
+    for(auto e : entradas){
+        if(e.tipo == TipoEntNGE::objeto)
+            e.objeto->fijarColorNodo(nuevo_color);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -318,6 +320,7 @@ Grua::Palo1::Trozo1::Tapa2::Tapa2(){
 }
 
 Muneco::Muneco(){
+    Tupla3f color = {(float)229/255, (float)235/255, (float)25/255};
     Cilindro* c = new Cilindro(
             2,
             20,
@@ -331,6 +334,16 @@ Muneco::Muneco(){
             true
             );
     Cola* cola = new Cola();
+    Brazo* br1 = new Brazo;
+    Brazo* br2 = new Brazo;
+    Ojo* ojo = new Ojo();
+
+    //Fijar Color
+    c->fijarColorNodo(color);
+    e->fijarColorNodo(color);
+    cola->fijarColorNodo(color);
+    br1->fijarColorNodo(color);
+    br2->fijarColorNodo(color);
 
     int i_rot_principal = agregar(MAT_Ident());
     agregar(MAT_Escalado(1,2,1));
@@ -361,12 +374,16 @@ Muneco::Muneco(){
     // Tercer cilindro del cuerpo
     agregar(c);
 
-    agregar(MAT_Traslacion(0,1,0));
-
-    Brazo1* br1 = new Brazo1;
-    Brazo2* br2 = new Brazo2;
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(MAT_Traslacion(0, 0.5, 0));
+    // Brazo izq
     agregar(br1);
+
+    // Brazo der
+    agregar(MAT_Escalado(-1, 1, 1));
     agregar(br2);
+    agregar(MAT_Escalado(-1, 1, 1));
+    agregar(MAT_Traslacion(0, -0.5, 0));
 
     // Esfera de articulación y rotación
     agregar(e);
@@ -374,6 +391,15 @@ Muneco::Muneco(){
 
     // Cilindro cabeza
     agregar(c);
+
+    // Ojos
+    agregar(MAT_Traslacion(-0.3, 0.7, 1));
+    agregar(MAT_Escalado(1, 0.5, 1));
+    agregar(ojo);
+    agregar(MAT_Traslacion(0.6, 0, 0));
+    agregar(ojo);
+    agregar(MAT_Escalado(1, 2, 1));
+    agregar(MAT_Traslacion(-0.3, -0.7, -1));
 
     //Rotación de todo el muneco
     Parametro rot_principal(
@@ -486,7 +512,7 @@ Muneco::Muneco(){
     parametros.push_back(rotacion_codo2);
 }
 
-Muneco::Brazo1::Brazo1(){
+Muneco::Brazo::Brazo(){
     Cilindro* c = new Cilindro(2, 20, true, true);
     Esfera* e = new Esfera(20, 20, false, true);
 
@@ -508,43 +534,11 @@ Muneco::Brazo1::Brazo1(){
     agregar(c);
 }
 
-// Igual que el brazo1 solo que simetrico respecto del plano YOZ
-Muneco::Brazo2::Brazo2(){
-    Cilindro* c = new Cilindro(2, 20, true, true);
-    Esfera* e = new Esfera(20, 20, false, true);
-
-    agregar(MAT_Escalado(-1,1,1));          // Simetría
-    agregar(MAT_Traslacion(-1, -0.5, 0));
-    indice_hombro = agregar(MAT_Ident());   // Articulación hombro
-    agregar(MAT_Rotacion(75, 0, 0, 1));
-    agregar(MAT_Escalado(0.25, 1, 0.25));
-    agregar(e);
-    agregar(c);
-    agregar(MAT_Traslacion(0, 1, 0));
-    agregar(c);
-    agregar(MAT_Traslacion(0, 1, 0));
-    indice_codo = agregar(MAT_Ident());     // Articulación codo
-    agregar(e);
-    agregar(c);
-    agregar(MAT_Traslacion(0, 1, 0));
-    agregar(c);
-    agregar(MAT_Traslacion(0, 1, 0));
-    agregar(c);
-}
-
-Matriz4f* Muneco::Brazo1::getArticulacionHombro(){
+Matriz4f* Muneco::Brazo::getArticulacionHombro(){
     return leerPtrMatriz(indice_hombro);
 }
 
-Matriz4f* Muneco::Brazo1::getArticulacionCodo(){
-    return leerPtrMatriz(indice_codo);
-}
-
-Matriz4f* Muneco::Brazo2::getArticulacionHombro(){
-    return leerPtrMatriz(indice_hombro);
-}
-
-Matriz4f* Muneco::Brazo2::getArticulacionCodo(){
+Matriz4f* Muneco::Brazo::getArticulacionCodo(){
     return leerPtrMatriz(indice_codo);
 }
 
@@ -610,4 +604,18 @@ Matriz4f* Muneco::Cola::getArticulacion(int i){
 
 unsigned Muneco::Cola::numArticulaciones(){
     return ind.size();
+}
+
+Muneco::Ojo::Ojo(){
+    Esfera* e1 = new Esfera(20, 20, true, true);    // Esfera de fuera
+    Esfera* e2 = new Esfera(20, 20, true, true);    // Pupila
+    e1->fijarColorNodo({1,1,1});
+    e2->fijarColorNodo({0,0,0});
+
+    agregar(MAT_Escalado(0.2, 0.2, 0.15));
+
+    agregar(e1);
+    agregar(MAT_Traslacion(-0.2, -0.2, 0.3));
+    agregar(MAT_Escalado(0.7, 0.7, 1));
+    agregar(e2);
 }
