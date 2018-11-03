@@ -137,16 +137,15 @@ void MallaInd::visualizarGL( ContextoVis & cv )
 
 }
 // *****************************************************************************
-void MallaInd::fijarColor( Tupla3f* color){
-    if (color == nullptr)
-        for (int i = 0; i < tabla_verts.size(); ++i) {
-            col_ver.push_back({0,(float)i/tabla_verts.size(),1});
-        }
-    else
-        for (int i = 0; i < tabla_verts.size(); ++i) {
-            col_ver.push_back(*color);
-        }
-
+void MallaInd::fijarColorNodo(const Tupla3f& color){
+    /* if (color == nullptr) */
+    /*     for (int i = 0; i < tabla_verts.size(); ++i) { */
+    /*         col_ver.push_back({0,(float)i/tabla_verts.size(),1}); */
+    /*     } */
+    /* else */
+    for (int i = 0; i < tabla_verts.size(); ++i) {
+        col_ver.push_back(color);
+    }
 }
 // -----------------------------------------------------------------------------
 // *****************************************************************************
@@ -184,10 +183,6 @@ Cubo::Cubo(Tupla3f main_corner, float edge_size)
         Tupla3i (7,2,6),
         Tupla3i (7,4,6),
     };
-
-    Tupla3f col = {0,1,1};
-    fijarColor(&col);
-
 }
 
 Cubo::Cubo()
@@ -211,7 +206,6 @@ Tetraedro::Tetraedro(Tupla3f center, float edge_size)
         Tupla3i (0,2,3),
         Tupla3i (1,2,3)
     };
-
 }
 
 Tetraedro::Tetraedro ()

@@ -32,6 +32,9 @@ void P2_Inicializar(  )
     objetos2[0] = new MallaPLY("../plys/beethoven.ply");
     objetos2[1] = new Cilindroide(0.75, 20, 20, true, true);
 
+    //testear color
+    objetos2[0]->fijarColorNodo({0,1,1});
+
     cout << "hecho." << endl << flush ;
 }
 

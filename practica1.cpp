@@ -30,6 +30,9 @@ void P1_Inicializar(  )
     objeto[0] = new Tetraedro();
     objeto[1] = new Cubo();
 
+    //testear color
+    objeto[0]->fijarColorNodo({1,0,1});
+
     cout << "hecho." << endl << flush ;
 }
 

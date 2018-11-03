@@ -52,7 +52,7 @@ class MallaInd : public Objeto3D
         // visualizar el objeto con OpenGL
         virtual void visualizarGL( ContextoVis & cv ) ;
         // fijar un color para la figura
-        void fijarColor(Tupla3f* color);
+        void fijarColorNodo(const Tupla3f& color);
 } ;
 // ---------------------------------------------------------------------
 
