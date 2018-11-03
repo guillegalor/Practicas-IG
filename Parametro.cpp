@@ -19,7 +19,7 @@ Parametro::Parametro(
     acotado(p_acotado), c(p_c), s(p_s), f(p_f)
 {
     valor_norm = 0;
-    velocidad = 0;
+    velocidad = valor_incremento_aceleracion;
 }
 // -----------------------------------------------------------------------------
 

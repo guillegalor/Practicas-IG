@@ -330,6 +330,7 @@ Muneco::Muneco(){
             false,
             true
             );
+    Cola* cola = new Cola();
 
     int i_rot_principal = agregar(MAT_Ident());
     agregar(MAT_Escalado(1,2,1));
@@ -338,6 +339,11 @@ Muneco::Muneco(){
     agregar(c);
 
     agregar(MAT_Traslacion(0,1,0));
+
+    // Cola
+    agregar(MAT_Escalado(1, 1.0/2, 1));
+    agregar(cola);
+    agregar(MAT_Escalado(1, 2, 1));
 
     // Esfera de articulación y rotación
     agregar(e);
@@ -457,6 +463,19 @@ Muneco::Muneco(){
             0.1
             );
 
+    for (int i = 0; i < cola->numArticulaciones(); ++i) {
+        Parametro movimiento_cola(
+                "Movimiento articulación " + std::to_string(i) + "de la cola",
+                cola->getArticulacion(i),
+                [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+                true,
+                0,
+                45,
+                0.1
+                );
+        parametros.push_back(movimiento_cola);
+    }
+
     /* parametros.push_back(rot_principal); */
     parametros.push_back(rotacion1);
     parametros.push_back(rotacion2);
@@ -527,4 +546,68 @@ Matriz4f* Muneco::Brazo2::getArticulacionHombro(){
 
 Matriz4f* Muneco::Brazo2::getArticulacionCodo(){
     return leerPtrMatriz(indice_codo);
+}
+
+Muneco::Cola::Cola(){
+    Cilindroide* c = new Cilindroide(0.8, 2, 20, true, true);
+    Esfera* e = new Esfera(20, 20, true, true);
+
+    agregar(MAT_Rotacion(-90, 1, 0, 0));
+
+    /* agregar(MAT_Escalado(0.6, 1,0.6)); */
+    agregar(c);
+
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    ind.push_back(agregar(MAT_Ident()));
+    agregar(e);
+    agregar(c);
+
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    ind.push_back(agregar(MAT_Ident()));
+    agregar(e);
+    agregar(c);
+
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    ind.push_back(agregar(MAT_Ident()));
+    agregar(e);
+    agregar(c);
+
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    ind.push_back(agregar(MAT_Ident()));
+    agregar(e);
+    agregar(c);
+
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    ind.push_back(agregar(MAT_Ident()));
+    agregar(e);
+    agregar(c);
+
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    ind.push_back(agregar(MAT_Ident()));
+    agregar(e);
+    agregar(c);
+
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    ind.push_back(agregar(MAT_Ident()));
+    agregar(e);
+    agregar(c);
+
+    agregar(MAT_Traslacion(0, 1, 0));
+    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    agregar(e);
+}
+
+Matriz4f* Muneco::Cola::getArticulacion(int i){
+    return leerPtrMatriz(ind[i]);
+}
+
+unsigned Muneco::Cola::numArticulaciones(){
+    return ind.size();
 }

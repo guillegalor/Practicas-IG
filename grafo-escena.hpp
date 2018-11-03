@@ -189,6 +189,17 @@ class Muneco : public NodoGrafoEscenaParam{
             Matriz4f* getArticulacionHombro();
             Matriz4f* getArticulacionCodo();
     };
+
+    class Cola: public NodoGrafoEscena{
+        std::vector<int> ind;                   // Vector de indices de las articulaciones
+
+        public:
+            Cola();
+
+            unsigned numArticulaciones();
+            Matriz4f* getArticulacion(int i);   // Devuelve la articulación i-ésima (i \in {0, ..., numArticulaciones()-1})
+    };
+
     public:
         Muneco();
 };
