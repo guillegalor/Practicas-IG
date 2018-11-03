@@ -60,12 +60,21 @@ void MallaInd::crearVBOs()
         // crear VBO caras
         id_vbo_tri = VBO_Crear( GL_ELEMENT_ARRAY_BUFFER, tam_tri, tabla_caras.data());
     }
+    // crear VBO con los colores de los vértices
+    if ( col_ver.size() > 0 )
+        id_vbo_col_ver = VBO_Crear( GL_ARRAY_BUFFER, tam_ver, col_ver.data() );
+
 }
 
 // -----------------------------------------------------------------------------
 
-void MallaInd::visualizarDE_MI( ContextoVis & cv )
-{
+void MallaInd::visualizarDE_MI( ContextoVis & cv ){
+    if( col_ver.size() > 0){ // si hay colores de v. disponibles:
+        glEnableClientState( GL_COLOR_ARRAY );
+        // habilitar colores
+        glColorPointer( 3, GL_FLOAT, 0, col_ver.data() ); // fija puntero a colores
+    }
+
     glEnableClientState( GL_VERTEX_ARRAY );
     glVertexPointer( 3, GL_FLOAT, 0, tabla_verts.data() );
 
@@ -73,6 +82,8 @@ void MallaInd::visualizarDE_MI( ContextoVis & cv )
     glDrawElements( GL_TRIANGLES, tabla_caras.size()*3, GL_UNSIGNED_INT, tabla_caras.data() );
     glDisableClientState( GL_VERTEX_ARRAY );
 
+    // deshabilitar array:
+    glDisableClientState( GL_COLOR_ARRAY );
 }
 
 // ----------------------------------------------------------------------------
@@ -80,7 +91,11 @@ void MallaInd::visualizarDE_VBOs( ContextoVis & cv )
 {
     crearVBOs();
 
-    glColor3f(0.91, 0.96, 0.17);
+    if(col_ver.size() > 0){
+        glBindBuffer (GL_ARRAY_BUFFER, id_vbo_col_ver); //Activar el vbo con los colores de los vertices
+        glColorPointer (3, GL_FLOAT, 0, 0);             //Formato y obset de colores
+        glEnableClientState (GL_COLOR_ARRAY);           //Activa el uso de colores de vertices
+    }
 
     glBindBuffer (GL_ARRAY_BUFFER, id_vbo_ver);
     glVertexPointer (3, GL_FLOAT, 0, 0);
@@ -92,10 +107,10 @@ void MallaInd::visualizarDE_VBOs( ContextoVis & cv )
     glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
 
     glDisableClientState (GL_VERTEX_ARRAY);
+    glDisableClientState (GL_COLOR_ARRAY);
 }
 
 // -----------------------------------------------------------------------------
-
 void MallaInd::visualizarGL( ContextoVis & cv )
 {
     // Establecer modo indicado en el contexto
@@ -122,7 +137,18 @@ void MallaInd::visualizarGL( ContextoVis & cv )
 
 }
 // *****************************************************************************
+void MallaInd::fijarColor( Tupla3f* color){
+    if (color == nullptr)
+        for (int i = 0; i < tabla_verts.size(); ++i) {
+            col_ver.push_back({0,(float)i/tabla_verts.size(),1});
+        }
+    else
+        for (int i = 0; i < tabla_verts.size(); ++i) {
+            col_ver.push_back(*color);
+        }
 
+}
+// -----------------------------------------------------------------------------
 // *****************************************************************************
 
 Cubo::Cubo(Tupla3f main_corner, float edge_size)
@@ -158,6 +184,9 @@ Cubo::Cubo(Tupla3f main_corner, float edge_size)
         Tupla3i (7,2,6),
         Tupla3i (7,4,6),
     };
+
+    Tupla3f col = {0,1,1};
+    fijarColor(&col);
 
 }
 

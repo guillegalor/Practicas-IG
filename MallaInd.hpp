@@ -23,7 +23,7 @@ class MallaInd : public Objeto3D
         std::vector<Tupla3i> tabla_caras;
 
         // IDs de los VBO de vertices y caras respectivamente
-        GLuint id_vbo_ver, id_vbo_tri;
+        GLuint id_vbo_ver, id_vbo_tri, id_vbo_col_ver;
 
         // Tamaño en bytes de las tablas
         unsigned tam_ver, tam_tri;
@@ -51,6 +51,8 @@ class MallaInd : public Objeto3D
         MallaInd( const std::string & nombreIni );
         // visualizar el objeto con OpenGL
         virtual void visualizarGL( ContextoVis & cv ) ;
+        // fijar un color para la figura
+        void fijarColor(Tupla3f* color);
 } ;
 // ---------------------------------------------------------------------
 
