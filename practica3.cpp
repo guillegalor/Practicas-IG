@@ -78,7 +78,7 @@ bool P3_FGE_PulsarTeclaCaracter( unsigned char tecla )
         case 'G' :
             parametroActivo = (++parametroActivo)%(objetos3[objetoActivo3]->numParametros());
 
-            std::cout << "Parametro activo: " << parametroActivo << std::endl;
+            std::cout << "Parametro activo: " << objetos3[objetoActivo3]->leerPtrParametro(parametroActivo)->leer_descripcion() << std::endl;
             break ;
 
         case 'R' :

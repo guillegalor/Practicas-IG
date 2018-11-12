@@ -345,7 +345,7 @@ Muneco::Muneco(){
     br1->fijarColorNodo(color);
     br2->fijarColorNodo(color);
 
-    int i_rot_principal = agregar(MAT_Ident());
+    /* int i_rot_principal = agregar(MAT_Ident()); */
     agregar(MAT_Escalado(1,2,1));
 
     // Primer cilindro del cuerpo
@@ -374,8 +374,7 @@ Muneco::Muneco(){
     // Tercer cilindro del cuerpo
     agregar(c);
 
-    agregar(MAT_Traslacion(0, 1, 0));
-    agregar(MAT_Traslacion(0, 0.5, 0));
+    agregar(MAT_Traslacion(0, 1.5, 0));
     // Brazo izq
     agregar(br1);
 
@@ -401,20 +400,9 @@ Muneco::Muneco(){
     agregar(MAT_Escalado(1, 2, 1));
     agregar(MAT_Traslacion(-0.3, -0.7, -1));
 
-    //Rotación de todo el muneco
-    Parametro rot_principal(
-            "Rotacion de todo el objeto",
-            leerPtrMatriz(i_rot_principal),
-            [=] (float v) {return MAT_Rotacion(v, 0, 1, 0);},
-            false,
-            0,
-            10.0,
-            0
-            );
-
     //Rotación 1
     Parametro rotacion1(
-            "Rotacion 1",
+            "Rotacion primera articulación del cuerpo",
             leerPtrMatriz(i_rotacion1),
             [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
             true,
@@ -425,7 +413,7 @@ Muneco::Muneco(){
 
     //Rotación 2
     Parametro rotacion2(
-            "Rotacion 2",
+            "Rotacion segunda articulación del cuerpo",
             leerPtrMatriz(i_rotacion2),
             [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
             true,
@@ -436,7 +424,7 @@ Muneco::Muneco(){
 
     //Rotación 3
     Parametro rotacion3(
-            "Rotacion 3",
+            "Rotacion tercera articulación del cuerpo",
             leerPtrMatriz(i_rotacion3),
             [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
             true,
@@ -491,7 +479,7 @@ Muneco::Muneco(){
 
     for (int i = 0; i < cola->numArticulaciones(); ++i) {
         Parametro movimiento_cola(
-                "Movimiento articulación " + std::to_string(i) + "de la cola",
+                "Movimiento " + std::to_string(i) + "a articulación de la cola",
                 cola->getArticulacion(i),
                 [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
                 true,
@@ -545,6 +533,7 @@ Matriz4f* Muneco::Brazo::getArticulacionCodo(){
 Muneco::Cola::Cola(){
     Cilindroide* c = new Cilindroide(0.8, 2, 20, true, true);
     Esfera* e = new Esfera(20, 20, true, true);
+    Matriz4f escalado = MAT_Escalado(0.8, 0.8, 0.8);
 
     agregar(MAT_Rotacion(-90, 1, 0, 0));
 
@@ -552,49 +541,49 @@ Muneco::Cola::Cola(){
     agregar(c);
 
     agregar(MAT_Traslacion(0, 1, 0));
-    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    agregar(escalado);
     ind.push_back(agregar(MAT_Ident()));
     agregar(e);
     agregar(c);
 
     agregar(MAT_Traslacion(0, 1, 0));
-    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    agregar(escalado);
     ind.push_back(agregar(MAT_Ident()));
     agregar(e);
     agregar(c);
 
     agregar(MAT_Traslacion(0, 1, 0));
-    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    agregar(escalado);
     ind.push_back(agregar(MAT_Ident()));
     agregar(e);
     agregar(c);
 
     agregar(MAT_Traslacion(0, 1, 0));
-    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    agregar(escalado);
     ind.push_back(agregar(MAT_Ident()));
     agregar(e);
     agregar(c);
 
     agregar(MAT_Traslacion(0, 1, 0));
-    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    agregar(escalado);
     ind.push_back(agregar(MAT_Ident()));
     agregar(e);
     agregar(c);
 
     agregar(MAT_Traslacion(0, 1, 0));
-    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    agregar(escalado);
     ind.push_back(agregar(MAT_Ident()));
     agregar(e);
     agregar(c);
 
     agregar(MAT_Traslacion(0, 1, 0));
-    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    agregar(escalado);
     ind.push_back(agregar(MAT_Ident()));
     agregar(e);
     agregar(c);
 
     agregar(MAT_Traslacion(0, 1, 0));
-    agregar(MAT_Escalado(0.8, 0.8, 0.8));
+    agregar(escalado);
     agregar(e);
 }
 

@@ -42,9 +42,6 @@ MallaInd::MallaInd( const std::string & nombreIni )
 
 void MallaInd::calcular_normales()
 {
-    // COMPLETAR: en la práctica 2: calculo de las normales de la malla
-    // .......
-
 }
 // -----------------------------------------------------------------------------
 void MallaInd::crearVBOs()
@@ -69,6 +66,17 @@ void MallaInd::crearVBOs()
 // -----------------------------------------------------------------------------
 
 void MallaInd::visualizarDE_MI( ContextoVis & cv ){
+    /* glBegin (GL_TRIANGLES); */
+    /* for (auto cara : caras) */
+    /*     for ( int j = 0; j < 3; j++) */
+    /*     { */
+    /*         if (!col_ver.empty()) */
+    /*             glColor3fv(col_ver[cara[j]]); */
+
+    /*         glVertex3fv (vertices[cara[j]]); */
+    /*     } */
+    /* glEnd(); */
+
     if( col_ver.size() > 0){ // si hay colores de v. disponibles:
         glEnableClientState( GL_COLOR_ARRAY );
         // habilitar colores
@@ -138,11 +146,6 @@ void MallaInd::visualizarGL( ContextoVis & cv )
 }
 // *****************************************************************************
 void MallaInd::fijarColorNodo(const Tupla3f& color){
-    /* if (color == nullptr) */
-    /*     for (int i = 0; i < tabla_verts.size(); ++i) { */
-    /*         col_ver.push_back({0,(float)i/tabla_verts.size(),1}); */
-    /*     } */
-    /* else */
     for (int i = 0; i < tabla_verts.size(); ++i) {
         col_ver.push_back(color);
     }
