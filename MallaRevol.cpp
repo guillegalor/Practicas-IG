@@ -86,7 +86,7 @@ void MallaRevol::crearMallaRevol(
             else
                 vert_index_nxt_per = vert_index + n_vert_per;
 
-            tabla_caras.push_back({vert_index, vert_index+1, vert_index_nxt_per});
+            tabla_caras.push_back({vert_index+1, vert_index, vert_index_nxt_per});
             tabla_caras.push_back({vert_index+1, vert_index_nxt_per, vert_index_nxt_per+1});
         }
     }
@@ -112,7 +112,7 @@ void MallaRevol::crearMallaRevol(
                 vert_index_nxt_per_top = vert_index_top + n_vert_per;
             }
 
-            tabla_caras.push_back ({vert_index_bot, vert_index_nxt_per_bot, tapa0_ver_index});
+            tabla_caras.push_back ({vert_index_nxt_per_bot, vert_index_bot, tapa0_ver_index});
             tabla_caras.push_back ({vert_index_top, vert_index_nxt_per_top, tapa1_ver_index});
         }
     }

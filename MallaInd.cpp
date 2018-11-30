@@ -42,6 +42,33 @@ MallaInd::MallaInd( const std::string & nombreIni )
 
 void MallaInd::calcular_normales()
 {
+    /*
+     * Calcular normales de las caras
+     * ||(1-0)x(2-0)||
+     *
+     * Calcular normales de los vértices
+     * ||sum(normales adyancentes a tu vértice)||
+     */
+    for (auto cara: tabla_caras){
+        Tupla3f a, b, m, n;
+        int v0, v1, v2;
+        v0 = cara(0);
+        v1 = cara(1);
+        v2 = cara(2);
+
+        a = tabla_verts[v1] - tabla_verts[v0];
+        b = tabla_verts[v2] - tabla_verts[v0];
+
+        m = a.cross(b);
+        n = m.normalized();
+
+        nor_ver[v0] = (nor_ver[v0] + n).normalized();
+        nor_ver[v1] = (nor_ver[v1] + n).normalized();
+        nor_ver[v2] = (nor_ver[v2] + n).normalized();
+
+        nor_tri.push_back(n);
+    }
+
 }
 // -----------------------------------------------------------------------------
 void MallaInd::crearVBOs()
@@ -153,7 +180,7 @@ void MallaInd::fijarColorNodo(const Tupla3f& color){
 // -----------------------------------------------------------------------------
 // *****************************************************************************
 
-Cubo::Cubo(Tupla3f main_corner, float edge_size)
+Cubo::Cubo()
     :  MallaInd ("malla cubo")
 {
     // Inicialización de vertices del cubo
@@ -163,9 +190,9 @@ Cubo::Cubo(Tupla3f main_corner, float edge_size)
         for (j = 0; j < 2; ++j) {
             for (k = 0; k < 2; ++k) {
                 tabla_verts.push_back (Tupla3f (
-                            main_corner(0) + i*edge_size,
-                            main_corner(1) + j*edge_size,
-                            main_corner(2) + k*edge_size)
+                            i,
+                            j,
+                            k)
                         );
             }
         }
@@ -174,44 +201,38 @@ Cubo::Cubo(Tupla3f main_corner, float edge_size)
     // Inicialización de caras del cubo
     tabla_caras = {
         Tupla3i (0,1,3),
-        Tupla3i (0,2,3),
-        Tupla3i (0,1,5),
+        Tupla3i (2,0,3),
+        Tupla3i (1,0,5),
         Tupla3i (0,4,5),
         Tupla3i (0,2,6),
-        Tupla3i (0,4,6),
-        Tupla3i (7,1,3),
+        Tupla3i (4,0,6),
+        Tupla3i (1,7,3),
         Tupla3i (7,2,3),
         Tupla3i (7,1,5),
-        Tupla3i (7,4,5),
-        Tupla3i (7,2,6),
+        Tupla3i (7,5,4),
+        Tupla3i (7,6,2),
         Tupla3i (7,4,6),
     };
 }
 
-Cubo::Cubo()
-    :  Cubo (Tupla3f(0,0,0), 1)
-{}
 // *****************************************************************************
 
-Tetraedro::Tetraedro(Tupla3f center, float edge_size)
+Tetraedro::Tetraedro()
     :  MallaInd( "malla tetraedro")
 {
     tabla_verts = {
-        Tupla3f (center(0)+ 1*edge_size/2, center(1), center(2) - 1/sqrt(2)*edge_size/2),
-        Tupla3f (center(0)- 1*edge_size/2, center(1), center(2) - 1/sqrt(2)*edge_size/2),
-        Tupla3f (center(0), center(1)+ 1*edge_size/2, center(2) + 1/sqrt(2)*edge_size/2),
-        Tupla3f (center(0), center(1)- 1*edge_size/2, center(2) + 1/sqrt(2)*edge_size/2)
+        Tupla3f ((float)1/2, 0, (float)-1/sqrt(2)/2),
+        Tupla3f ((float)-1/2, 0,(float)-1/sqrt(2)/2),
+        Tupla3f (0, (float)1/2, (float)1/sqrt(2)/2),
+        Tupla3f (0, (float)-1/2, (float)1/sqrt(2)/2)
     };
 
     tabla_caras = {
         Tupla3i (0,1,2),
-        Tupla3i (0,1,3),
+        Tupla3i (1,0,3),
         Tupla3i (0,2,3),
-        Tupla3i (1,2,3)
+        Tupla3i (1,3,2)
     };
 }
 
-Tetraedro::Tetraedro ()
-    : Tetraedro (Tupla3f(0,0,0), 1)
-{}
 // *****************************************************************************

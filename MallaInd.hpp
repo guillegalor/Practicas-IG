@@ -60,7 +60,6 @@ class Cubo : public MallaInd
 {
     public:
         Cubo ();
-        Cubo (Tupla3f main_corner, float edge_size);
 };
 // ---------------------------------------------------------------------
 
@@ -68,7 +67,6 @@ class Tetraedro : public MallaInd
 {
     public:
         Tetraedro ();
-        Tetraedro (Tupla3f center, float edge_size);
 };
 
 #endif
