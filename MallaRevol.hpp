@@ -21,7 +21,8 @@ class MallaRevol : public MallaInd
         void crearMallaRevol(
                 const std::vector<Tupla3f> & perfil_original,
                 const bool crear_tapas,
-                const bool crear_malla);
+                const bool cerrar_malla,
+                const bool crear_texturas);
         unsigned
             nper , // numero de perfiles
             nvp  ; // numero de vertices por perfil
@@ -32,8 +33,9 @@ class MallaRevol : public MallaInd
         // crea una malla de revolucion tomando el perfil de un archivo
         MallaRevol( const std::string & nombre_arch,
                 const unsigned nperfiles,
-                const bool     crear_tapas,
-                const bool     cerrar_malla ) ;
+                const bool crear_tapas,
+                const bool cerrar_malla,
+                const bool crear_texturas);
 
 } ;
 
@@ -43,7 +45,8 @@ class Cilindro : public MallaRevol
         Cilindro(   const unsigned num_verts_per,
                 const unsigned nperfiles,
                 const bool crear_tapas,
-                const bool cerrar_malla);
+                const bool cerrar_malla,
+                const bool crear_texturas);
 };
 
 class Cilindroide : public MallaRevol
@@ -53,7 +56,8 @@ class Cilindroide : public MallaRevol
                     const unsigned num_verts_per,
                     const unsigned nperfiles,
                     const bool crear_tapas,
-                    const bool cerrar_malla);
+                    const bool cerrar_malla,
+                    const bool crear_texturas);
 };
 
 class Esfera : public MallaRevol
@@ -62,7 +66,8 @@ class Esfera : public MallaRevol
         Esfera( const unsigned num_verts_per,
                 const unsigned nperfiles,
                 const bool crear_tapas,
-                const bool cerrar_malla);
+                const bool cerrar_malla,
+                const bool crear_texturas);
 };
 
 class Cono : public MallaRevol
@@ -71,7 +76,8 @@ class Cono : public MallaRevol
         Cono(   const unsigned num_verts_per,
                 const unsigned nperfiles,
                 const bool crear_tapas,
-                const bool cerrar_malla);
+                const bool cerrar_malla,
+                const bool crear_texturas);
 };
 
 #endif

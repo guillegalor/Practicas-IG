@@ -42,13 +42,10 @@ MallaInd::MallaInd( const std::string & nombreIni )
 
 void MallaInd::calcular_normales()
 {
-    /*
-     * Calcular normales de las caras
-     * ||(1-0)x(2-0)||
-     *
-     * Calcular normales de los vértices
-     * ||sum(normales adyancentes a tu vértice)||
-     */
+    for (auto i: tabla_verts){
+        nor_ver.push_back({0, 0, 0});
+    }
+
     for (auto cara: tabla_caras){
         Tupla3f a, b, m, n;
         int v0, v1, v2;
@@ -56,12 +53,14 @@ void MallaInd::calcular_normales()
         v1 = cara(1);
         v2 = cara(2);
 
+        // Calcular normales de las caras ((v1-v0)x(v2-vo))||(v1-v0)x(v2-v0)||
         a = tabla_verts[v1] - tabla_verts[v0];
         b = tabla_verts[v2] - tabla_verts[v0];
 
         m = a.cross(b);
         n = m.normalized();
 
+        // Calcular normales de los vértices sum(normales adyancentes a tu vértice)||sum(normales adyancentes a tu vértice)||
         nor_ver[v0] = (nor_ver[v0] + n).normalized();
         nor_ver[v1] = (nor_ver[v1] + n).normalized();
         nor_ver[v2] = (nor_ver[v2] + n).normalized();

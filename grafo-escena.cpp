@@ -325,13 +325,15 @@ Muneco::Muneco(){
             2,
             20,
             true,
-            true
+            true,
+            false
             );
     Esfera* e = new Esfera(
             20,
             20,
             false,
-            true
+            true,
+            false
             );
     Cola* cola = new Cola();
     Brazo* br1 = new Brazo;
@@ -501,8 +503,8 @@ Muneco::Muneco(){
 }
 
 Muneco::Brazo::Brazo(){
-    Cilindro* c = new Cilindro(2, 20, true, true);
-    Esfera* e = new Esfera(20, 20, false, true);
+    Cilindro* c = new Cilindro(2, 20, true, true, false);
+    Esfera* e = new Esfera(20, 20, false, true, false);
 
     agregar(MAT_Traslacion(-1, -0.5, 0));
     indice_hombro = agregar(MAT_Ident());   // Articulación hombro
@@ -531,8 +533,8 @@ Matriz4f* Muneco::Brazo::getArticulacionCodo(){
 }
 
 Muneco::Cola::Cola(){
-    Cilindroide* c = new Cilindroide(0.8, 2, 20, true, true);
-    Esfera* e = new Esfera(20, 20, true, true);
+    Cilindroide* c = new Cilindroide(0.8, 2, 20, true, true, false);
+    Esfera* e = new Esfera(20, 20, true, true, false);
     Matriz4f escalado = MAT_Escalado(0.8, 0.8, 0.8);
 
     agregar(MAT_Rotacion(-90, 1, 0, 0));
@@ -596,8 +598,8 @@ unsigned Muneco::Cola::numArticulaciones(){
 }
 
 Muneco::Ojo::Ojo(){
-    Esfera* e1 = new Esfera(20, 20, true, true);    // Esfera de fuera
-    Esfera* e2 = new Esfera(20, 20, true, true);    // Pupila
+    Esfera* e1 = new Esfera(20, 20, true, true, false);    // Esfera de fuera
+    Esfera* e2 = new Esfera(20, 20, true, true, false);    // Pupila
     e1->fijarColorNodo({1,1,1});
     e2->fijarColorNodo({0,0,0});
 

@@ -17,6 +17,13 @@ const double PI = 3.1415926535897;
 using namespace std ;
 
 // *****************************************************************************
+// Funciones auxiliares
+
+float norm(Tupla3f v){
+    return sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+};
+
+// *****************************************************************************
 MallaRevol::MallaRevol( const std::string & nombre)
 {
     ponerNombre( nombre );
@@ -24,8 +31,9 @@ MallaRevol::MallaRevol( const std::string & nombre)
 
 MallaRevol::MallaRevol( const std::string & nombre_arch,
         const unsigned nperfiles,
-        const bool     crear_tapas,
-        const bool     cerrar_malla  )
+        const bool crear_tapas,
+        const bool cerrar_malla,
+        const bool crear_texturas)
 {
     ponerNombre( std::string("malla por revolución del perfil en '"+ nombre_arch + "'" ));
 
@@ -43,27 +51,47 @@ MallaRevol::MallaRevol( const std::string & nombre_arch,
     nper = nperfiles;
 
     // Rellena las tablas
-    crearMallaRevol(  perfil_original, crear_tapas, cerrar_malla);
+    crearMallaRevol(perfil_original, crear_tapas, cerrar_malla, crear_texturas);
 
     // calcular la tabla de normales
-    // calcular_normales();
-
+    calcular_normales();
 }
 
 void MallaRevol::crearMallaRevol(
         const std::vector<Tupla3f> & perfil_original,
         const bool crear_tapas,
-        const bool cerrar_malla)
+        const bool cerrar_malla,
+        const bool crear_texturas)
 {
     unsigned n_vert_per = perfil_original.size();
+    //Si se crean las texturas, en cada entrada se almacena la longitud del perfil {vértice inicial, ..., vértice i-ésimo}
+    std::vector<float> distancias_perfil;
+
+    if (crear_texturas){
+        distancias_perfil[0] = 0;
+        for (int i = 1; i < n_vert_per; ++i){
+            distancias_perfil[i]  = distancias_perfil[i-1] + norm(perfil_original[i] - perfil_original[i-1]);
+        }
+    }
 
     // Añadir todos los vertices a la tabla de vértices
     for (int i = 0; i < nper; ++i) {
+        unsigned j = 0;
         for (auto vert : perfil_original){
             if (cerrar_malla)
                 tabla_verts.push_back (MAT_Rotacion((float)(360*i)/nper, 0, 1, 0)*vert);
-            else
+            else{
                 tabla_verts.push_back (MAT_Rotacion((float)(360*i)/(nper-1), 0, 1, 0)*vert);
+                if (crear_texturas){
+                    float s, t;
+
+                    s = i/(nper-1);
+                    t = distancias_perfil[j] / distancias_perfil[n_vert_per-1];
+
+                    tabla_text.push_back ({s,t});
+                }
+            }
+            ++j;
         }
     }
 
@@ -125,7 +153,8 @@ void MallaRevol::crearMallaRevol(
 Cilindro::Cilindro( const unsigned num_verts_per,
         const unsigned nperfiles,
         const bool crear_tapas,
-        const bool cerrar_malla)
+        const bool cerrar_malla,
+        const bool crear_texturas)
     : MallaRevol ("Cilindro")
 {
     std::vector<Tupla3f> perfil_original;
@@ -136,7 +165,7 @@ Cilindro::Cilindro( const unsigned num_verts_per,
 
     nper = nperfiles;
 
-    crearMallaRevol (perfil_original, crear_tapas, crear_tapas);
+    crearMallaRevol (perfil_original, crear_tapas, crear_tapas, crear_texturas);
 }
 
 // *****************************************************************************
@@ -147,7 +176,8 @@ Cilindroide::Cilindroide(
         const unsigned num_verts_per,
         const unsigned nperfiles,
         const bool crear_tapas,
-        const bool cerrar_malla)
+        const bool cerrar_malla,
+        const bool crear_texturas)
     : MallaRevol ("Cilindroide")
 {
     std::vector<Tupla3f> perfil_original;
@@ -158,7 +188,7 @@ Cilindroide::Cilindroide(
 
     nper = nperfiles;
 
-    crearMallaRevol (perfil_original, crear_tapas, crear_tapas);
+    crearMallaRevol (perfil_original, crear_tapas, crear_tapas, crear_texturas);
 }
 // *****************************************************************************
 //
@@ -166,7 +196,8 @@ Cilindroide::Cilindroide(
 Cono::Cono( const unsigned num_verts_per,
         const unsigned nperfiles,
         const bool crear_tapas,
-        const bool cerrar_malla)
+        const bool cerrar_malla,
+        const bool crear_texturas)
     : MallaRevol ("Cono")
 {
     std::vector<Tupla3f> perfil_original;
@@ -177,7 +208,7 @@ Cono::Cono( const unsigned num_verts_per,
 
     nper = nperfiles;
 
-    crearMallaRevol (perfil_original, crear_tapas, crear_tapas);
+    crearMallaRevol (perfil_original, crear_tapas, crear_tapas, crear_texturas);
 }
 
 // *****************************************************************************
@@ -186,7 +217,8 @@ Cono::Cono( const unsigned num_verts_per,
 Esfera::Esfera( const unsigned num_verts_per,
         const unsigned nperfiles,
         const bool crear_tapas,
-        const bool cerrar_malla)
+        const bool cerrar_malla,
+        const bool crear_texturas)
     : MallaRevol ("Cono")
 {
     std::vector<Tupla3f> perfil_original;
@@ -202,5 +234,5 @@ Esfera::Esfera( const unsigned num_verts_per,
 
     nper = nperfiles;
 
-    crearMallaRevol (perfil_original, crear_tapas, crear_tapas);
+    crearMallaRevol (perfil_original, crear_tapas, crear_tapas, crear_texturas);
 }

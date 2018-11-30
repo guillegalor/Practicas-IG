@@ -30,7 +30,7 @@ void P2_Inicializar(  )
     cout << "Creando objetos de la práctica 2 .... " << flush ;
 
     objetos2[0] = new MallaPLY("../plys/beethoven.ply");
-    objetos2[1] = new Cilindroide(0.75, 20, 20, true, true);
+    objetos2[1] = new Cilindroide(0.75, 20, 20, true, true, false);
 
     //testear color
     objetos2[0]->fijarColorNodo({0,1,1});

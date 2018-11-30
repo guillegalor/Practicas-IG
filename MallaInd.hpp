@@ -34,6 +34,9 @@ class MallaInd : public Objeto3D
         std::vector<Tupla3f> col_tri;
         std::vector<Tupla3f> col_ver;
 
+        // Tabla de texturas
+        std::vector<Tupla2f> tabla_text;
+
         // calculo de las normales de esta malla
         void calcular_normales();
 
