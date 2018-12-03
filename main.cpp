@@ -273,6 +273,18 @@ void FGE_PulsarTeclaCaracter( GLFWwindow* window, unsigned int codepoint )
             contextoVis.usarVBOs = !contextoVis.usarVBOs;
             cout << "modo de envío cambiado a: '" << (contextoVis.usarVBOs ? "modo diferido" : "modo inmediato") << "'" << endl;
             break;
+        case 'H':
+            cam_a += cam_ab_incre_tecla ;
+            break;
+        case 'L':
+            cam_a += -cam_ab_incre_tecla ;
+            break;
+        case 'K':
+            cam_b += cam_ab_incre_tecla ;
+            break;
+        case 'J':
+            cam_b += -cam_ab_incre_tecla ;
+            break;
 
         default:
             redibujar = false ;
