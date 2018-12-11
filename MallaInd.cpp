@@ -58,7 +58,8 @@ void MallaInd::calcular_normales()
         b = tabla_verts[v2] - tabla_verts[v0];
 
         m = a.cross(b);
-        n = m.normalized();
+        if (m.lengthSq() > 0.0)
+            n = m.normalized();
 
         // Calcular normales de los vértices sum(normales adyancentes a tu vértice)||sum(normales adyancentes a tu vértice)||
         nor_ver[v0] = (nor_ver[v0] + n).normalized();
@@ -72,37 +73,33 @@ void MallaInd::calcular_normales()
 // -----------------------------------------------------------------------------
 void MallaInd::crearVBOs()
 {
-    if (id_vbo_ver == 0){
-        tam_ver = sizeof(float)*3L*tabla_verts.size();
-        // crear VBO vértices
-        id_vbo_ver = VBO_Crear(GL_ARRAY_BUFFER, tam_ver, tabla_verts.data());
-    }
+    tam_ver = sizeof(float)*3L*tabla_verts.size();
+    tam_tri = sizeof(unsigned)*3L*tabla_caras.size();
 
-    if (id_vbo_tri == 0){
-        tam_tri = sizeof(unsigned)*3L*tabla_caras.size();
+    if (id_vbo_ver == 0)
+        // crear VBO vértices
+        id_vbo_ver = VBO_Crear (GL_ARRAY_BUFFER, tam_ver, tabla_verts.data());
+
+    if (id_vbo_tri == 0)
         // crear VBO caras
-        id_vbo_tri = VBO_Crear( GL_ELEMENT_ARRAY_BUFFER, tam_tri, tabla_caras.data());
-    }
+        id_vbo_tri = VBO_Crear (GL_ELEMENT_ARRAY_BUFFER, tam_tri, tabla_caras.data());
+
     // crear VBO con los colores de los vértices
     if ( col_ver.size() > 0 )
-        id_vbo_col_ver = VBO_Crear( GL_ARRAY_BUFFER, tam_ver, col_ver.data() );
+        id_vbo_col_ver = VBO_Crear (GL_ARRAY_BUFFER, tam_ver, col_ver.data() );
+
+    // crear VBO con las normales de los vertices
+    if (nor_ver.size() > 0)
+        id_vbo_nor_ver = VBO_Crear (GL_ARRAY_BUFFER, tam_ver, nor_ver.data());
+
+    if (tabla_text.size() > 0)
+        id_vbo_tex = VBO_Crear (GL_ARRAY_BUFFER, sizeof(float)*2L*tam_ver, tabla_text.data());
 
 }
 
 // -----------------------------------------------------------------------------
 
 void MallaInd::visualizarDE_MI( ContextoVis & cv ){
-    /* glBegin (GL_TRIANGLES); */
-    /* for (auto cara : caras) */
-    /*     for ( int j = 0; j < 3; j++) */
-    /*     { */
-    /*         if (!col_ver.empty()) */
-    /*             glColor3fv(col_ver[cara[j]]); */
-
-    /*         glVertex3fv (vertices[cara[j]]); */
-    /*     } */
-    /* glEnd(); */
-
     if( col_ver.size() > 0){ // si hay colores de v. disponibles:
         glEnableClientState( GL_COLOR_ARRAY );
         // habilitar colores
@@ -145,6 +142,45 @@ void MallaInd::visualizarDE_VBOs( ContextoVis & cv )
 }
 
 // -----------------------------------------------------------------------------
+
+void MallaInd::visualizarDE_NT (ContextoVis & cv) // visu. con normales y cc.tt.
+{
+    glVertexPointer (3, GL_FLOAT, 0, tabla_verts.data());
+    glTexCoordPointer (2, GL_FLOAT, 0, tabla_text.data());
+    glNormalPointer (GL_FLOAT, 0, nor_ver.data() );
+    glEnableClientState (GL_VERTEX_ARRAY );
+    glEnableClientState (GL_NORMAL_ARRAY );
+    glEnableClientState (GL_TEXTURE_COORD_ARRAY );
+    glDrawElements (GL_TRIANGLES, tabla_caras.size(), GL_UNSIGNED_INT, tabla_caras.data());
+    glDisableClientState (GL_VERTEX_ARRAY );
+    glDisableClientState (GL_NORMAL_ARRAY );
+    glDisableClientState (GL_TEXTURE_COORD_ARRAY );
+}
+
+// -----------------------------------------------------------------------------
+void MallaInd::visualizarVBOs_NT (ContextoVis & cv) // vis. normales y cc.tt. en VBOs
+{
+    // activar VBO de coordenadas de normales
+    glBindBuffer( GL_ARRAY_BUFFER, id_vbo_nor_ver );
+    glNormalPointer( GL_FLOAT, 0, 0 );
+
+    // (0 == offset en vbo)
+    glEnableClientState( GL_NORMAL_ARRAY );
+
+    // activar VBO de coordenadas de textura
+    glBindBuffer( GL_ARRAY_BUFFER, id_vbo_tex );
+    glTexCoordPointer( 2, GL_FLOAT, 0, 0 ); // (0 == offset en vbo)
+    glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+
+    // visualizar (el mismo método ya visto)
+    visualizarDE_VBOs(cv);
+
+    // desactivar punteros a tablas
+    glDisableClientState( GL_NORMAL_ARRAY );
+    glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+}
+
+// -----------------------------------------------------------------------------
 void MallaInd::visualizarGL( ContextoVis & cv )
 {
     // Establecer modo indicado en el contexto
@@ -169,8 +205,7 @@ void MallaInd::visualizarGL( ContextoVis & cv )
     else
         visualizarDE_MI (cv);
 
-}
-// *****************************************************************************
+} // *****************************************************************************
 void MallaInd::fijarColorNodo(const Tupla3f& color){
     for (int i = 0; i < tabla_verts.size(); ++i) {
         col_ver.push_back(color);

@@ -68,9 +68,9 @@ void MallaRevol::crearMallaRevol(
     std::vector<float> distancias_perfil;
 
     if (crear_texturas){
-        distancias_perfil[0] = 0;
+        distancias_perfil.push_back(0.0);
         for (int i = 1; i < n_vert_per; ++i){
-            distancias_perfil[i]  = distancias_perfil[i-1] + norm(perfil_original[i] - perfil_original[i-1]);
+            distancias_perfil.push_back(distancias_perfil[i-1] + norm(perfil_original[i] - perfil_original[i-1]));
         }
     }
 

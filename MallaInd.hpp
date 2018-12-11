@@ -23,7 +23,7 @@ class MallaInd : public Objeto3D
         std::vector<Tupla3i> tabla_caras;
 
         // IDs de los VBO de vertices y caras respectivamente
-        GLuint id_vbo_ver, id_vbo_tri, id_vbo_col_ver;
+        GLuint id_vbo_ver, id_vbo_tri, id_vbo_col_ver, id_vbo_tex, id_vbo_nor_ver;
 
         // Tamaño en bytes de las tablas
         unsigned tam_ver, tam_tri;
@@ -43,9 +43,12 @@ class MallaInd : public Objeto3D
         // crear VBO de caras y VBO de vertices
         void crearVBOs();
         // visualizar con 'draw elements', en modo inmediato
-        void visualizarDE_MI( ContextoVis & cv );
+        void visualizarDE_MI (ContextoVis & cv);
         // visualizar con 'draw elements', en modo diferido (con VBOS)
-        void visualizarDE_VBOs( ContextoVis & cv );
+        void visualizarDE_VBOs (ContextoVis & cv);
+
+        void visualizarDE_NT (ContextoVis & cv); // vis. con normales y cc.tt.
+        void visualizarVBOs_NT (ContextoVis & cv); // vis. normales y cc.tt. en VBOs
 
     public:
         // crea una malla vacía (nombre: "malla indexada nueva vacía")
