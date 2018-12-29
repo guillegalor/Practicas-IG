@@ -84,6 +84,9 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix ();
 
+    // Guardamos el material activo anterior
+    cv.pilaMateriales.push();
+
     for (unsigned i = 0; i < entradas.size(); i++)
         switch (entradas[i].tipo) {
             case TipoEntNGE::objeto:
@@ -93,9 +96,16 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
                 glMatrixMode (GL_MODELVIEW);
                 glMultMatrixf (*(entradas[i].matriz));
                 break;
+            case TipoEntNGE::material:
+                cv.pilaMateriales.activarMaterial(entradas[i].material);
+
             default:
                 std::cout << "Tipo no conocido" << std::endl;
         }
+
+    // Restauramos el material activo anterior
+    cv.pilaMateriales.pop();
+    cv.pilaMateriales.activarActual();
 
     glMatrixMode (GL_MODELVIEW);
     glPopMatrix();

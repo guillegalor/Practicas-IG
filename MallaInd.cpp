@@ -183,22 +183,25 @@ void MallaInd::visualizarVBOs_NT (ContextoVis & cv) // vis. normales y cc.tt. en
 // -----------------------------------------------------------------------------
 void MallaInd::visualizarGL( ContextoVis & cv )
 {
-    // Establecer modo indicado en el contexto
-    GLenum mode;
-    switch (cv.modoVis){
-        default:
-        case modoSolido:
-            mode = GL_FILL;
-            break;
-        case modoPuntos:
-            mode = GL_POINT;
-            break;
-        case modoAlambre:
-            mode = GL_LINE;
-            break;
-    }
 
-    glPolygonMode (GL_FRONT_AND_BACK, mode);
+    if (cv.modoVis < 3){
+        // Establecer modo indicado en el contexto
+        GLenum mode;
+        switch (cv.modoVis){
+            default:
+            case modoSolido:
+                mode = GL_FILL;
+                break;
+            case modoPuntos:
+                mode = GL_POINT;
+                break;
+            case modoAlambre:
+                mode = GL_LINE;
+                break;
+        }
+
+        glPolygonMode (GL_FRONT_AND_BACK, mode);
+    }
 
     if (cv.usarVBOs)
         visualizarDE_VBOs (cv);

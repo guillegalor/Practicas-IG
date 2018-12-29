@@ -129,7 +129,7 @@ Textura::~Textura( )
 
 void Textura::activar(  )
 {
-    // COMPLETAR: práctica 4: enviar la textura a la GPU (solo la primera vez) y activarla
+    // DONE: práctica 4: enviar la textura a la GPU (solo la primera vez) y activarla
     if (enviada = false){
         enviar();
     }

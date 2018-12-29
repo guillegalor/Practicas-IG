@@ -47,7 +47,7 @@ class PilaMateriales
    public:
 
    PilaMateriales( ) ;
-   void activarMaterial( Material * material );
+   void activarMaterial( Material* material );
    void activarActual();
 
    void push();
@@ -197,7 +197,7 @@ class FuenteLuz
    public:
 
    // inicializa la fuente de luz
-   //
+
    // p_longi_ini == valor inicial del ángulo horizontal en grados
    // p_lati_ini  == idem del ángulo vértical
    // p_color     == color de la fuente de luz (amb, dif y spec )
