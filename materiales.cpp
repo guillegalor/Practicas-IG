@@ -87,19 +87,10 @@ Textura::Textura( const std::string & nombreArchivoJPG )
 
 void Textura::enviar()
 {
-    // para el modo de coords. de objeto:
-    if (modo_gen_ct = mgct_coords_objeto){
-        glTexGenfv( GL_S, GL_OBJECT_PLANE, coefs_s ) ;
-        glTexGenfv( GL_T, GL_OBJECT_PLANE, coefs_t ) ;
-    }
+    glBindTexture(GL_TEXTURE_2D, ident_textura);
 
-    // para el modo de coords. del ojo:
-    if (modo_gen_ct = mgct_coords_ojo){
-        glTexGenfv( GL_S, GL_EYE_PLANE, coefs_s ) ;
-        glTexGenfv( GL_T, GL_EYE_PLANE, coefs_t ) ;
-    }
-
-    gluBuild2DMipmaps( GL_TEXTURE_2D,
+    gluBuild2DMipmaps(
+        GL_TEXTURE_2D,
         GL_RGB,                         // formato interno
         imagen->tamX(),                 // núm. de columnas (arbitrario) (GLsizei)
         imagen->tamY(),                 // núm de filas (arbitrario) (GLsizei)
@@ -130,12 +121,57 @@ Textura::~Textura( )
 void Textura::activar(  )
 {
     // DONE: práctica 4: enviar la textura a la GPU (solo la primera vez) y activarla
-    if (enviada = false){
+    if (!enviada){
         enviar();
     }
 
+    glEnable(GL_TEXTURE_2D);
+
+    // Habilita la generación de coordenadas
+    if (modo_gen_ct != mgct_desactivada){
+        glEnable(GL_TEXTURE_GEN_S);
+        glEnable(GL_TEXTURE_GEN_T);
+
+        // para el modo de coords. de objeto:
+        if (modo_gen_ct == mgct_coords_objeto){
+            glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+            glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+            glTexGenfv( GL_S, GL_OBJECT_PLANE, coefs_s ) ;
+            glTexGenfv( GL_T, GL_OBJECT_PLANE, coefs_t ) ;
+        }
+
+        // para el modo de coords. del ojo:
+        if (modo_gen_ct == mgct_coords_ojo){
+            glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+            glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+            glTexGenfv( GL_S, GL_EYE_PLANE, coefs_s ) ;
+            glTexGenfv( GL_T, GL_EYE_PLANE, coefs_t ) ;
+        }
+    }
+    // Deshabilita la generación de coordenadas
+    else{
+        glDisable(GL_TEXTURE_GEN_S);
+        glDisable(GL_TEXTURE_GEN_T);
+    }
+
     glBindTexture(GL_TEXTURE_2D, ident_textura);
+
 }
+
+// *********************************************************************
+
+TexturaXY::TexturaXY( const std::string & nom )
+  : Textura(nom)
+{
+  modo_gen_ct = mgct_coords_ojo;  // por ejemplo
+
+  coefs_s[0] = 1.0;
+  coefs_s[1] = coefs_s[2] = coefs_s[3] = 0.0;
+
+  coefs_t[1] = 1.0;
+  coefs_t[0] = coefs_t[2] = coefs_t[3] = 0.0;
+}
+
 // *********************************************************************
 
 Material::Material()
@@ -153,12 +189,12 @@ Material::Material( const std::string & nombreArchivoJPG )
 
     coloresCero();
 
-    del.emision   = VectorRGB(0.0,0.0,0.0,1.0);
+    del.emision   = VectorRGB( 0.0, 0.0, 0.0, 1.0);
     del.ambiente  = VectorRGB( 0.0, 0.0, 0.0, 1.0);
     del.difusa    = VectorRGB( 0.5, 0.5, 0.5, 1.0 );
     del.especular = VectorRGB( 1.0, 1.0, 1.0, 1.0 );
 
-    tra.emision   = VectorRGB(0.0,0.0,0.0,1.0);
+    tra.emision   = VectorRGB( 0.0, 0.0, 0.0, 1.0);
     tra.ambiente  = VectorRGB( 0.0, 0.0, 0.0, 1.0);
     tra.difusa    = VectorRGB( 0.2, 0.2, 0.2, 1.0 );
     tra.especular = VectorRGB( 0.2, 0.2, 0.2, 1.0 );
@@ -198,29 +234,26 @@ Material::Material( Textura * text, float ka, float kd, float ks, float exp )
 // en el lugar de textura (textura == NULL)
 Material::Material( const Tupla3f & colorAmbDif, float ka, float kd, float ks, float exp )
 {
-    // DONE: práctica 4: inicializar material usando colorAmbDif,ka,kd,ks,exp
-    // .....
+    tex = NULL;
+    iluminacion = true;
+    color = {colorAmbDif[0], colorAmbDif[1], colorAmbDif[2], 1.0};
+
+    del.emision   = VectorRGB(0.0,0.0,0.0, 1.0);
+    del.ambiente  = ka*color;
+    del.difusa    = kd*color;
+    del.especular = ks*color;
+
+    tra.emision   = VectorRGB(0.0,0.0,0.0, 1.0);
+    tra.ambiente  = ka*color;
+    tra.difusa    = kd*color;
+    tra.especular = ks*color;
+
+    del.exp_brillo = exp;
+    tra.exp_brillo = exp;
 
     ponerNombre("material color plano, ilum.") ;
-
-    iluminacion = true;
-    tex         = NULL;
-
-    coloresCero();
-
-    color       =
-        del.ambiente  =
-        del.difusa    =
-
-        tra.ambiente  =
-        tra.difusa    = {colorAmbDif[0], colorAmbDif[1], colorAmbDif[2], 1.0};
-
-    del.especular       =
-        tra.especular   =  VectorRGB(ks, ks, ks, 1);
-
-    del.exp_brillo =
-        tra.exp_brillo = exp;
 }
+
 // ---------------------------------------------------------------------
 
 Material::Material( const float r, const float g, const float b )
@@ -229,10 +262,12 @@ Material::Material( const float r, const float g, const float b )
     // .....
 
     ponerNombre("Material color plano");
-    coloresCero();
-    color = {r, g, b, 1.0};
+
     iluminacion = false;
     tex = NULL;
+
+    coloresCero();
+    color = {r, g, b, 1.0};
 }
 
 //----------------------------------------------------------------------
@@ -284,15 +319,8 @@ void Material::activar(  )
     // DONE: práctica 4: activar un material
     // .....
 
-    if (tex != NULL)
-        tex->activar();
-    else
-        glDisable (GL_TEXTURE_2D);
-
     // Activa la iluminación
     if (iluminacion){
-        glDisable(GL_COLOR_MATERIAL);
-
         glMaterialfv(GL_FRONT, GL_EMISSION, del.emision);
         glMaterialfv(GL_FRONT, GL_AMBIENT, del.ambiente);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, del.difusa);
@@ -305,42 +333,35 @@ void Material::activar(  )
         glMaterialfv(GL_BACK, GL_SPECULAR, tra.especular);
         glMaterialf(GL_BACK, GL_SHININESS, tra.exp_brillo);
 
-        glColorMaterial(GL_FRONT, GL_EMISSION);
-        glColorMaterial(GL_FRONT, GL_AMBIENT);
-        glColorMaterial(GL_FRONT, GL_DIFFUSE);
-        glColorMaterial(GL_FRONT, GL_SPECULAR);
-        glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-
-        glColorMaterial(GL_BACK, GL_EMISSION);
-        glColorMaterial(GL_BACK, GL_AMBIENT);
-        glColorMaterial(GL_BACK, GL_DIFFUSE);
-        glColorMaterial(GL_BACK, GL_SPECULAR);
-        glColorMaterial(GL_BACK, GL_AMBIENT_AND_DIFFUSE);
-
-        glEnable(GL_COLOR_MATERIAL);
-
         glEnable(GL_LIGHTING);
+        glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
     }
     else{
         glDisable(GL_LIGHTING);
-        glColor4fv(color);
+
+        /* glColor4fv(color); */
+
+        /* glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION); */
+        /* glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE); */
+        /* glColorMaterial(GL_FRONT_AND_BACK, GL_SPECULAR); */
+
+        /* glEnable(GL_COLOR_MATERIAL); // No estoy seguro si hace falta */
     }
+
+    if (tex != NULL)
+        tex->activar();
+    else
+        glDisable (GL_TEXTURE_2D);
 }
 
 //**********************************************************************
 
-FuenteLuz::FuenteLuz( GLfloat p_longi_ini, GLfloat p_lati_ini, const VectorRGB & p_color )
+FuenteLuz::FuenteLuz(const VectorRGB & p_color)
 {
     //CError();
 
     if ( trazam )
         cout << "creando fuente de luz." <<  endl << flush ;
-
-    // inicializar parámetros de la fuente de luz
-    longi_ini = p_longi_ini ;
-    lati_ini  = p_lati_ini  ;
-    longi = longi_ini ;
-    lati  = lati_ini ;
 
     col_ambiente  = p_color ;
     col_difuso    = p_color ;
@@ -351,24 +372,23 @@ FuenteLuz::FuenteLuz( GLfloat p_longi_ini, GLfloat p_lati_ini, const VectorRGB &
     //CError();
 }
 
-//----------------------------------------------------------------------
+//**********************************************************************
 
-void FuenteLuz::activar()
+void FuenteLuzDireccional::activar()
 {
     if (ind_fuente != -1){
         unsigned i = GL_LIGHT0 + ind_fuente;
 
         glEnable(i);
-        glLightfv(i, GL_AMBIENT, (float *) &col_ambiente);
-        glLightfv(i, GL_DIFFUSE, (float *) &col_difuso);
-        glLightfv(i, GL_SPECULAR, (float *) &col_especular);
+        glLightfv(i, GL_AMBIENT, col_ambiente);
+        glLightfv(i, GL_DIFFUSE, col_difuso);
+        glLightfv(i, GL_SPECULAR, col_especular);
 
-        const float ejeZ[4] = {0.0, 0.0, 1.0, 0.0};
+        const Tupla4f ejeZ = {0.0, 0.0, 1.0, 0.0};
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
 
         glLoadIdentity(); // Hacer M = Ide
-        /* glMultMatrix(A);  // A podría ser Ide, V o VN, no se que hace */
 
         // (3) rotación longi grados en torno a eje Y
         glRotatef(longi, 0.0, 1.0, 0.0);
@@ -386,7 +406,7 @@ void FuenteLuz::activar()
 
 //----------------------------------------------------------------------
 
-bool FuenteLuz::gestionarEventoTeclaEspecial( int key )
+bool FuenteLuzDireccional::gestionarEventoTeclaEspecial( int key )
 {
     bool actualizar = true ;
     const float incr = 3.0f ;
@@ -414,6 +434,67 @@ bool FuenteLuz::gestionarEventoTeclaEspecial( int key )
             cout << "tecla no usable para la fuente de luz." << endl << flush ;
     }
 
+    std::cout << "Latitud, longitud = " << lati << ", " << longi << std::endl;
+
+    //if ( actualizar )
+    //   cout << "fuente de luz cambiada: longi == " << longi << ", lati == " << lati << endl << flush ;
+    return actualizar ;
+}
+
+//----------------------------------------------------------------------
+
+FuenteLuzDireccional::FuenteLuzDireccional(float alpha_inicial, float beta_inicial, const VectorRGB & p_color)
+    : FuenteLuz(p_color),
+    longi_ini(alpha_inicial),
+    lati_ini(beta_inicial),
+    longi(alpha_inicial),
+    lati(beta_inicial)
+{}
+
+//----------------------------------------------------------------------
+
+void FuenteLuzDireccional::variarAngulo(unsigned angulo, float incremento){
+    if(angulo == 0)
+        longi+=incremento;
+    else
+        lati+=incremento;
+}
+
+//**********************************************************************
+
+FuenteLuzPosicional::FuenteLuzPosicional(const Tupla3f & posicion, const VectorRGB & p_color)
+    : FuenteLuz(p_color), posicion(posicion){}
+
+void FuenteLuzPosicional::activar()
+{
+    // COMPLETAR: práctica 4: activar una fuente de luz (en GL_LIGHT0 + ind_fuente)
+    if(ind_fuente != -1){
+        unsigned i = GL_LIGHT0 + ind_fuente;
+
+        glEnable(i);
+
+        //Colores de ambiente
+        glLightfv(i, GL_AMBIENT, col_ambiente);
+        glLightfv(i, GL_DIFFUSE, col_difuso);
+        glLightfv(i, GL_SPECULAR, col_especular);
+
+        glLightfv(i, GL_POSITION, Tupla4f{posicion(X),posicion(Y),posicion(Z),1.0});
+    }
+
+}
+
+bool FuenteLuzPosicional::gestionarEventoTeclaEspecial( int key )
+{
+    bool actualizar = true ;
+    const float incr = 3.0f ;
+
+    switch( key )
+    {
+        default :
+            actualizar = false ;
+            cout << "No se puede utilizar esta tecla en una fuente de luz posicional" << endl;
+    }
+
     //if ( actualizar )
     //   cout << "fuente de luz cambiada: longi == " << longi << ", lati == " << lati << endl << flush ;
     return actualizar ;
@@ -439,18 +520,23 @@ void ColFuentesLuz::insertar( FuenteLuz * pf )  // inserta una nueva
 
 //----------------------------------------------------------------------
 // activa una colección de fuentes de luz
-void ColFuentesLuz::activar( unsigned id_prog )
+void ColFuentesLuz::activar(unsigned id_prog)
 {
     // Activa la iluminación
     glEnable(GL_LIGHTING);
 
-    // Activa las luces de la colección y desactiva el resto
-    for (int i = 0; i < max_num_fuentes; ++i) {
-        if(i < vpf.size())
-            ptrFuente(i)->activar();
-        else
-            glDisable(GL_LIGHT0 + i);
-    }
+    if(id_prog > 2)
+        // Activa las luces de la colección y desactiva el resto
+        for (int i = 0; i < max_num_fuentes; ++i) {
+            if(i < vpf.size())
+                vpf[i]->activar();
+            else
+                glDisable(GL_LIGHT0 + i);
+        }
+    else
+        for (int i = 0; i < max_num_fuentes; ++i) {
+                glDisable(GL_LIGHT0 + i);
+        }
 }
 
 //----------------------------------------------------------------------
@@ -474,4 +560,27 @@ ColFuentesLuz::~ColFuentesLuz()
 // **********************************************************************
 // Implementación de materiales específicos
 
-MaterialLata::MaterialLata(): Material("../imgs/lata-sprite.jpg"){}
+MaterialLata::MaterialLata()
+    : Material(new Textura("../imgs/lata-pepsi.jpg"), 0.6, 1, 0.2, 1){
+    ponerNombre("MaterialLata");
+}
+
+MaterialTapasLata::MaterialTapasLata()
+    : Material(NULL, 0.3, 0.3, 0.3, 1) {
+    ponerNombre("MaterialTapasLata");
+}
+
+MaterialPeonMadera::MaterialPeonMadera()
+: Material(new TexturaXY("../imgs/text-madera.jpg"), 0.6, 0.3, 0.3, 0){
+    ponerNombre("Material Peon Madera");
+}
+
+MaterialPeonBlanco::MaterialPeonBlanco()
+    : Material(NULL, 0.8, 0.8, 0, 5){
+    ponerNombre("Material Peon Madera");
+}
+
+MaterialPeonNegro::MaterialPeonNegro()
+    : Material(NULL, 0.0, 0.05, 0.1, 0.2){
+    ponerNombre("Material Peon Madera");
+}

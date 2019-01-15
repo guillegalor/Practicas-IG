@@ -39,19 +39,19 @@ typedef Tupla4f VectorRGB ;
 
 class PilaMateriales
 {
-   private:
+    private:
 
-   Material *              actual ;
-   std::vector<Material *> pila ;
+        Material *              actual ;
+        std::vector<Material *> pila ;
 
-   public:
+    public:
 
-   PilaMateriales( ) ;
-   void activarMaterial( Material* material );
-   void activarActual();
+        PilaMateriales( ) ;
+        void activarMaterial( Material* material );
+        void activarActual();
 
-   void push();
-   void pop();
+        void push();
+        void pop();
 } ;
 
 //**********************************************************************
@@ -59,10 +59,10 @@ class PilaMateriales
 
 typedef enum
 {  mgct_desactivada,
-   mgct_coords_objeto,
-   mgct_coords_ojo
+    mgct_coords_objeto,
+    mgct_coords_ojo
 }
-   ModoGenCT ;
+ModoGenCT ;
 
 // *********************************************************************
 // Estructura ColoresMat
@@ -71,13 +71,13 @@ typedef enum
 
 struct ColoresMat
 {
-   VectorRGB
-      emision,    // color de la emisividad del material
-      ambiente,   // reflectividad para la componente ambiental (M_A)
-      difusa,     // reflectividad para la componente difusa (M_D)
-      especular ; // reflectividad para la componente especular (M_S)
-   float
-      exp_brillo ; // exponente de brillo especular
+    VectorRGB
+        emision,    // color de la emisividad del material
+        ambiente,   // reflectividad para la componente ambiental (M_A)
+        difusa,     // reflectividad para la componente difusa (M_D)
+        especular ; // reflectividad para la componente especular (M_S)
+    float
+        exp_brillo ; // exponente de brillo especular
 } ;
 
 // *********************************************************************
@@ -89,34 +89,34 @@ struct ColoresMat
 
 class Textura
 {
-   public:
+    public:
 
-   // carga una imagen de textura en la memoria de vídeo, e
-   // inicializa los atributos de la textura a valores por defecto.
-   Textura( const std::string & nombreArchivoJPG ) ;
+        // carga una imagen de textura en la memoria de vídeo, e
+        // inicializa los atributos de la textura a valores por defecto.
+        Textura( const std::string & nombreArchivoJPG ) ;
 
-   // libera la memoria dinámica usada por la textura, si hay alguna
-   ~Textura() ;
+        // libera la memoria dinámica usada por la textura, si hay alguna
+        ~Textura() ;
 
-   // activar una textura, por ahora en el cauce fijo
-   void activar(  ) ;
+        // activar una textura, por ahora en el cauce fijo
+        void activar(  ) ;
 
-   protected: //--------------------------------------------------------
+    protected: //--------------------------------------------------------
 
-   void enviar() ;    // envia la imagen a la GPU (gluBuild2DMipmaps)
+        void enviar() ;    // envia la imagen a la GPU (gluBuild2DMipmaps)
 
-   bool
-      enviada ; // true si ha sido enviada, false en otro caso
-   GLuint
-      ident_textura ;// 'nombre' o identif. de textura para OpenGL
-   jpg::Imagen *
-      imagen ;       // objeto con los bytes de la imagen de textura
-   ModoGenCT
-      modo_gen_ct ;  // modo de generacion de coordenadas de textura
-                     // (desactivadas si modo_gen_ct == mgct_desactivada)
-   float
-      coefs_s[4] ,   // si 'modo_gen_ct != desactivadas', coeficientes para la coord. S
-      coefs_t[4] ;   // idem para coordenada T
+        bool
+            enviada ; // true si ha sido enviada, false en otro caso
+        GLuint
+            ident_textura ;// 'nombre' o identif. de textura para OpenGL
+        jpg::Imagen *
+            imagen ;       // objeto con los bytes de la imagen de textura
+        ModoGenCT
+            modo_gen_ct ;  // modo de generacion de coordenadas de textura
+        // (desactivadas si modo_gen_ct == mgct_desactivada)
+        float
+            coefs_s[4] ,   // si 'modo_gen_ct != desactivadas', coeficientes para la coord. S
+            coefs_t[4] ;   // idem para coordenada T
 } ;
 
 // *********************************************************************
@@ -126,7 +126,7 @@ class Textura
 
 class TexturaXY : public Textura
 {
-   public: TexturaXY( const std::string & nom );
+    public: TexturaXY( const std::string & nom );
 } ;
 
 // *********************************************************************
@@ -137,101 +137,134 @@ class TexturaXY : public Textura
 
 class Material
 {
-   public:
+    public:
 
-   // crea un material con un color plano blanco sin textura
-   // ni iluminación
-   Material() ;
+        // crea un material con un color plano blanco sin textura
+        // ni iluminación
+        Material() ;
 
-   // crea un material con un color plano sin textura ni iluminación
-   // (el color se pasa como parámetro)
-   Material( const float r, const float g, const float b );
+        // crea un material con un color plano sin textura ni iluminación
+        // (el color se pasa como parámetro)
+        Material( const float r, const float g, const float b );
 
-   // crea un material con una textura asociada, y con la iluminación activada.
-   // 'nombreArchivoJPG' nombre del archivo que contiene la imagen de text.
-   Material( const std::string & nombreArchivoJPG ) ;
+        // crea un material con una textura asociada, y con la iluminación activada.
+        // 'nombreArchivoJPG' nombre del archivo que contiene la imagen de text.
+        Material( const std::string & nombreArchivoJPG ) ;
 
-   // libera la memoria dinámica ocupada por el material
-   ~Material() ;
+        // libera la memoria dinámica ocupada por el material
+        ~Material() ;
 
-   // crea un material usando textura y coeficientes: ka,kd,ks
-   // (la textura puede ser NULL, la ilum. queda activada)
-   Material( Textura * text, float ka, float kd, float ks, float exp ) ;
+        // crea un material usando textura y coeficientes: ka,kd,ks
+        // (la textura puede ser NULL, la ilum. queda activada)
+        Material( Textura * text, float ka, float kd, float ks, float exp ) ;
 
-   // crea un material con un color único para las componentes ambiental y difusa
-   // en el lugar de textura (textura == NULL)
-   Material( const Tupla3f & colorAmbDif, float ka, float kd, float ks, float exp ) ;
+        // crea un material con un color único para las componentes ambiental y difusa
+        // en el lugar de textura (textura == NULL)
+        Material( const Tupla3f & colorAmbDif, float ka, float kd, float ks, float exp ) ;
 
-   // activa un material (por ahora en el cauce fijo)
-   void activar( ) ;
+        // activa un material (por ahora en el cauce fijo)
+        void activar( ) ;
 
-   // poner y leer el nombre del material
-   void ponerNombre( const std::string & nuevo_nombre );
-   std::string nombre() const ;
+        // poner y leer el nombre del material
+        void ponerNombre( const std::string & nuevo_nombre );
+        std::string nombre() const ;
 
-    //--------------------------------------------------------
+        //--------------------------------------------------------
 
-   void coloresCero();// pone todos los colores y reflectividades a cero
+        void coloresCero();// pone todos los colores y reflectividades a cero
 
-   std::string nombre_mat ;  // nombre del material
+        std::string nombre_mat ;  // nombre del material
 
-   bool
-      iluminacion ;  // true si el material requiere activar iluminación,
-                     // false si requiere desactivarla
-   Textura *
-      tex ;          // si !=NULL, el material tiene esta textura
-   VectorRGB
-      color ;        // color del material cuando iluminacion=false
-   ColoresMat
-      del,           // reflectividades de caras delanteras, si iluminacion= true
-      tra ;          // reflectividades de caras traseras, si iluminacion=true
+        bool
+            iluminacion ;  // true si el material requiere activar iluminación,
+        // false si requiere desactivarla
+        Textura *
+            tex ;          // si !=NULL, el material tiene esta textura
+        VectorRGB
+            color ;        // color del material cuando iluminacion=false
+        ColoresMat
+            del,           // reflectividades de caras delanteras, si iluminacion= true
+            tra ;          // reflectividades de caras traseras, si iluminacion=true
 } ;
 
 //**********************************************************************
 // Clase FuenteLuz
 // ---------------
-// clase que contiene los atributo de una fuente de luz OpenGL
+// clase que contiene los atributos básicos de una fuente de luz OpenGL
 
 class FuenteLuz
 {
-   public:
+    public:
 
-   // inicializa la fuente de luz
+        // inicializa la fuente de luz
 
-   // p_longi_ini == valor inicial del ángulo horizontal en grados
-   // p_lati_ini  == idem del ángulo vértical
-   // p_color     == color de la fuente de luz (amb, dif y spec )
-   FuenteLuz( GLfloat p_longi_ini, GLfloat p_lati_ini, const VectorRGB & p_color ) ;
+        // p_color     == color de la fuente de luz (amb, dif y spec )
+        FuenteLuz(const VectorRGB & p_color) ;
 
-   // cambia el estado de OpenGL de forma que a partir de la llamada
-   // se usará esta fuente de luz en los calculos del MIL
-   // (en cada momento puede haber varias fuentes activadas)
-   void activar() ;
+        // cambia el estado de OpenGL de forma que a partir de la llamada
+        // se usará esta fuente de luz en los calculos del MIL
+        // (en cada momento puede haber varias fuentes activadas)
+        virtual void activar() = 0;
 
-   // cambia los atributos de la instancia en respuesta a una pulsación
-   // de una tecla 'especial' (según la terminología de 'glut')
-   bool gestionarEventoTeclaEspecial( int key ) ;
+        // cambia los atributos de la instancia en respuesta a una pulsación
+        // de una tecla 'especial' (según la terminología de 'glut')
+        virtual bool gestionarEventoTeclaEspecial( int key ) = 0;
+        virtual void variarAngulo(unsigned angulo, float incremento) {};
 
-   //-------------------------------------------------------------------
-   // variables de instancia:
+        //-------------------------------------------------------------------
+        // variables de instancia:
 
-public:
-    float
-      longi,      // longitud actual de la fuente direccional (en grados, entre 0 y 360)
-      lati ;      // latitud actual de la fuente direccional (en grados, entre -90 y 90)
-protected:
-   VectorRGB
-      col_ambiente,  // color de la fuente para la componente ambiental
-      col_difuso,    // color de la fuente para la componente difusa
-      col_especular; // color de la fuente para la componente especular
-   GLenum
-      ind_fuente ;// indice de la fuente de luz en el vector, se asigna al insertarlo
-   float
-      longi_ini,  // valor inicial de 'longi'
-      lati_ini ;  // valor inicial de 'lati'
+    protected:
+        VectorRGB
+            col_ambiente,  // color de la fuente para la componente ambiental
+            col_difuso,    // color de la fuente para la componente difusa
+            col_especular; // color de la fuente para la componente especular
+        GLenum
+            ind_fuente ;// indice de la fuente de luz en el vector, se asigna al insertarlo
 
-   friend class ColFuentesLuz ;
+        friend class ColFuentesLuz ;
 } ;
+
+//**********************************************************************
+// Clase FuenteLuzDireccional
+// ---------------
+// clase que contiene los atributos de una fuente de luz direccional OpenGL
+
+class FuenteLuzDireccional : public FuenteLuz{
+    public:
+        float
+            longi,      // longitud actual de la fuente direccional (en grados, entre 0 y 360) (ALPHA)
+            lati ;      // latitud actual de la fuente direccional (en grados, entre -90 y 90) (BETA)
+        const float
+            longi_ini,  // valor inicial de 'longi'
+            lati_ini ;  // valor inicial de 'lati'
+
+        // Inicializar la fuente de Fuente de Luz
+        FuenteLuzDireccional(float alpha_inicial, float beta_inicial, const VectorRGB & p_color);
+
+        void activar();
+        bool gestionarEventoTeclaEspecial(int key);
+
+        //Cambiar ángulo
+        //(ángulo==0->variar alpha,angulo==1 variar beta)
+        void variarAngulo(unsigned angulo, float incremento);
+
+};
+
+//**********************************************************************
+// Clase FuenteLuzPosicional
+// ---------------
+// clase que contiene los atributos de una fuente de luz direccional OpenGL
+
+class FuenteLuzPosicional : public FuenteLuz{
+    public:
+        Tupla3f posicion;
+
+        FuenteLuzPosicional(const Tupla3f & posicion, const VectorRGB & p_color);
+
+        void activar();
+        bool gestionarEventoTeclaEspecial(int key);
+};
 
 // **********************************************************************
 // Clase ConjuntoFuentes
@@ -240,16 +273,16 @@ protected:
 
 class ColFuentesLuz
 {
-   public:
-   ColFuentesLuz() ; // crea la colección vacía
-   ~ColFuentesLuz() ;
-   void insertar( FuenteLuz * pf ) ; // inserta una nueva
-   void activar( unsigned id_prog ); // activa las fuentes de luz
-   FuenteLuz * ptrFuente( unsigned i ); // devuelve ptr a la fuente de luz numero i
+    public:
+        ColFuentesLuz() ; // crea la colección vacía
+        ~ColFuentesLuz() ;
+        void insertar( FuenteLuz * pf ) ; // inserta una nueva
+        void activar(unsigned id_prog); // activa las fuentes de luz
+        FuenteLuz * ptrFuente( unsigned i ); // devuelve ptr a la fuente de luz numero i
 
-   private:
-   std::vector<FuenteLuz *> vpf ; // vector de punteros a fuentes
-   GLint max_num_fuentes ;
+    private:
+        std::vector<FuenteLuz *> vpf ; // vector de punteros a fuentes
+        GLint max_num_fuentes ;
 } ;
 
 // **********************************************************************
@@ -259,6 +292,30 @@ class MaterialLata : public Material
 {
     public:
         MaterialLata() ;
+};
+
+class MaterialTapasLata : public Material
+{
+    public:
+        MaterialTapasLata() ;
+};
+
+class MaterialPeonMadera : public Material
+{
+    public:
+        MaterialPeonMadera() ;
+};
+
+class MaterialPeonBlanco : public Material
+{
+    public:
+        MaterialPeonBlanco() ;
+};
+
+class MaterialPeonNegro : public Material
+{
+    public:
+        MaterialPeonNegro() ;
 };
 
 #endif

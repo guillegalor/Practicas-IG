@@ -22,6 +22,7 @@
 #include "matrices-tr.hpp"
 #include "shaders.hpp"
 #include "grafo-escena.hpp"
+#include "materiales.hpp"
 
 using namespace std ;
 
@@ -98,14 +99,14 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
                 break;
             case TipoEntNGE::material:
                 cv.pilaMateriales.activarMaterial(entradas[i].material);
+                break;
 
             default:
                 std::cout << "Tipo no conocido" << std::endl;
         }
 
-    // Restauramos el material activo anterior
+    // Restauramos el material activo anterior y lo activamos (pop lo hace todo)
     cv.pilaMateriales.pop();
-    cv.pilaMateriales.activarActual();
 
     glMatrixMode (GL_MODELVIEW);
     glPopMatrix();
@@ -182,13 +183,13 @@ void NodoGrafoEscena::calcularCentroOC()
 // -----------------------------------------------------------------------------
 // método para buscar un objeto con un identificador y devolver un puntero al mismo
 
-bool NodoGrafoEscena::buscarObjeto
+    bool NodoGrafoEscena::buscarObjeto
 (
-    const int         ident_busc, // identificador a buscar
-    const Matriz4f &  mmodelado,  // matriz de modelado
-    Objeto3D       ** objeto,     // (salida) puntero al puntero al objeto
-    Tupla3f &         centro_wc   // (salida) centro del objeto en coordenadas del mundo
-)
+ const int         ident_busc, // identificador a buscar
+ const Matriz4f &  mmodelado,  // matriz de modelado
+ Objeto3D       ** objeto,     // (salida) puntero al puntero al objeto
+ Tupla3f &         centro_wc   // (salida) centro del objeto en coordenadas del mundo
+ )
 {
     // COMPLETAR: práctica 5: buscar un sub-objeto con un identificador
     // ........
@@ -619,4 +620,51 @@ Muneco::Ojo::Ojo(){
     agregar(MAT_Traslacion(-0.2, -0.2, 0.3));
     agregar(MAT_Escalado(0.7, 0.7, 1));
     agregar(e2);
+}
+
+Lata::Lata(){
+    agregar(new TapaArriba());
+    agregar(new Cuerpo());
+    agregar(new TapaAbajo());
+}
+
+Lata::Cuerpo::Cuerpo(){
+    agregar(new MaterialLata());
+    agregar(new MallaRevol("../plys/lata-pcue.ply", 50, false ,false, true));
+}
+
+Lata::TapaArriba::TapaArriba(){
+    agregar(new MaterialTapasLata());
+    agregar(new MallaRevol("../plys/lata-psup.ply", 50, true, false, true));
+}
+
+Lata::TapaAbajo::TapaAbajo(){
+    agregar(new MaterialTapasLata());
+    agregar(new MallaRevol("../plys/lata-pinf.ply", 50, true, false, true));
+}
+
+PeonMadera::PeonMadera(){
+    agregar(new MaterialPeonMadera());
+    agregar(new MallaRevol("../plys/peon.ply", 50, true, false, true));
+}
+
+PeonBlanco::PeonBlanco(){
+    agregar(new MaterialPeonBlanco());
+    agregar(new MallaRevol("../plys/peon.ply", 50, true, false, true));
+}
+
+PeonNegro::PeonNegro(){
+    agregar(new MaterialPeonNegro());
+    agregar(new MallaRevol("../plys/peon.ply", 50, true, false, true));
+}
+
+EscenaP4::EscenaP4(){
+    agregar(new Lata());
+    agregar(MAT_Traslacion(0, 0.25, 1));
+    agregar(MAT_Escalado((float) 1/5,(float) 1/5,(float) 1/5));
+    agregar(new PeonMadera);
+    agregar(MAT_Traslacion(3, 0, 0));
+    agregar(new PeonBlanco);
+    agregar(MAT_Traslacion(3, 0, 0));
+    agregar(new PeonNegro);
 }

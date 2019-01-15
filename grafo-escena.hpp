@@ -120,8 +120,6 @@ class NodoGrafoEscenaParam : public NodoGrafoEscena
         void siguienteCuadro();
 } ;
 
-#endif // GRAFO_ESCENA_HPP
-
 // *********************************************************************
 //
 class Grua : public NodoGrafoEscenaParam{
@@ -202,3 +200,46 @@ class Muneco : public NodoGrafoEscenaParam{
     public:
         Muneco();
 };
+
+class Lata : public NodoGrafoEscenaParam{
+    protected:
+        class Cuerpo : public NodoGrafoEscena{
+            public:
+                Cuerpo();
+        };
+
+        class TapaArriba : public NodoGrafoEscena{
+            public:
+                TapaArriba();
+        };
+
+        class TapaAbajo : public NodoGrafoEscena{
+            public:
+                TapaAbajo();
+        };
+
+    public:
+        Lata();
+};
+
+class PeonMadera : public NodoGrafoEscenaParam{
+    public:
+        PeonMadera();
+};
+
+class PeonBlanco : public NodoGrafoEscenaParam{
+    public:
+        PeonBlanco();
+};
+
+class PeonNegro : public NodoGrafoEscenaParam{
+    public:
+        PeonNegro();
+};
+
+class EscenaP4: public NodoGrafoEscenaParam{
+    public:
+        EscenaP4();
+};
+
+#endif // GRAFO_ESCENA_HPP

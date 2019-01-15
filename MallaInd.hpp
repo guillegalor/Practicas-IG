@@ -18,24 +18,22 @@ class MallaInd : public Objeto3D
 {
 
     protected:
-        // Tablas para modo inmediato
-        std::vector<Tupla3f> tabla_verts;
-        std::vector<Tupla3i> tabla_caras;
+        bool vbo_creado;
+
+        // Tablas
+        std::vector<Tupla3f> tabla_verts;   // Vértices
+        std::vector<Tupla3i> tabla_caras;   // Caras
+        std::vector<Tupla3f> nor_ver;       // Normales Vértices
+        std::vector<Tupla3f> nor_tri;       // Normales Caras
+        std::vector<Tupla3f> col_ver;       // Colores Vértices
+        std::vector<Tupla3f> col_tri;       // Colores Caras
+        std::vector<Tupla2f> tabla_text;    // Texturas
 
         // IDs de los VBO de vertices y caras respectivamente
         GLuint id_vbo_ver, id_vbo_tri, id_vbo_col_ver, id_vbo_tex, id_vbo_nor_ver;
 
         // Tamaño en bytes de las tablas
-        unsigned tam_ver, tam_tri;
-
-        // Tabla de normales y de colores
-        std::vector<Tupla3f> nor_tri;
-        std::vector<Tupla3f> nor_ver;
-        std::vector<Tupla3f> col_tri;
-        std::vector<Tupla3f> col_ver;
-
-        // Tabla de texturas
-        std::vector<Tupla2f> tabla_text;
+        unsigned tam_ver, tam_tri, tam_tex;
 
         // calculo de las normales de esta malla
         void calcular_normales();

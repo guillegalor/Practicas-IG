@@ -590,7 +590,7 @@ void Inicializa_Vars( )
 {
     // inicializar práctica actual
     practicaActual = 1 ;
-    contextoVis.modoVis = modoMateriales ;
+    contextoVis.modoVis = modoAlambre ;
 
 }
 
@@ -638,7 +638,8 @@ void Inicializa_OpenGL( )
     Inicializa_GLEW();
 
     shader = new SimpleSP;
-    shader->activar();
+    // Si lo activamos no funcionan las luces
+    // shader->activar();
 
     // ya está
     CError();

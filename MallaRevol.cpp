@@ -85,10 +85,9 @@ void MallaRevol::crearMallaRevol(
                 if (crear_texturas){
                     float s, t;
 
-                    s = i/(nper-1);
-                    t = distancias_perfil[j] / distancias_perfil[n_vert_per-1];
-
-                    tabla_text.push_back ({s,t});
+                    s = (float)i/(float)(nper-1);
+                    t = distancias_perfil[j] /distancias_perfil[n_vert_per-1];
+                    tabla_text.push_back ({s,1-t});
                 }
             }
             ++j;
