@@ -179,6 +179,10 @@ void NodoGrafoEscena::calcularCentroOC()
     //   (si el centro ya ha sido calculado, no volver a hacerlo)
     // ........
 
+    /* if (!centro_calculado){ */
+
+    /* } */
+
 }
 // -----------------------------------------------------------------------------
 // método para buscar un objeto con un identificador y devolver un puntero al mismo

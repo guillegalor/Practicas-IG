@@ -73,7 +73,6 @@ MarcoCoorVista::MarcoCoorVista( const Tupla3f & pfoco, const Tupla3f & paten,
    matrizVistaInv = MAT_Vista_inv( eje, org );
 }
 
-
 // *********************************************************************
 // clase: ViewFrustum
 
@@ -116,7 +115,6 @@ ViewFrustum::ViewFrustum( float hfovy_grad, float aspect, float zNear, float zFa
    matrizProy = MAT_Frustum( left, right, bottom, top, near, far );
 }
 
-
 // *********************************************************************
 // clase: Camara
 // ---------------------------------------------------------------------
@@ -126,7 +124,6 @@ Camara::Camara()
 {
 
 }
-
 
 // ---------------------------------------------------------------------
 // fijar matrices {\ttbf MODELVIEW} y {\ttbf PROJECTION} de OpenGL
@@ -143,13 +140,8 @@ void Camara::activar()
    glMultMatrixf( mcv.matrizVista ); // matriz de vista
 }
 
-
-
-
 // *********************************************************************
 // clase: Viewport
-
-
 
 // ---------------------------------------------------------------------
 // crea viewport de 512 x 512 con origen en (0,0)
@@ -179,4 +171,13 @@ Viewport::Viewport( int p_org_x, int p_org_y, int p_ancho, int p_alto )
    matrizVp    = MAT_Viewport( org_x, org_y, ancho, alto );
    matrizVpInv = MAT_Viewport_inv( org_x, org_y, ancho, alto );
 }
+
+// ---------------------------------------------------------------------
+void Viewport::actualizar(int vp_ancho, int vp_alto){
+    ancho = vp_ancho;
+    alto = vp_alto;
+
+    ratio_yx = (float) alto/ancho;
+}
+
 // *********************************************************************

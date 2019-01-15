@@ -232,24 +232,23 @@ Material::Material( Textura * text, float ka, float kd, float ks, float exp )
 // ---------------------------------------------------------------------
 // crea un material con un color único para las componentes ambiental y difusa
 // en el lugar de textura (textura == NULL)
-Material::Material( const Tupla3f & colorAmbDif, float ka, float kd, float ks, float exp )
+Material::Material( const Tupla3f & colorAmbDif, float ks, float exp )
 {
     tex = NULL;
     iluminacion = true;
     color = {colorAmbDif[0], colorAmbDif[1], colorAmbDif[2], 1.0};
 
-    del.emision   = VectorRGB(0.0,0.0,0.0, 1.0);
-    del.ambiente  = ka*color;
-    del.difusa    = kd*color;
-    del.especular = ks*color;
+    del.emision     = VectorRGB(0.0,0.0,0.0, 1.0);
+    del.ambiente =
+        del.difusa  = color;
+    del.especular   = VectorRGB(ks, ks, ks, 1.0);
+    del.exp_brillo  = exp;
 
-    tra.emision   = VectorRGB(0.0,0.0,0.0, 1.0);
-    tra.ambiente  = ka*color;
-    tra.difusa    = kd*color;
-    tra.especular = ks*color;
-
-    del.exp_brillo = exp;
-    tra.exp_brillo = exp;
+    tra.emision     = VectorRGB(0.0,0.0,0.0, 1.0);
+    tra.ambiente =
+        tra.difusa  = color;
+    tra.especular   = VectorRGB(ks, ks, ks, 1.0);
+    tra.exp_brillo  = exp;
 
     ponerNombre("material color plano, ilum.") ;
 }

@@ -24,6 +24,23 @@ GLuint VBO_Crear (GLuint tipo, GLuint tamanio, GLvoid *puntero)
     return id_vbo;
 }
 
+Tupla3f calcularCentroCajaEnglobante(std::vector<Tupla3f> puntos){
+    Tupla3f maximos, minimos = puntos[0];
+
+    for( auto ver : vertices){
+        maximos[0] = std::max(ver[0], maximos[0]);
+        maximos[1] = std::max(ver[1], maximos[1]);
+        maximos[2] = std::max(ver[2], maximos[2]);
+
+        minimos[0] = std::min(ver[0], minimos[0]);
+        minimos[1] = std::min(ver[1], minimos[1]);
+        minimos[2] = std::min(ver[2], minimos[2]);
+
+    }
+
+    return (maximos + minimos)/2;
+}
+
 // *****************************************************************************
 // métodos de la clase MallaInd.
 

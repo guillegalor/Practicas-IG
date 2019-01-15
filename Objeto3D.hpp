@@ -23,6 +23,9 @@ class Objeto3D
         // 0: no tiene identificador, -1: identificador del padre,
         // >0: tiene este identificador
 
+    protected:
+        bool centro_calculado;
+
     public:
         // pone el identificador a '0', siempre
         Objeto3D() ;

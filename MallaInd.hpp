@@ -11,6 +11,13 @@
 #include <vector>          // usar std::vector
 
 #include "Objeto3D.hpp"   // declaración de 'Objeto3D'
+
+// ---------------------------------------------------------------------
+// Funciones auxiliares
+
+// Función que devuelve el centro de la caja englobante de un vector de vértices
+Tupla3f calcularCentroCajaEnglobante(std::vector<Tupla3f> puntos);
+
 // ---------------------------------------------------------------------
 // clase para objetos gráficos genéricos
 
