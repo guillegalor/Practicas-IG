@@ -174,33 +174,32 @@ Matriz4f* NodoGrafoEscena::leerPtrMatriz( unsigned indice )
 void NodoGrafoEscena::calcularCentroOC()
 {
 
-    // COMPLETAR: práctica 5: calcular y guardar el centro del nodo
+    // DONE: práctica 5: calcular y guardar el centro del nodo
     //    en coordenadas de objeto (hay que hacerlo recursivamente)
     //   (si el centro ya ha sido calculado, no volver a hacerlo)
     // ........
 
-    Matriz4f m_aux = MAT_Ident();
+    Matriz4f cumulative_transformation_m = MAT_Ident();
+    std::vector<Tupla3f> centros;
 
     if (!centro_calculado){
         for (auto entrada : entradas){
             switch(entrada.tipo) {
                 case TipoEntNGE::objeto:
-                    entradas[i].objeto->leerCentroOC();
+                    centros.push_back(cumulative_transformation_m * entrada.objeto->leerCentroOC());
                     break;
                 case TipoEntNGE::transformacion:
-                    glMatrixMode (GL_MODELVIEW);
-                    glMultMatrixf (*(entradas[i].matriz));
+                    cumulative_transformation_m = cumulative_transformation_m * (*entrada.matriz);
                     break;
-                case TipoEntNGE::material:
-                    cv.pilaMateriales.activarMaterial(entradas[i].material);
-                    break;
-
                 default:
-                    std::cout << "Tipo no conocido" << std::endl;
+                    break;
             }
         }
     }
 
+    ponerCentroOC(calcularCentroCajaEnglobante(centros));
+
+    centro_calculado = true;
 }
 // -----------------------------------------------------------------------------
 // método para buscar un objeto con un identificador y devolver un puntero al mismo
@@ -213,8 +212,33 @@ void NodoGrafoEscena::calcularCentroOC()
  Tupla3f &         centro_wc   // (salida) centro del objeto en coordenadas del mundo
  )
 {
-    // COMPLETAR: práctica 5: buscar un sub-objeto con un identificador
+    // DONE: práctica 5: buscar un sub-objeto con un identificador
     // ........
+
+    if (ident_busc == leerIdentificador()){
+        *objeto = this;
+        centro_wc = leerCentroOC();
+        return true;
+    }
+
+    Matriz4f cumulative_transformation_m = MAT_Ident();
+
+    for (auto &entrada: entradas){
+        switch(entrada.tipo) {
+            case TipoEntNGE::objeto:
+                if (buscarObjeto(ident_busc, mmodelado*cumulative_transformation_m, objeto, centro_wc))
+                    return true;
+                break;
+            case TipoEntNGE::transformacion:
+                cumulative_transformation_m = cumulative_transformation_m * (*entrada.matriz);
+                break;
+            default:
+                break;
+        }
+
+        return false;
+
+    }
 
 }
 
