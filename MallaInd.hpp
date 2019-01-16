@@ -55,6 +55,8 @@ class MallaInd : public Objeto3D
         void visualizarDE_NT (ContextoVis & cv); // vis. con normales y cc.tt.
         void visualizarVBOs_NT (ContextoVis & cv); // vis. normales y cc.tt. en VBOs
 
+        void calcularCentroOC();
+
     public:
         // crea una malla vacía (nombre: "malla indexada nueva vacía")
         MallaInd() ;

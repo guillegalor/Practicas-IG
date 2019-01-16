@@ -179,9 +179,27 @@ void NodoGrafoEscena::calcularCentroOC()
     //   (si el centro ya ha sido calculado, no volver a hacerlo)
     // ........
 
-    /* if (!centro_calculado){ */
+    Matriz4f m_aux = MAT_Ident();
 
-    /* } */
+    if (!centro_calculado){
+        for (auto entrada : entradas){
+            switch(entrada.tipo) {
+                case TipoEntNGE::objeto:
+                    entradas[i].objeto->leerCentroOC();
+                    break;
+                case TipoEntNGE::transformacion:
+                    glMatrixMode (GL_MODELVIEW);
+                    glMultMatrixf (*(entradas[i].matriz));
+                    break;
+                case TipoEntNGE::material:
+                    cv.pilaMateriales.activarMaterial(entradas[i].material);
+                    break;
+
+                default:
+                    std::cout << "Tipo no conocido" << std::endl;
+            }
+        }
+    }
 
 }
 // -----------------------------------------------------------------------------

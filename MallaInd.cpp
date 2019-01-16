@@ -249,11 +249,20 @@ void MallaInd::visualizarGL( ContextoVis & cv )
     }
 }
 
-// *****************************************************************************
+// -----------------------------------------------------------------------------
 void MallaInd::fijarColorNodo(const Tupla3f& color){
     for (int i = 0; i < tabla_verts.size(); ++i) {
         col_ver.push_back(color);
     }
+}
+
+// -----------------------------------------------------------------------------
+void MallaInd::calcularCentroOC(){
+    Tupla3f centro = calcularCentroCajaEnglobante(tabla_verts);
+
+    ponerCentroOC(centro);
+
+    centro_calculado = true;
 }
 
 // -----------------------------------------------------------------------------
