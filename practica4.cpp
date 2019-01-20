@@ -16,9 +16,10 @@ using namespace std ;
 // DONE: práctica 4: declaración de variables de la práctica 4 (static)
 // ....
 static unsigned objetoActivo4 = 0 ; // objeto activo: muneco(0)
-static constexpr int numObjetos4 = 3 ;
+static constexpr int numObjetos4 = 4 ;
 static NodoGrafoEscena* objetos4[numObjetos4] = {nullptr, nullptr, nullptr};
 MaterialCambiante* m = nullptr;
+FuenteLuzPosicional* f = nullptr;
 
 ColFuentesLuz p4_fuentes;
 
@@ -46,11 +47,16 @@ void P4_Inicializar(  )
             1.0
             );
 
-    p4_fuentes.insertar(new FuenteLuzDireccional(-10, 30, Tupla4f{1, 1, 1, 1}));
-    p4_fuentes.insertar(new FuenteLuzPosicional({0, 20, 0}, Tupla4f{0.4, 0.4, 0.4, 1}));
+    f = new FuenteLuzPosicional({10,-10,10}, {0, 1, 0, 1});
+
+    /* p4_fuentes.insertar(new FuenteLuzDireccional(-10, 30, Tupla4f{1, 1, 1, 1})); */
+    /* p4_fuentes.insertar(new FuenteLuzPosicional({0, 20, 0}, Tupla4f{0.4, 0.4, 0.4, 1})); */
+    p4_fuentes.insertar(new FuenteLuzDireccional(0, 0, {1, 1, 1, 1}));
+    /* p4_fuentes.insertar(f); */
     objetos4[0] = new EscenaP4();
     objetos4[1] = new Moneda();
     objetos4[2] = new Test(m);
+    objetos4[3] = new CuboColores;
 
     cout << "hecho." << endl << flush ;
 }
@@ -69,6 +75,7 @@ bool P4_FGE_PulsarTeclaCaracter( unsigned char tecla) {
     int key = -1;
 
     switch ( toupper( tecla ) ) {
+        // Teclas ejercicios
         case 'E':
             m->aument();
             res = true;
@@ -77,7 +84,12 @@ bool P4_FGE_PulsarTeclaCaracter( unsigned char tecla) {
             m->reverse();
             res = true;
             break;
+        case 'Z':
+            f->posicion[1] += 0.5;
+            res = true;
+            break;
 
+        // Teclas originales práctica
         case 'G' :
             angulo_activo  = ( angulo_activo + 1 ) % 2;
             break ;

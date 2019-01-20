@@ -674,3 +674,9 @@ MaterialBorde::MaterialBorde()
     : Material(new Textura("../imgs/metal_res.jpg"), 0.0, 1, 0.0, 0){
     ponerNombre("Material Borde");
 }
+
+// Examen fotocopia
+MaterialDado::MaterialDado()
+    : Material(new Textura("../imgs/dice.jpg"), 0.0, 1, 0.0, 0){
+    ponerNombre("Material Cbuo");
+}

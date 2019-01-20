@@ -852,3 +852,15 @@ Borde::Borde(){
     agregar(new MaterialBorde());
     agregar(new Cilindro(2, 50, false, false, true));
 }
+
+// Examen fotocopia
+CuboColores::CuboColores(){
+    agregar(new MaterialDado());
+    agregar(new CaraArriba());
+    agregar(new CaraAbajo());
+    agregar(new CaraIzq());
+    agregar(new CaraDer());
+    agregar(new CaraFrente());
+    agregar(new CaraAtras());
+
+}

@@ -273,4 +273,10 @@ class Moneda: public NodoGrafoEscena {
         Moneda();
 };
 
+// Examen fotocopia
+class CuboColores : public NodoGrafoEscena{
+    public:
+        CuboColores();
+};
+
 #endif // GRAFO_ESCENA_HPP

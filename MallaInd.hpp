@@ -92,4 +92,36 @@ class Disco : public MallaInd
         Disco(unsigned nper);
         void invertirCoordText(bool s, bool t);
 };
+
+// Examen fotocopia
+class CaraArriba : public MallaInd{
+    public:
+        CaraArriba();
+};
+
+class CaraAbajo : public MallaInd{
+    public:
+        CaraAbajo();
+};
+
+class CaraIzq : public MallaInd{
+    public:
+        CaraIzq();
+};
+
+class CaraDer : public MallaInd{
+    public:
+        CaraDer();
+};
+
+class CaraFrente : public MallaInd{
+    public:
+        CaraFrente();
+};
+
+class CaraAtras : public MallaInd{
+    public:
+        CaraAtras();
+};
+
 #endif

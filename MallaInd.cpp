@@ -383,3 +383,129 @@ void Disco::invertirCoordText(bool s, bool t){
         text[1] = (t ? 1 - text[1] : text[1]);
     }
 }
+
+CaraArriba::CaraArriba(){
+    // Añadimos vértices
+    tabla_verts.push_back({0,1,0});
+    tabla_verts.push_back({0,1,1});
+    tabla_verts.push_back({1,1,0});
+    tabla_verts.push_back({1,1,1});
+
+    // Añadimos caras
+    tabla_caras.push_back({2, 0, 3});
+    tabla_caras.push_back({3, 0, 1});
+
+    // Añadimos coordenadas de textura
+    tabla_text.push_back({0.5, (float)1/3});
+    tabla_text.push_back({0.5, (float)2/3});
+    tabla_text.push_back({0.75, (float)1/3});
+    tabla_text.push_back({0.75, (float)2/3});
+
+    // Calcular normales
+    calcular_normales();
+}
+
+CaraAbajo::CaraAbajo(){
+    // Añadimos vértices
+    tabla_verts.push_back({0,0,0});
+    tabla_verts.push_back({0,0,1});
+    tabla_verts.push_back({1,0,0});
+    tabla_verts.push_back({1,0,1});
+
+    // Añadimos caras
+    tabla_caras.push_back({0, 2, 3});
+    tabla_caras.push_back({0, 3, 1});
+
+    // Añadimos coordenadas de textura
+    tabla_text.push_back({0.25, (float)1/3});
+    tabla_text.push_back({0.25, (float)2/3});
+    tabla_text.push_back({0, (float)1/3});
+    tabla_text.push_back({0, (float)2/3});
+
+    // Calcular normales
+    calcular_normales();
+}
+
+CaraIzq::CaraIzq(){
+    // Añadimos vértices
+    tabla_verts.push_back({0,0,0});
+    tabla_verts.push_back({0,0,1});
+    tabla_verts.push_back({0,1,0});
+    tabla_verts.push_back({0,1,1});
+
+    // Añadimos caras
+    tabla_caras.push_back({0, 1, 3});
+    tabla_caras.push_back({0, 3, 2});
+
+    // Añadimos coordenadas de textura
+    tabla_text.push_back({0.25, (float)1/3});
+    tabla_text.push_back({0.25, (float)2/3});
+    tabla_text.push_back({0.5, (float)1/3});
+    tabla_text.push_back({0.5, (float)2/3});
+
+    // Calcular normales
+    calcular_normales();
+}
+
+CaraDer::CaraDer(){
+    // Añadimos vértices
+    tabla_verts.push_back({1,0,0});
+    tabla_verts.push_back({1,0,1});
+    tabla_verts.push_back({1,1,0});
+    tabla_verts.push_back({1,1,1});
+
+    // Añadimos caras
+    tabla_caras.push_back({1, 0, 3});
+    tabla_caras.push_back({3, 0, 2});
+
+    // Añadimos coordenadas de textura
+    tabla_text.push_back({1, (float)1/3});
+    tabla_text.push_back({1, (float)2/3});
+    tabla_text.push_back({0.75, (float)1/3});
+    tabla_text.push_back({0.75, (float)2/3});
+
+    // Calcular normales
+    calcular_normales();
+}
+
+CaraFrente::CaraFrente(){
+    // Añadimos vértices
+    tabla_verts.push_back({0,0,1});
+    tabla_verts.push_back({0,1,1});
+    tabla_verts.push_back({1,0,1});
+    tabla_verts.push_back({1,1,1});
+
+    // Añadimos caras
+    tabla_caras.push_back({0, 2, 3});
+    tabla_caras.push_back({0, 3, 1});
+
+    // Añadimos coordenadas de textura
+    tabla_text.push_back({0.5, 1});
+    tabla_text.push_back({0.5, (float)2/3});
+    tabla_text.push_back({0.75, 1});
+    tabla_text.push_back({0.75, (float)2/3});
+
+    // Calcular normales
+    calcular_normales();
+}
+
+CaraAtras::CaraAtras(){
+    // Añadimos vértices
+    tabla_verts.push_back({0,0,0});
+    tabla_verts.push_back({0,1,0});
+    tabla_verts.push_back({1,0,0});
+    tabla_verts.push_back({1,1,0});
+
+    // Añadimos caras
+    tabla_caras.push_back({2, 0, 3});
+    tabla_caras.push_back({3, 0, 1});
+
+    // Añadimos coordenadas de textura
+    tabla_text.push_back({0.5, 0});
+    tabla_text.push_back({0.5, (float)1/3});
+    tabla_text.push_back({0.75, 0});
+    tabla_text.push_back({0.75, (float)1/3});
+
+    // Calcular normales
+    calcular_normales();
+}

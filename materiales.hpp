@@ -358,4 +358,11 @@ class MaterialBorde : public Material{
         MaterialBorde();
 };
 
+// Examen fotocopia
+
+class MaterialDado : public Material{
+    public:
+        MaterialDado();
+};
+
 #endif
