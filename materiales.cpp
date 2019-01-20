@@ -572,7 +572,7 @@ MaterialTapasLata::MaterialTapasLata()
 }
 
 MaterialPeonMadera::MaterialPeonMadera()
-: Material(new TexturaXY("../imgs/text-madera.jpg"), 0.0, 0.6, 0.4, 10){
+    : Material(new TexturaXY("../imgs/text-madera.jpg"), 0.0, 0.6, 0.4, 10){
     ponerNombre("Material Peon Madera");
 }
 
@@ -584,4 +584,93 @@ MaterialPeonBlanco::MaterialPeonBlanco()
 MaterialPeonNegro::MaterialPeonNegro()
     : Material({0.05, 0.05, 0.05}, 0.0, 0.9, 0.1, 8){        // {0.05, 0.05, 0.05} color negro
     ponerNombre("Material Peon Negro");
+}
+
+//---------------------------------------------------------------------------------
+// EJERCICIOS
+// Examen Grado
+
+MaterialCambiante::MaterialCambiante( Tupla3f color1, float ka1, float kd1, float ks1, float exp1,
+        Tupla3f color2, float ka2, float kd2, float ks2, float exp2)
+        : Material(color1, ka1, kd1, ks1, exp1){
+
+    from1to2 = true;
+    percentage_of_m1 = 1;
+
+    m1.ambiente = VectorRGB(ka1 * color1(R), ka1 * color1(G), ka1 * color1(B), 1.0);
+
+    m1.difusa = VectorRGB(kd1 * color1(R), kd1 * color1(G), kd1 * color1(B), 1.0);
+
+    m1.especular = VectorRGB(ks1, ks1, ks1, 1.0);
+
+    m1.exp_brillo = exp1;
+
+    m2.ambiente = VectorRGB(ka2 * color2(R), ka2 * color2(G), ka2 * color2(B), 1.0);
+    m2.difusa = VectorRGB(kd2 * color2(R), kd2 * color2(G), kd2 * color2(B), 1.0);
+    m2.especular = VectorRGB(ks2, ks2, ks2, 1.0);
+    m2.exp_brillo = exp2;
+
+}
+
+void MaterialCambiante::reverse(){
+    from1to2 = !from1to2;
+}
+
+void MaterialCambiante::aument(){
+    percentage_of_m1 = (from1to2 ?
+            std::max((float)0, percentage_of_m1 - (float)1/grades) :
+            std::min((float)1, percentage_of_m1 + (float)1/grades));
+
+    del.ambiente = tra.ambiente = {
+        percentage_of_m1 * m1.ambiente(R) + (1-percentage_of_m1)* m2.ambiente(R),
+        percentage_of_m1 * m1.ambiente(G) + (1-percentage_of_m1)* m2.ambiente(G),
+        percentage_of_m1 * m1.ambiente(B) + (1-percentage_of_m1)* m2.ambiente(B),
+        1.0
+    };
+    del.difusa = tra.difusa = {
+        percentage_of_m1 * m1.difusa(R) + (1-percentage_of_m1)* m2.difusa(R),
+        percentage_of_m1 * m1.difusa(G) + (1-percentage_of_m1)* m2.difusa(G),
+        percentage_of_m1 * m1.difusa(B) + (1-percentage_of_m1)* m2.difusa(B),
+        1
+    };
+    del.especular = tra.especular = {
+        percentage_of_m1 * m1.especular(R) + (1-percentage_of_m1)* m2.especular(R),
+        percentage_of_m1 * m1.especular(G) + (1-percentage_of_m1)* m2.especular(G),
+        percentage_of_m1 * m1.especular(B) + (1-percentage_of_m1)* m2.especular(B),
+        1
+    };
+
+    del.exp_brillo = tra.exp_brillo = percentage_of_m1 * m1.exp_brillo + (1-percentage_of_m1)* m2.exp_brillo;
+}
+
+MaterialMarfil::MaterialMarfil()
+  : Material(
+             {1.0,1.0,1.0},
+             0.0,
+             1.0,
+             0.0,
+             1.0
+)
+{}
+
+MaterialEsmeralda::MaterialEsmeralda()
+  : Material(
+             {0.314, 0.784, 0.471},
+             0.0,
+             0.6,
+             0.4,
+             10
+             )
+{}
+
+// Examen Prácticas Año Pasado
+
+MaterialCaras::MaterialCaras()
+    : Material(new Textura("../imgs/moneda-anv.jpg"), 0.0, 1, 0.0, 0){
+    ponerNombre("Material Caras");
+}
+
+MaterialBorde::MaterialBorde()
+    : Material(new Textura("../imgs/metal_res.jpg"), 0.0, 1, 0.0, 0){
+    ponerNombre("Material Borde");
 }

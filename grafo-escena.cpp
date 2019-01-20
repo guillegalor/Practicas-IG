@@ -737,3 +737,118 @@ EscenaP4::EscenaP4(){
     agregar(MAT_Traslacion(3, 0, 0));
     agregar(new PeonNegro);
 }
+
+//---------------------------------------------------------------------------------
+// EJERCICIOS RELACIÓN
+// 33-.
+
+void tronco(){
+    std::vector<Tupla3f> vertices;
+    std::vector<Tupla3i> caras;
+
+    std::vector<int> linea1;
+    std::vector<int> linea2;
+    std::vector<int> linea3;
+
+    // Inicialización de vértices
+    vertices.push_back({0, 0, 0});
+    vertices.push_back({1, 0, 0});
+    vertices.push_back({1, 1, 0});
+    vertices.push_back({2, 2, 0});
+    vertices.push_back({1.5, 2.5, 0});
+    vertices.push_back({0.5, 1.5, 0});
+    vertices.push_back({0, 3, 0});
+    vertices.push_back({-0.5, 3, 0});
+    vertices.push_back({0, 1.5, 0});
+
+    caras.push_back({0, 1, 2});
+    caras.push_back({0, 2, 8});
+    caras.push_back({2, 5, 8});
+    caras.push_back({2, 4, 5});
+    caras.push_back({2, 3, 4});
+    caras.push_back({5, 6, 8});
+    caras.push_back({6, 7, 8});
+
+    linea1.push_back(1);
+    linea1.push_back(2);
+    linea1.push_back(3);
+
+    linea2.push_back(4);
+    linea2.push_back(5);
+    linea2.push_back(6);
+
+    linea3.push_back(7);
+    linea3.push_back(8);
+    linea3.push_back(0);
+
+    glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+
+    glEnableClientState( GL_VERTEX_ARRAY ); // habilitar array de vértices
+    glVertexPointer( 3, GL_FLOAT, 0, vertices.data() ); // establecer dirección y estructura
+
+    glColor3f(0.5, 0.5, 1); // Azul clarito(?)
+
+    glDrawElements( GL_TRIANGLES, caras.size()*3L, GL_UNSIGNED_INT, caras.data() );
+
+    glColor3f(0.0, 0.0, 1); // Azul
+    glLineWidth(3.0);
+    glDrawElements( GL_LINE_STRIP, linea1.size(), GL_UNSIGNED_INT, linea1.data() );
+    glDrawElements( GL_LINE_STRIP, linea2.size(), GL_UNSIGNED_INT, linea2.data() );
+    glDrawElements( GL_LINE_STRIP, linea3.size(), GL_UNSIGNED_INT, linea3.data() );
+
+    glDisableClientState( GL_VERTEX_ARRAY );
+
+}
+
+void arbol(unsigned niveles){
+    if (niveles > 0){
+        tronco();
+
+        glPushMatrix();
+        glTranslatef(1.5, 2.5, 0);
+        glRotatef(-45.0, 0.0, 0.0, 1.0);
+        glScalef(sqrt(0.5), sqrt(0.5), sqrt(0.5));
+        arbol(niveles-1);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.5, 3, 0);
+        glScalef(0.5, 0.5, 0.5);
+        arbol(niveles-1);
+        glPopMatrix();
+    }
+}
+
+//Examen Grado
+Test::Test(Material* m){
+    agregar(m);
+    /* agregar(new MaterialEsmeralda); */
+    agregar(new Esfera(20, 20, true, false, true));
+}
+
+// Examen Prácticas Año Pasado
+Moneda::Moneda(){
+    agregar(new CaraSuperior);
+    agregar(new Borde);
+    agregar(new CaraInferior);
+}
+
+CaraSuperior::CaraSuperior(){
+    agregar(MAT_Traslacion(0.0, 0.05, 0));
+    agregar(new MaterialCaras());
+    agregar(new Disco(50));
+}
+
+CaraInferior::CaraInferior(){
+    agregar(MAT_Rotacion(180, 0, 0, 1));
+    agregar(new MaterialCaras());
+    Disco * d = new Disco(50);
+    d->invertirCoordText(true, false);
+    agregar(d);
+}
+
+Borde::Borde(){
+    agregar(MAT_Escalado(1, 0.05, 1));
+    agregar(new MaterialBorde());
+    agregar(new Cilindro(2, 50, false, false, true));
+}

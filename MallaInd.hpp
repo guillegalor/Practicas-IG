@@ -82,4 +82,14 @@ class Tetraedro : public MallaInd
         Tetraedro ();
 };
 
+//-----------------------------------------------------------------------
+// EJERCICIOS
+
+// Examen Prácticas Año Pasado
+class Disco : public MallaInd
+{
+    public:
+        Disco(unsigned nper);
+        void invertirCoordText(bool s, bool t);
+};
 #endif

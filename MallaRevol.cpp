@@ -165,6 +165,7 @@ Cilindro::Cilindro( const unsigned num_verts_per,
     nper = nperfiles;
 
     crearMallaRevol (perfil_original, crear_tapas, crear_tapas, crear_texturas);
+    calcular_normales();
 }
 
 // *****************************************************************************
@@ -225,7 +226,7 @@ Esfera::Esfera( const unsigned num_verts_per,
     float x, y, z;
     for (int i = 0; i < num_verts_per; ++i) {
         z = 0;
-        y = -1 + (float)2*i/(num_verts_per-1);
+        y = -1 + (float)2*(i+1)/(num_verts_per+1);
         x = sqrt(1 - y*y);
 
         perfil_original.push_back({x, y, z});
@@ -234,4 +235,5 @@ Esfera::Esfera( const unsigned num_verts_per,
     nper = nperfiles;
 
     crearMallaRevol (perfil_original, crear_tapas, crear_tapas, crear_texturas);
+    calcular_normales();
 }

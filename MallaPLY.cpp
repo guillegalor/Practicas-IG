@@ -10,7 +10,6 @@
 #include <tuplasg.hpp>
 #include <file_ply_stl.hpp>
 #include "MallaPLY.hpp"
-#include <bits/stdc++.h>
 
 using namespace std ;
 

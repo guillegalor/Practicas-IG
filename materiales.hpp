@@ -318,4 +318,44 @@ class MaterialPeonNegro : public Material
         MaterialPeonNegro() ;
 };
 
+//---------------------------------------------------------------------------------
+// EJERCICIOS
+// Examen-Grado.
+
+const static unsigned grades = 30;
+class MaterialCambiante : public Material{
+    private:
+        bool from1to2;
+        float percentage_of_m1;
+        ColoresMat m1, m2;
+
+    public:
+        MaterialCambiante(Tupla3f color1, float ka1, float kd1, float ks1, float exp1,
+            Tupla3f color2, float ka2, float kd2, float ks2, float exp2);
+        void reverse();
+        void aument();
+};
+
+class MaterialMarfil : public Material{
+    public:
+        MaterialMarfil();
+};
+
+class MaterialEsmeralda : public Material{
+    public:
+        MaterialEsmeralda();
+};
+
+// Examen Prácticas Año Pasado
+
+class MaterialCaras : public Material{
+    public:
+        MaterialCaras();
+};
+
+class MaterialBorde : public Material{
+    public:
+        MaterialBorde();
+};
+
 #endif

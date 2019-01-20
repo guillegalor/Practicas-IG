@@ -239,4 +239,38 @@ class EscenaP4: public NodoGrafoEscenaParam{
         EscenaP4();
 };
 
+//---------------------------------------------------------------------------------
+// EJERCICIOS RELACIÓN
+// 33-.
+
+void tronco();
+void arbol(unsigned niveles);
+
+// Examen Grado
+class Test : public NodoGrafoEscena{
+    public:
+        Test(Material* m);
+};
+
+// Examen Prácticas Año Pasado
+class CaraSuperior : public NodoGrafoEscena {
+    public:
+        CaraSuperior();
+};
+
+class CaraInferior : public NodoGrafoEscena {
+    public:
+        CaraInferior();
+};
+
+class Borde : public NodoGrafoEscena {
+    public:
+        Borde();
+};
+
+class Moneda: public NodoGrafoEscena {
+    public:
+        Moneda();
+};
+
 #endif // GRAFO_ESCENA_HPP

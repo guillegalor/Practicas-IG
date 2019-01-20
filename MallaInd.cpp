@@ -8,6 +8,7 @@
 #include <aux.hpp>
 #include <tuplasg.hpp>
 #include "MallaInd.hpp"   // declaración de 'ContextoVis'
+#include "matrices-tr.hpp"
 
 // *****************************************************************************
 // funciones auxiliares
@@ -78,11 +79,15 @@ void MallaInd::calcular_normales()
         n = a.cross(b).normalized();
 
         // Calcular normales de los vértices sum(normales adyancentes a tu vértice)||sum(normales adyancentes a tu vértice)||
-        nor_ver[v0] = (nor_ver[v0] + n).normalized();
-        nor_ver[v1] = (nor_ver[v1] + n).normalized();
-        nor_ver[v2] = (nor_ver[v2] + n).normalized();
+        nor_ver[v0] = (nor_ver[v0] + n);
+        nor_ver[v1] = (nor_ver[v1] + n);
+        nor_ver[v2] = (nor_ver[v2] + n);
 
         nor_tri.push_back(n);
+    }
+
+    for (auto& normal : nor_ver){
+        normal = normal.normalized();
     }
 
 }
@@ -343,3 +348,38 @@ Tetraedro::Tetraedro()
 }
 
 // *****************************************************************************
+
+//-----------------------------------------------------------------------
+// EJERCICIOS
+
+// Examen Prácticas Año Pasado
+Disco::Disco(unsigned nper){
+    tabla_verts.push_back({0, 0, 0});
+    tabla_text.push_back({0.5, 0.5});
+    nor_ver.push_back ({0, 1, 0});
+
+    Tupla3f vert;
+
+    for (int i = 0; i < nper; ++i) {
+        vert = MAT_Rotacion((float)(360*i)/(nper-1), 0, 1, 0)* Tupla3f({0,0,1});
+        tabla_verts.push_back (vert);
+
+        // Crear texturas
+        tabla_text.push_back ({(vert[0]+1)/2, (vert[2]+1)/2});
+        // Crear normales
+        nor_ver.push_back ({0, 1, 0});
+    }
+
+    // Crear caras
+    for (int i = 0; i < nper-1; ++i) {
+        tabla_caras.push_back ({i+1, i+2, 0});
+    }
+
+}
+
+void Disco::invertirCoordText(bool s, bool t){
+    for (auto& text : tabla_text){
+        text[0] = (s ? 1 - text[0] : text[0]);
+        text[1] = (t ? 1 - text[1] : text[1]);
+    }
+}

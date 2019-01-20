@@ -16,8 +16,9 @@ using namespace std ;
 // DONE: práctica 4: declaración de variables de la práctica 4 (static)
 // ....
 static unsigned objetoActivo4 = 0 ; // objeto activo: muneco(0)
-static constexpr int numObjetos4 = 1 ;
-static NodoGrafoEscena* objetos4[numObjetos4] = {nullptr};
+static constexpr int numObjetos4 = 3 ;
+static NodoGrafoEscena* objetos4[numObjetos4] = {nullptr, nullptr, nullptr};
+MaterialCambiante* m = nullptr;
 
 ColFuentesLuz p4_fuentes;
 
@@ -32,9 +33,24 @@ void P4_Inicializar(  )
 {
     cout << "Creando objetos de la práctica 4 .... " << flush ;
 
+    m = new MaterialCambiante(
+            {0.314, 0.784, 0.471},
+            0.0,
+            0.6,
+            0.4,
+            10,
+            {1.0,1.0,1.0},
+            0.0,
+            1.0,
+            0.0,
+            1.0
+            );
+
     p4_fuentes.insertar(new FuenteLuzDireccional(-10, 30, Tupla4f{1, 1, 1, 1}));
     p4_fuentes.insertar(new FuenteLuzPosicional({0, 20, 0}, Tupla4f{0.4, 0.4, 0.4, 1}));
     objetos4[0] = new EscenaP4();
+    objetos4[1] = new Moneda();
+    objetos4[2] = new Test(m);
 
     cout << "hecho." << endl << flush ;
 }
@@ -49,30 +65,51 @@ void P4_Inicializar(  )
 //    cambiado nada)
 
 bool P4_FGE_PulsarTeclaCaracter( unsigned char tecla) {
-   bool res = false  ;
-   int key = -1;
+    bool res = false  ;
+    int key = -1;
 
-  switch ( toupper( tecla ) ) {
-    case 'G' :
-      angulo_activo  = ( angulo_activo + 1 ) % 2;
-      break ;
+    switch ( toupper( tecla ) ) {
+        case 'E':
+            m->aument();
+            res = true;
+            break;
+        case 'R':
+            m->reverse();
+            res = true;
+            break;
 
-    case '>' :
-      key = angulo_activo == 0 ? GLFW_KEY_UP : GLFW_KEY_RIGHT;
-      break ;
+        case 'G' :
+            angulo_activo  = ( angulo_activo + 1 ) % 2;
+            break ;
 
-    case '<' :
-      key = angulo_activo == 0 ? GLFW_KEY_DOWN : GLFW_KEY_LEFT;
-      break ;
+        case '>' :
+            key = angulo_activo == 0 ? GLFW_KEY_UP : GLFW_KEY_RIGHT;
+            break ;
 
-    default :
-      break ;
-  }
-  if (key != -1) {
-    res = p4_fuentes.ptrFuente(0)->gestionarEventoTeclaEspecial(key);
-  }
+        case '<' :
+            key = angulo_activo == 0 ? GLFW_KEY_DOWN : GLFW_KEY_LEFT;
+            break ;
 
-  return res ;
+        case 'O' :
+            objetoActivo4 = (objetoActivo4+1) % numObjetos4 ;
+            cout << "práctica 3: nuevo objeto activo es: " << objetoActivo4 ;
+            if ( objetos4[objetoActivo4] != nullptr )
+                cout << " (" << objetos4[objetoActivo4]->leerNombre() << ")." << endl ;
+            else
+                cout << " (objeto no creado)" << endl ;
+
+            res = true;
+
+            break ;
+
+        default :
+            break ;
+    }
+    if (key != -1) {
+        res = p4_fuentes.ptrFuente(0)->gestionarEventoTeclaEspecial(key);
+    }
+
+    return res ;
 }
 
 // ---------------------------------------------------------------------
