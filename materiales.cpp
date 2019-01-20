@@ -334,7 +334,7 @@ void Material::activar(  )
         glMaterialf(GL_BACK, GL_SHININESS, tra.exp_brillo);
 
         glEnable(GL_LIGHTING);
-        /* glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR); */
+        glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
     }
     else{
         glDisable(GL_LIGHTING);
@@ -524,6 +524,7 @@ void ColFuentesLuz::activar(unsigned id_prog)
 {
     // Activa la iluminación
     glEnable(GL_LIGHTING);
+    glEnable(GL_NORMALIZE);
 
     if(id_prog > 2)
         // Activa las luces de la colección y desactiva el resto
@@ -561,7 +562,7 @@ ColFuentesLuz::~ColFuentesLuz()
 // Implementación de materiales específicos
 
 MaterialLata::MaterialLata()
-    : Material(new Textura("../imgs/lata-pepsi.jpg"), 0, 0.7, 0.3, 1){
+    : Material(new Textura("../imgs/lata-pepsi.jpg"), 0, 0.6, 0.4, 7){
     ponerNombre("MaterialLata");
 }
 
@@ -571,7 +572,7 @@ MaterialTapasLata::MaterialTapasLata()
 }
 
 MaterialPeonMadera::MaterialPeonMadera()
-: Material(new TexturaXY("../imgs/text-madera.jpg"), 0.0, 0.95, 0.05, 1){
+: Material(new TexturaXY("../imgs/text-madera.jpg"), 0.0, 0.6, 0.4, 10){
     ponerNombre("Material Peon Madera");
 }
 
@@ -581,6 +582,6 @@ MaterialPeonBlanco::MaterialPeonBlanco()
 }
 
 MaterialPeonNegro::MaterialPeonNegro()
-    : Material({0.05, 0.05, 0.05}, 0.1, 0.1, 0.1, 1){        // {0.05, 0.05, 0.05} color negro
+    : Material({0.05, 0.05, 0.05}, 0.0, 0.9, 0.1, 8){        // {0.05, 0.05, 0.05} color negro
     ponerNombre("Material Peon Negro");
 }
