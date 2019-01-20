@@ -25,20 +25,21 @@ GLuint VBO_Crear (GLuint tipo, GLuint tamanio, GLvoid *puntero)
 }
 
 Tupla3f calcularCentroCajaEnglobante(std::vector<Tupla3f> puntos){
-    Tupla3f maximos, minimos = puntos[0];
+    Tupla3f maximos = puntos[0],
+            minimos = puntos[0];
 
-    for( auto ver : vertices){
-        maximos[0] = std::max(ver[0], maximos[0]);
-        maximos[1] = std::max(ver[1], maximos[1]);
-        maximos[2] = std::max(ver[2], maximos[2]);
+    for( auto p : puntos){
+        maximos[0] = std::max(p[0], maximos[0]);
+        maximos[1] = std::max(p[1], maximos[1]);
+        maximos[2] = std::max(p[2], maximos[2]);
 
-        minimos[0] = std::min(ver[0], minimos[0]);
-        minimos[1] = std::min(ver[1], minimos[1]);
-        minimos[2] = std::min(ver[2], minimos[2]);
+        minimos[0] = std::min(p[0], minimos[0]);
+        minimos[1] = std::min(p[1], minimos[1]);
+        minimos[2] = std::min(p[2], minimos[2]);
 
     }
 
-    return (maximos + minimos)/2;
+    return (maximos + minimos) / 2.0;
 }
 
 // *****************************************************************************
@@ -117,7 +118,9 @@ void MallaInd::crearVBOs()
 // -----------------------------------------------------------------------------
 
 void MallaInd::visualizarDE_MI( ContextoVis & cv ){
-    if( col_ver.size() > 0){ // si hay colores de v. disponibles:
+
+    if( col_ver.size() > 0 && ! cv.modoSeleccionFBO){ // si hay colores de v. disponibles:
+        std::cout << "mandando colores" << std::endl;
         glEnableClientState( GL_COLOR_ARRAY );
         // habilitar colores
         glColorPointer( 3, GL_FLOAT, 0, col_ver.data() ); // fija puntero a colores
@@ -127,11 +130,14 @@ void MallaInd::visualizarDE_MI( ContextoVis & cv ){
     glVertexPointer( 3, GL_FLOAT, 0, tabla_verts.data() );
 
     // Hace falta multiplicar tabla_caras*3 porque es un vector de 3-uplas
-    glDrawElements( GL_TRIANGLES, tabla_caras.size()*3, GL_UNSIGNED_INT, tabla_caras.data() );
+    glDrawElements( GL_TRIANGLES, tabla_caras.size()*3L, GL_UNSIGNED_INT, tabla_caras.data() );
 
     // deshabilitar arrays
     glDisableClientState( GL_VERTEX_ARRAY );
     glDisableClientState( GL_COLOR_ARRAY );
+
+    if (cv.modoSeleccionFBO)
+        std::cout << "Saliendo del visualizar modo seleccion" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -211,26 +217,39 @@ void MallaInd::visualizarGL( ContextoVis & cv )
     // Establecer sombra
     GLenum shade;
 
-    switch (cv.modoVis){
-        default:
-        case modoSolido:
-            mode = GL_FILL;
-            break;
-        case modoPuntos:
-            mode = GL_POINT;
-            break;
-        case modoAlambre:
-            mode = GL_LINE;
-            break;
-        case modoIluminacionPlano:
-            mode = GL_FILL;
-            shade = GL_FLAT;
-            break;
-        case modoIluminacionSuave:
-            mode = GL_FILL;
-            shade = GL_SMOOTH;
-            break;
+    // Practica 5: Parámetros para modo selección
+    if (cv.modoSeleccionFBO){
+        glDisable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glShadeModel(GL_FLAT);
+
+        visualizarDE_MI (cv);
+
+        return;
     }
+
+    else
+        switch (cv.modoVis){
+            default:
+            case modoSolido:
+                mode = GL_FILL;
+                break;
+            case modoPuntos:
+                mode = GL_POINT;
+                break;
+            case modoAlambre:
+                mode = GL_LINE;
+                break;
+            case modoIluminacionPlano:
+                mode = GL_FILL;
+                shade = GL_FLAT;
+                break;
+            case modoIluminacionSuave:
+                mode = GL_FILL;
+                shade = GL_SMOOTH;
+                break;
+        }
 
     glPolygonMode (GL_FRONT_AND_BACK, mode);
 

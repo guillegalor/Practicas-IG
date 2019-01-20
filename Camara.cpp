@@ -177,7 +177,12 @@ void Viewport::actualizar(int vp_ancho, int vp_alto){
     ancho = vp_ancho;
     alto = vp_alto;
 
-    ratio_yx = (float) alto/ancho;
+    ratio_yx = (float)alto/(float)ancho;
+}
+
+// ---------------------------------------------------------------------
+void Viewport::fijarViewport(){
+    glViewport(org_x, org_y, ancho, alto);
 }
 
 // *********************************************************************

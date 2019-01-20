@@ -32,8 +32,8 @@ void P4_Inicializar(  )
 {
     cout << "Creando objetos de la práctica 4 .... " << flush ;
 
-    p4_fuentes.insertar(new FuenteLuzDireccional(-10, 30, Tupla4f{0.3, 0.3, 0.3, 1}));
-    p4_fuentes.insertar(new FuenteLuzPosicional({0, -20, 0}, Tupla4f{0.4, 0.4, 0.4, 1}));
+    /* p4_fuentes.insertar(new FuenteLuzDireccional(-10, 30, Tupla4f{1, 1, 1, 1})); */
+    p4_fuentes.insertar(new FuenteLuzPosicional({0, 20, 0}, Tupla4f{0.4, 0.4, 0.4, 1}));
     objetos4[0] = new EscenaP4();
 
     cout << "hecho." << endl << flush ;

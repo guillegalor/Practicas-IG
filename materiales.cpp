@@ -232,23 +232,24 @@ Material::Material( Textura * text, float ka, float kd, float ks, float exp )
 // ---------------------------------------------------------------------
 // crea un material con un color único para las componentes ambiental y difusa
 // en el lugar de textura (textura == NULL)
-Material::Material( const Tupla3f & colorAmbDif, float ks, float exp )
+Material::Material( const Tupla3f & colorAmbDif, float ka, float kd, float ks, float exp )
 {
     tex = NULL;
     iluminacion = true;
-    color = {colorAmbDif[0], colorAmbDif[1], colorAmbDif[2], 1.0};
 
-    del.emision     = VectorRGB(0.0,0.0,0.0, 1.0);
+    del.emision =
+        tra.emision = VectorRGB(0.0,0.0,0.0, 1.0);
+
     del.ambiente =
-        del.difusa  = color;
-    del.especular   = VectorRGB(ks, ks, ks, 1.0);
-    del.exp_brillo  = exp;
+        tra.ambiente    = VectorRGB(ka * colorAmbDif(R), ka * colorAmbDif(G), ka * colorAmbDif(B), 1.0);
 
-    tra.emision     = VectorRGB(0.0,0.0,0.0, 1.0);
-    tra.ambiente =
-        tra.difusa  = color;
-    tra.especular   = VectorRGB(ks, ks, ks, 1.0);
-    tra.exp_brillo  = exp;
+    del.difusa =
+        tra.difusa      = VectorRGB(kd * colorAmbDif(R), kd * colorAmbDif(G), kd * colorAmbDif(B), 1.0);
+
+    del.especular =
+        tra.especular = VectorRGB(ks, ks, ks, 1.0);
+
+    del.exp_brillo = tra.exp_brillo  = exp;
 
     ponerNombre("material color plano, ilum.") ;
 }
@@ -333,12 +334,12 @@ void Material::activar(  )
         glMaterialf(GL_BACK, GL_SHININESS, tra.exp_brillo);
 
         glEnable(GL_LIGHTING);
-        glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
+        /* glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR); */
     }
     else{
         glDisable(GL_LIGHTING);
 
-        /* glColor4fv(color); */
+        glColor4fv(color);
 
         /* glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION); */
         /* glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE); */
@@ -560,26 +561,26 @@ ColFuentesLuz::~ColFuentesLuz()
 // Implementación de materiales específicos
 
 MaterialLata::MaterialLata()
-    : Material(new Textura("../imgs/lata-pepsi.jpg"), 0.6, 1, 0.2, 1){
+    : Material(new Textura("../imgs/lata-pepsi.jpg"), 0, 0.7, 0.3, 1){
     ponerNombre("MaterialLata");
 }
 
 MaterialTapasLata::MaterialTapasLata()
-    : Material(NULL, 0.3, 0.3, 0.3, 1) {
+    : Material({0.3, 0.3, 0.3}, 0, 0.5, 0.5, 1) {
     ponerNombre("MaterialTapasLata");
 }
 
 MaterialPeonMadera::MaterialPeonMadera()
-: Material(new TexturaXY("../imgs/text-madera.jpg"), 0.6, 0.3, 0.3, 0){
+: Material(new TexturaXY("../imgs/text-madera.jpg"), 0.0, 0.95, 0.05, 1){
     ponerNombre("Material Peon Madera");
 }
 
 MaterialPeonBlanco::MaterialPeonBlanco()
-    : Material(NULL, 0.8, 0.8, 0, 5){
-    ponerNombre("Material Peon Madera");
+    : Material({1, 1, 1}, 0, 1, 0, 1){                      // {1,1,1} color blanco
+    ponerNombre("Material Peon Blanco");
 }
 
 MaterialPeonNegro::MaterialPeonNegro()
-    : Material(NULL, 0.0, 0.05, 0.1, 0.2){
-    ponerNombre("Material Peon Madera");
+    : Material({0.05, 0.05, 0.05}, 0.1, 0.1, 0.1, 1){        // {0.05, 0.05, 0.05} color negro
+    ponerNombre("Material Peon Negro");
 }

@@ -1,6 +1,8 @@
 #include <aux.hpp>
 #include "CamaraInter.hpp"
 
+using namespace std;
+
 // -----------------------------------------------------------------------------
 // constructor de cámaras interactivas, los parámetros son:
 //
@@ -16,8 +18,6 @@ CamaraInteractiva::CamaraInteractiva( bool examinar_ini, float ratio_yx_vp_ini,
         const Tupla3f & aten_ini, bool pers_ini,
         float hfov_grad_ini, float dist_ini  )
 {
-    using namespace std ;
-
     examinar    = examinar_ini ;
     longi       = longi_ini_grad ;
     lati        = lati_ini_grad ;
@@ -41,23 +41,35 @@ constexpr float n = 0.01 ; // valor 'near' en proy. persp
 
 void CamaraInteractiva::calcularViewfrustum(  )
 {
-    using namespace std ;
+    float aspect = (float) 1 / ratio_yx_vp;
 
     if ( perspectiva )
     {
-        // TODO: práctica 5: calcular los parámetros del view frustum (vf), y actualiza la matriz de proyección (vf.matrizProy)
+        // DONE: práctica 5: calcular los parámetros del view frustum (vf), y actualiza la matriz de proyección (vf.matrizProy)
         // caso perspectiva: usar hfov_grad, n, ratio_yx_vp, dist, función MAT_Frustum
         // .....
 
+        vf = ViewFrustum(hfov_grad, aspect, n, dist + 200);
     }
     else
     {
-        // TODO: práctica 5: calcular los parámetros del view frustum (vf), y actualiza la matriz de proyección (vf.matrizProy)
+        // DONE: práctica 5: calcular los parámetros del view frustum (vf), y actualiza la matriz de proyección (vf.matrizProy)
         // caso ortográfica: usar ratio_yx_vp, dist, función MAT_Ortografica
         // .....
 
-    }
+        aspect = ratio_yx_vp;
 
+        vf.persp = false;
+        vf.left = - dist * aspect;
+        vf.right = dist * aspect;
+        vf.top = dist;
+        vf.bottom = - dist;
+        vf.near = n;
+        vf.far = dist + 200;
+
+        vf.matrizProy = MAT_Ortografica(vf.left, vf.right, vf.bottom, vf.top, vf.near, vf.far);
+
+    }
 }
 
 //-----------------------------------------------------------------------
@@ -67,11 +79,23 @@ void CamaraInteractiva::calcularViewfrustum(  )
 void CamaraInteractiva::calcularMarcoCamara()
 {
 
-    // TODO: práctica 5: recalcular 'mcv.matrizVista' y 'mcv.matriVistaInv'
+    // DONE: práctica 5: recalcular 'mcv.matrizVista' y 'mcv.matriVistaInv'
     //    (1) Matriz = Trasl( aten )*Rotacion( longi, Y )*Rotacion( -lati, X )* Traslacion( (0,0,dist) )
     //    (2) ejes mcv = ejes mcv * matriz
     //    (3) recalcular matrices marco camara
     // .....
+
+    Matriz4f m = MAT_Traslacion(aten)
+        * MAT_Rotacion(longi, 0, 1, 0)
+        * MAT_Rotacion(-lati, 1, 0, 0)
+        * MAT_Traslacion(0, 0, dist);
+
+    mcv.eje[0] = m * Tupla4f(1, 0, 0, 0);
+    mcv.eje[1] = m * Tupla4f(0, 1, 0, 0);
+    mcv.eje[2] = m * Tupla4f(0, 0, 1, 0);
+    mcv.org    = m * Tupla4f(0, 0, 0, 1);
+
+    recalcularMatrMCV();
 
 }
 
@@ -81,9 +105,10 @@ void CamaraInteractiva::calcularMarcoCamara()
 
 void CamaraInteractiva::recalcularMatrMCV()
 {
-    // TODO: práctica 5: recalcular 'mcv.matrizVista' y 'mcv.matriVistaInv' en 'mcv' usando 'mcv.eje[X/Y/Z]' y 'mcv.org'
-    // .....
+    // DONE: práctica 5: recalcular 'mcv.matrizVista' y 'mcv.matriVistaInv' en 'mcv' usando 'mcv.eje[X/Y/Z]' y 'mcv.org'
 
+    mcv.matrizVista = MAT_Vista(mcv.eje, mcv.org);
+    mcv.matrizVistaInv = MAT_Vista_inv(mcv.eje, mcv.org);
 }
 
 // -----------------------------------------------------------------------------
@@ -114,13 +139,14 @@ void CamaraInteractiva::moverHV( float nh, float nv )
         // (y movimiento solidario del punto de atención)
         // .....
 
-        mcv.org[0] += nh*udesp;
-        mcv.org[1] += nv*udesp;
-        recalcularMatrMCV();
+        mcv.org(X) += nh*udesp;
+        mcv.org(Y) += nv*udesp;
 
         // NOTE: no sabemos si esto es correcto o no, pero lo pone en el comentario de arriba
-        aten[0] += nh*udesp;
-        aten[1] += nv*udesp;
+        aten(X) += nh*udesp;
+        aten(Y) += nv*udesp;
+
+        recalcularMatrMCV();
     }
 }
 // -----------------------------------------------------------------------------

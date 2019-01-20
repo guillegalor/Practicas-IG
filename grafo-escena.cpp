@@ -91,6 +91,10 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
     for (unsigned i = 0; i < entradas.size(); i++)
         switch (entradas[i].tipo) {
             case TipoEntNGE::objeto:
+                if (cv.modoSeleccionFBO && leerIdentificador() >= 0) {
+                    std::cout << "Fijando color con identificador "<< leerIdentificador() << std::endl;
+                    FijarColorIdent(leerIdentificador());
+                }
                 entradas[i].objeto->visualizarGL (cv);
                 break;
             case TipoEntNGE::transformacion:
@@ -98,7 +102,8 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
                 glMultMatrixf (*(entradas[i].matriz));
                 break;
             case TipoEntNGE::material:
-                cv.pilaMateriales.activarMaterial(entradas[i].material);
+                if(!cv.modoSeleccionFBO)
+                    cv.pilaMateriales.activarMaterial(entradas[i].material);
                 break;
 
             default:
@@ -217,28 +222,32 @@ void NodoGrafoEscena::calcularCentroOC()
 
     if (ident_busc == leerIdentificador()){
         *objeto = this;
-        centro_wc = leerCentroOC();
+        centro_wc = mmodelado*leerCentroOC();
         return true;
     }
 
-    Matriz4f cumulative_transformation_m = MAT_Ident();
+    Matriz4f nueva_mmodelado = mmodelado;
+
+    // TEST
+    unsigned counter = 0;
 
     for (auto &entrada: entradas){
+        cerr << "Entrada numero: " << counter++ << " de " << leerNombre() << endl;
         switch(entrada.tipo) {
             case TipoEntNGE::objeto:
-                if (buscarObjeto(ident_busc, mmodelado*cumulative_transformation_m, objeto, centro_wc))
+                if (entrada.objeto->buscarObjeto(ident_busc, nueva_mmodelado, objeto, centro_wc)){
                     return true;
+                }
                 break;
             case TipoEntNGE::transformacion:
-                cumulative_transformation_m = cumulative_transformation_m * (*entrada.matriz);
+                nueva_mmodelado = nueva_mmodelado * (*entrada.matriz);
                 break;
             default:
                 break;
         }
-
-        return false;
-
     }
+
+    return false;
 
 }
 
@@ -669,37 +678,51 @@ Muneco::Ojo::Ojo(){
 }
 
 Lata::Lata(){
+    ponerIdentificador(1);
+    ponerNombre("Lata");
     agregar(new TapaArriba());
     agregar(new Cuerpo());
     agregar(new TapaAbajo());
 }
 
 Lata::Cuerpo::Cuerpo(){
+    ponerIdentificador(-1);
+    ponerNombre("Cuerpo lata");
     agregar(new MaterialLata());
     agregar(new MallaRevol("../plys/lata-pcue.ply", 50, false ,false, true));
 }
 
 Lata::TapaArriba::TapaArriba(){
+    ponerIdentificador(-1);
+    ponerNombre("Tapa arriba lata");
     agregar(new MaterialTapasLata());
     agregar(new MallaRevol("../plys/lata-psup.ply", 50, true, false, true));
 }
 
 Lata::TapaAbajo::TapaAbajo(){
+    ponerIdentificador(-1);
+    ponerNombre("Tapa abajo lata");
     agregar(new MaterialTapasLata());
     agregar(new MallaRevol("../plys/lata-pinf.ply", 50, true, false, true));
 }
 
 PeonMadera::PeonMadera(){
+    ponerIdentificador(2);
+    ponerNombre("Peon madera");
     agregar(new MaterialPeonMadera());
     agregar(new MallaRevol("../plys/peon.ply", 50, true, false, true));
 }
 
 PeonBlanco::PeonBlanco(){
+    ponerIdentificador(3);
+    ponerNombre("Peon blanco");
     agregar(new MaterialPeonBlanco());
     agregar(new MallaRevol("../plys/peon.ply", 50, true, false, true));
 }
 
 PeonNegro::PeonNegro(){
+    ponerIdentificador(4);
+    ponerNombre("Peon negro");
     agregar(new MaterialPeonNegro());
     agregar(new MallaRevol("../plys/peon.ply", 50, true, false, true));
 }

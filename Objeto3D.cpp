@@ -71,7 +71,7 @@ void Objeto3D::calcularCentroOC()
 // -----------------------------------------------------------------------------
 // buscar un identificador (implementación por defecto para todos los Objeto3D)
 
-    bool Objeto3D::buscarObjeto
+bool Objeto3D::buscarObjeto
 (
  const int        ident_busc,
  const Matriz4f & mmodelado,

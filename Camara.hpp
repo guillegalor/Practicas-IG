@@ -82,7 +82,10 @@ class Viewport
         Viewport( int p_org_x, int p_org_y, int p_ancho, int p_alto );
 
         // actualizar
-        void actualizar(int vp_ancho, vp_alto);
+        void actualizar(int vp_ancho, int vp_alto);
+
+        // fijar viewport
+        void fijarViewport();
 } ;
 
 // *********************************************************************
