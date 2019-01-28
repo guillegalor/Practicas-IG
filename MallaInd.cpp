@@ -18,7 +18,8 @@ GLuint VBO_Crear (GLuint tipo, GLuint tamanio, GLvoid *puntero)
     assert (tipo == GL_ARRAY_BUFFER || tipo == GL_ELEMENT_ARRAY_BUFFER);
     GLuint id_vbo;
     glGenBuffers (1, &id_vbo);
-    glBindBuffer (tipo,id_vbo); glBufferData (tipo, tamanio, puntero, GL_STATIC_DRAW);
+    glBindBuffer (tipo,id_vbo);
+    glBufferData (tipo, tamanio, puntero, GL_STATIC_DRAW);
 
     glBindBuffer (tipo, 0);
     return id_vbo;
@@ -126,7 +127,6 @@ void MallaInd::crearVBOs()
 void MallaInd::visualizarDE_MI( ContextoVis & cv ){
 
     if( col_ver.size() > 0 && ! cv.modoSeleccionFBO){ // si hay colores de v. disponibles:
-        std::cout << "mandando colores" << std::endl;
         glEnableClientState( GL_COLOR_ARRAY );
         // habilitar colores
         glColorPointer( 3, GL_FLOAT, 0, col_ver.data() ); // fija puntero a colores
@@ -196,6 +196,7 @@ void MallaInd::visualizarDE_VBOs( ContextoVis & cv )
     glBindBuffer (GL_ARRAY_BUFFER, id_vbo_ver);
     glVertexPointer (3, GL_FLOAT, 0, 0);
     glBindBuffer (GL_ARRAY_BUFFER, 0);
+
     glEnableClientState (GL_VERTEX_ARRAY);
 
     glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri);
@@ -532,6 +533,102 @@ CaraAtras::CaraAtras(){
     // Calcular normales
     calcular_normales();
 }
+
+//-----------------------------------------------------------------------
+// Ejercicio 1 de teoría del examen
+
+// n \in [3,128]
+
+void poligonoNLados(int n){
+    std::vector<Tupla3f> vertices;
+    float alpha = 360.0/n;
+
+    static bool creado[125];
+    for (int i = 0; i < 125; ++i) creado[i] = false;
+    static GLuint id_vbo[125];
+
+    if (!creado[n-3]) {
+        for (int i = 0; i < n; ++i) {
+            vertices.push_back(MAT_Rotacion(alpha*i, 0, 0, 1)*Tupla3f({1,0,0}));
+        }
+
+        glGenBuffers (1, &id_vbo[n-3]);
+        glBindBuffer (GL_ARRAY_BUFFER, id_vbo[n-3]);
+        glBufferData (GL_ARRAY_BUFFER, sizeof(float)*3L*vertices.size(), vertices.data(), GL_STATIC_DRAW);
+        glBindBuffer (GL_ARRAY_BUFFER, 0);
+
+        creado[n-3] = true;
+    }
+
+    glBindBuffer (GL_ARRAY_BUFFER, id_vbo[n-3]);
+    glVertexPointer (3, GL_FLOAT, 0, 0);
+    glBindBuffer (GL_ARRAY_BUFFER, 0);
+
+    glDisable(GL_DEPTH_TEST);
+
+    glEnableClientState (GL_VERTEX_ARRAY);
+
+    glColor3f(0,1,1);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glDrawArrays (GL_POLYGON, 0, vertices.size());      // El tercer parámetro es el número de vértices
+
+    glColor3f(1,0,0);
+    glLineWidth(2.0);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glDrawArrays (GL_POLYGON, 0, vertices.size());
+
+    glDisableClientState (GL_VERTEX_ARRAY);
+
+}
+
+// Ejercicio 2 de teoría del examen
+void poligonos3_M(int m){
+    float s = (m-3)*2.3+2;
+    float t = 2;
+    float ratio_yx = t/s;
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // Fijar matriz de vista
+    gluLookAt(0,0,5, 0,0,0, 0,1,0);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // Fijar matriz de proyección
+    glOrtho(-s/2, s/2, -1, 1, 3, 7);
+
+    /* // Está comentado ya que las variables ax y ay no las conocemos */
+    /* float x, y, ancho, alto; */
+
+    /* ancho = min(ax, (1/ratio_yx) * ay); */
+    /* alto = min(ay, (ratio_yx) * ax); */
+
+    /* x = (ax - ancho)/2; */
+    /* y = (ay - alto)/2; */
+
+    /* // Fijar viewport */
+    /* glViewport(x, y, ancho, alto); */
+
+    // Translación inicial
+    glTranslatef(-s/2 + 1, 0, 0);
+
+    // Dibujar los polígonos
+    for (int i = 3; i < m+1; ++i) {
+        poligonoNLados(i);
+        glTranslatef(2.3, 0, 0);
+    }
+
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+}
+
+//-----------------------------------------------------------------------
+// Examen Prácticas P4
 
 DadoP4::DadoP4(){
     tabla_verts = {

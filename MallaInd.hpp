@@ -126,6 +126,13 @@ class CaraAtras : public MallaInd{
         CaraAtras();
 };
 
+//-----------------------------------------------------------------------
+// Ejercicio 1 de teoría del examen
+void poligonoNLados(int n);
+
+// Ejercicio 2 de teoría del examen
+void poligonos3_M(int m);
+
 // EXAMEN P4
 class DadoP4 : public MallaInd{
     public:
