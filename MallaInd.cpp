@@ -18,8 +18,7 @@ GLuint VBO_Crear (GLuint tipo, GLuint tamanio, GLvoid *puntero)
     assert (tipo == GL_ARRAY_BUFFER || tipo == GL_ELEMENT_ARRAY_BUFFER);
     GLuint id_vbo;
     glGenBuffers (1, &id_vbo);
-    glBindBuffer (tipo,id_vbo);
-    glBufferData (tipo, tamanio, puntero, GL_STATIC_DRAW);
+    glBindBuffer (tipo,id_vbo); glBufferData (tipo, tamanio, puntero, GL_STATIC_DRAW);
 
     glBindBuffer (tipo, 0);
     return id_vbo;
@@ -76,7 +75,9 @@ void MallaInd::calcular_normales()
         a = tabla_verts[v1] - tabla_verts[v0];
         b = tabla_verts[v2] - tabla_verts[v0];
 
-        n = a.cross(b).normalized();
+        n = a.cross(b);
+        if (n.lengthSq() > 0.0)
+            n = n.normalized();
 
         // Calcular normales de los vértices sum(normales adyancentes a tu vértice)||sum(normales adyancentes a tu vértice)||
         nor_ver[v0] = (nor_ver[v0] + n);
@@ -162,6 +163,23 @@ void MallaInd::visualizarDE_NT (ContextoVis & cv) // visu. con normales y cc.tt.
     glDisableClientState (GL_VERTEX_ARRAY );
     glDisableClientState (GL_NORMAL_ARRAY );
     glDisableClientState (GL_TEXTURE_COORD_ARRAY );
+}
+
+void MallaInd::visualizarDE_MI_Plano(ContextoVis & cv)
+{
+    glBegin(GL_TRIANGLES);
+
+    for (unsigned i = 0; i < tabla_caras.size(); i++) {
+        if (nor_tri.size() > 0)glNormal3fv(nor_tri[i]);
+        for (unsigned j = 0; j < 3; j++) {
+            unsigned iv = tabla_caras[i](j);
+            if (tabla_text.size() > 0) glTexCoord2fv(tabla_text[iv]);
+            if (col_ver.size() > 0) glColor3fv(col_ver[iv]);
+            glVertex3fv(tabla_verts[iv]);
+        }
+    }
+
+    glEnd();
 }
 
 // ----------------------------------------------------------------------------
@@ -257,20 +275,23 @@ void MallaInd::visualizarGL( ContextoVis & cv )
         }
 
     glPolygonMode (GL_FRONT_AND_BACK, mode);
+    glShadeModel(shade);
 
     if (cv.modoVis < 3)
         if (cv.usarVBOs)
             visualizarDE_VBOs (cv);
         else
             visualizarDE_MI (cv);
-    else {
-        glShadeModel(shade);
+    else if (cv.modoVis != modoIluminacionPlano){
 
         if (cv.usarVBOs)
             visualizarVBOs_NT (cv);
         else
             visualizarDE_NT(cv);
     }
+    else
+        visualizarDE_MI_Plano(cv);
+
 }
 
 // -----------------------------------------------------------------------------
@@ -374,6 +395,8 @@ Disco::Disco(unsigned nper){
     for (int i = 0; i < nper-1; ++i) {
         tabla_caras.push_back ({i+1, i+2, 0});
     }
+
+    // calcular_normales();
 
 }
 
@@ -507,5 +530,34 @@ CaraAtras::CaraAtras(){
     tabla_text.push_back({0.75, (float)1/3});
 
     // Calcular normales
+    calcular_normales();
+}
+
+DadoP4::DadoP4(){
+    tabla_verts = {
+        {-1,1,1}, {1,1,1}, {1,-1,1}, {-1,-1,1},     // 0 1 2 3
+        {1,1,1}, {1,1,-1}, {1,-1,-1},               // 4 5 6
+        {-1,1,1}, {-1,1,-1},                        // 7 8
+        {-1,-1,1}, {-1,-1,-1}, {-1,1,-1},           // 9 10 11
+        {-1,-1,1}, {-1,-1,-1}, {1,-1,1}, {1,-1,-1}, // 12 13 14 15
+        {-1,1,-1}, {1,1,-1}, {1,-1,-1}, {-1,-1,-1}  // 16 17 18 19
+    };
+    tabla_caras = {
+        {2,1,0}, {3,2,0},                           // Cara del 4
+        {2,6,4}, {6,5,4},                           // Cara del 6
+        {4,5,8}, {4,8,7},                           // Cara del 5
+        {0,10,9}, {0,11,10},                        // Cara del 1
+        {12,13,14}, {15,14,13},                     // Cara del 2
+        {16, 17, 18}, {16, 18, 19}
+    };
+    tabla_text = {
+        {0.5, (float)1/3}, {1, (float)1/3}, {1, (float)2/3}, {0.5, (float)2/3},
+        {0.5, (float)2/3}, {0.5,1}, {1,1},
+        {0, (float)2/3}, {0,1},
+        {0.5, 0}, {0,0}, {0,(float)1/3},
+        {0.5, (float)1/3}, {0.5,0}, {1,(float)1/3}, {1,0},
+        {0,(float)1/3}, {0.5,(float)1/3}, {0.5,(float)2/3}, {0,(float)2/3}
+    };
+
     calcular_normales();
 }

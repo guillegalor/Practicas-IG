@@ -279,4 +279,10 @@ class CuboColores : public NodoGrafoEscena{
         CuboColores();
 };
 
+// EXAMEN P4
+class Dado : public NodoGrafoEscena{
+    public:
+        Dado();
+};
+
 #endif // GRAFO_ESCENA_HPP

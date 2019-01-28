@@ -365,4 +365,11 @@ class MaterialDado : public Material{
         MaterialDado();
 };
 
+// EXAMEN P4
+
+class MaterialDadoP4 : public Material{
+    public:
+        MaterialDadoP4();
+};
+
 #endif

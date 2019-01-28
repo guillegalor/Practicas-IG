@@ -55,6 +55,8 @@ class MallaInd : public Objeto3D
         void visualizarDE_NT (ContextoVis & cv); // vis. con normales y cc.tt.
         void visualizarVBOs_NT (ContextoVis & cv); // vis. normales y cc.tt. en VBOs
 
+        void visualizarDE_MI_Plano(ContextoVis & cv);
+
         void calcularCentroOC();
 
     public:
@@ -122,6 +124,12 @@ class CaraFrente : public MallaInd{
 class CaraAtras : public MallaInd{
     public:
         CaraAtras();
+};
+
+// EXAMEN P4
+class DadoP4 : public MallaInd{
+    public:
+        DadoP4();
 };
 
 #endif

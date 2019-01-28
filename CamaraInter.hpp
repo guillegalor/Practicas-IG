@@ -37,6 +37,7 @@ class CamaraInteractiva : public Camara
 {
     public:
         bool    examinar; // modo: true --> examinar, false --> primera persona (inicialmente {\bf false})
+        bool    persona_rotaciones; // true-->primera persona con rotaciones, false viceversa
         bool    perspectiva ; // true --> camara perspectiva, false --> cámara ortográfica
         float   ratio_yx_vp;  // aspect ratio del viewport (alto/ancho)
         float   longi,     // en modo examinar: ángulo (en radianes) en torno al eje Y (longitud) (inic. 0)
@@ -76,6 +77,7 @@ class CamaraInteractiva : public Camara
         void modoExaminar( const Tupla3f & pAten ); // fija punt. aten. y activa modo examinar
         void modoExaminar();                        // pasa a modo examinar (mantiene p.aten.)
         void modoPrimeraPersona() ;                 // pasa al modo primera persona
+        void modoPrimeraPersonaRotaciones();
 
         // recalcular las matrices del marco de coorda de camara, a partir de:
         // mcv.org, mcv.eje[X/Y/Z]

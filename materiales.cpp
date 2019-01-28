@@ -680,3 +680,9 @@ MaterialDado::MaterialDado()
     : Material(new Textura("../imgs/dice.jpg"), 0.0, 1, 0.0, 0){
     ponerNombre("Material Cbuo");
 }
+
+// EXAMEN P4
+MaterialDadoP4::MaterialDadoP4()
+    : Material(new Textura("../imgs/textura-dado-nr.jpg"), 0.4, 0.6, 0.0, 0){
+    ponerNombre("Material Dado");
+}

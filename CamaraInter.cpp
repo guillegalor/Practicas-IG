@@ -19,6 +19,7 @@ CamaraInteractiva::CamaraInteractiva( bool examinar_ini, float ratio_yx_vp_ini,
         float hfov_grad_ini, float dist_ini  )
 {
     examinar    = examinar_ini ;
+    persona_rotaciones = false;
     longi       = longi_ini_grad ;
     lati        = lati_ini_grad ;
     dist        = dist_ini ;
@@ -135,16 +136,25 @@ void CamaraInteractiva::moverHV( float nh, float nv )
     }
     else // primer persona
     {
-        // DONE: práctica 5: desplazar 'mcv.org' en X e Y y recalcular la matriz de vista
-        // (y movimiento solidario del punto de atención)
-        // .....
+        if (!persona_rotaciones){
+            // DONE: práctica 5: desplazar 'mcv.org' en X e Y y recalcular la matriz de vista
+            // (y movimiento solidario del punto de atención)
+            // .....
 
-        mcv.org(X) += nh*udesp;
-        mcv.org(Y) += nv*udesp;
+            mcv.org(X) += nh*udesp;
+            mcv.org(Y) += nv*udesp;
 
-        // NOTE: no sabemos si esto es correcto o no, pero lo pone en el comentario de arriba
-        aten(X) += nh*udesp;
-        aten(Y) += nv*udesp;
+            // NOTE: no sabemos si esto es correcto o no, pero lo pone en el comentario de arriba
+            aten(X) += nh*udesp;
+            aten(Y) += nv*udesp;
+        }
+        else{
+                mcv.eje[0] = MAT_Rotacion(nh, mcv.eje[1][0], mcv.eje[1][1], mcv.eje[1][2]) * mcv.eje[0];
+                mcv.eje[2] = MAT_Rotacion(nh, mcv.eje[1][0], mcv.eje[1][1], mcv.eje[1][2]) * mcv.eje[2];
+
+                mcv.eje[1] = MAT_Rotacion(nv, mcv.eje[0][0], mcv.eje[0][1], mcv.eje[0][2]) * mcv.eje[1];
+                mcv.eje[2] = MAT_Rotacion(nv, mcv.eje[0][0], mcv.eje[0][1], mcv.eje[0][2]) * mcv.eje[2];
+        }
 
         recalcularMatrMCV();
     }
@@ -203,6 +213,7 @@ void CamaraInteractiva::modoExaminar()
     // .....
 
     examinar = true;
+
 }
 // -----------------------------------------------------------------------------
 // pasa al modo primera persona
@@ -213,4 +224,9 @@ void CamaraInteractiva::modoPrimeraPersona()
     // .....
 
     examinar = false;
+}
+
+void CamaraInteractiva::modoPrimeraPersonaRotaciones()
+{
+    persona_rotaciones = !persona_rotaciones;
 }

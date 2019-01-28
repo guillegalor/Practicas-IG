@@ -232,7 +232,6 @@ void NodoGrafoEscena::calcularCentroOC()
     unsigned counter = 0;
 
     for (auto &entrada: entradas){
-        cerr << "Entrada numero: " << counter++ << " de " << leerNombre() << endl;
         switch(entrada.tipo) {
             case TipoEntNGE::objeto:
                 if (entrada.objeto->buscarObjeto(ident_busc, nueva_mmodelado, objeto, centro_wc)){
@@ -729,7 +728,15 @@ PeonNegro::PeonNegro(){
 
 EscenaP4::EscenaP4(){
     agregar(new Lata());
+
+    agregar(MAT_Escalado((float) 1/7,(float) 1/7,(float) 1/7));
+    agregar(MAT_Traslacion(0, 1, 12));
+    agregar(new Dado);
+    agregar(MAT_Traslacion(0, -1,-12));
+    agregar(MAT_Escalado((float) 7,(float) 7,(float) 7));
+
     agregar(MAT_Traslacion(0, 0.25, 1));
+
     agregar(MAT_Escalado((float) 1/5,(float) 1/5,(float) 1/5));
     agregar(new PeonMadera);
     agregar(MAT_Traslacion(3, 0, 0));
@@ -863,4 +870,12 @@ CuboColores::CuboColores(){
     agregar(new CaraFrente());
     agregar(new CaraAtras());
 
+}
+
+// EXAMEN P4
+
+Dado::Dado(){
+    ponerIdentificador(5);
+    agregar(new MaterialDadoP4);
+    agregar(new DadoP4());
 }

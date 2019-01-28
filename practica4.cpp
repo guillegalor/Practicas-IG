@@ -56,7 +56,7 @@ void P4_Inicializar(  )
     objetos4[0] = new EscenaP4();
     objetos4[1] = new Moneda();
     objetos4[2] = new Test(m);
-    objetos4[3] = new CuboColores;
+    objetos4[3] = new Dado;
 
     cout << "hecho." << endl << flush ;
 }
@@ -76,18 +76,18 @@ bool P4_FGE_PulsarTeclaCaracter( unsigned char tecla) {
 
     switch ( toupper( tecla ) ) {
         // Teclas ejercicios
-        case 'E':
-            m->aument();
-            res = true;
-            break;
-        case 'R':
-            m->reverse();
-            res = true;
-            break;
-        case 'Z':
-            f->posicion[1] += 0.5;
-            res = true;
-            break;
+        /* case 'E': */
+        /*     m->aument(); */
+        /*     res = true; */
+        /*     break; */
+        /* case 'R': */
+        /*     m->reverse(); */
+        /*     res = true; */
+        /*     break; */
+        /* case 'Z': */
+        /*     f->posicion[1] += 0.5; */
+        /*     res = true; */
+        /*     break; */
 
         // Teclas originales práctica
         case 'G' :

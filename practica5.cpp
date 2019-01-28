@@ -14,7 +14,7 @@
 
 using namespace std ;
 
-// TODO: práctica 5: declarar variables de la práctica 5 (static)
+// DONE: práctica 5: declarar variables de la práctica 5 (static)
 //    (escena, viewport, el vector de camaras, y las variables
 //      que sirven para gestionar el modo arrastrar)
 // ......
@@ -142,7 +142,7 @@ bool P5_FGE_PulsarTeclaCaracter(  unsigned char tecla )
             // DONE: práctica 5: desplazamiento en Z de la cámara actual (positivo) (desplaZ)
             // .....
 
-            camaras[camaraActiva5]->desplaZ(desp);
+            camaras[camaraActiva5]->desplaZ(-desp);
 
             break;
 
@@ -150,7 +150,7 @@ bool P5_FGE_PulsarTeclaCaracter(  unsigned char tecla )
             // DONE: práctica 5: desplazamiento en Z de la cámara actual (negativo) (desplaZ)
             // .....
 
-            camaras[camaraActiva5]->desplaZ(-desp);
+            camaras[camaraActiva5]->desplaZ(desp);
 
             break;
 
@@ -240,6 +240,7 @@ void P5_ClickIzquierdo( int x, int y )
         camaras[camaraActiva5]->modoExaminar(centro_wc);
         cout << "práctica 5: seleccionado objeto " << objeto->leerNombre()
             << " con centro " << centro_wc << endl;
+        if(ident == 5) std::cout << "bingo! has acertado en el dado" << std::endl;
     }
 
     else {
