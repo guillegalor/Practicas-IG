@@ -133,6 +133,9 @@ void poligonoNLados(int n);
 // Ejercicio 2 de teoría del examen
 void poligonos3_M(int m);
 
+// Ejercicio 3 de teoría del examen
+std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n);
+
 // EXAMEN P4
 class DadoP4 : public MallaInd{
     public:

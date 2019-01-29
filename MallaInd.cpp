@@ -601,17 +601,23 @@ void poligonos3_M(int m){
     // Fijar matriz de proyección
     glOrtho(-s/2, s/2, -1, 1, 3, 7);
 
-    /* // Está comentado ya que las variables ax y ay no las conocemos */
-    /* float x, y, ancho, alto; */
+    // Conseguir dimensiones del viewport
+    GLint m_viewport[4];
+    glGetIntegerv( GL_VIEWPORT, m_viewport );
 
-    /* ancho = min(ax, (1/ratio_yx) * ay); */
-    /* alto = min(ay, (ratio_yx) * ax); */
+    float x, y, ancho, alto, ax, ay;
 
-    /* x = (ax - ancho)/2; */
-    /* y = (ay - alto)/2; */
+    ax = m_viewport[2];
+    ay = m_viewport[3];
 
-    /* // Fijar viewport */
-    /* glViewport(x, y, ancho, alto); */
+    ancho = std::min(ax, (1/ratio_yx) * ay);
+    alto = std::min(ay, (ratio_yx) * ax);
+
+    x = (ax - ancho)/2;
+    y = (ay - alto)/2;
+
+    // Fijar viewport
+    glViewport(x, y, ancho, alto);
 
     // Translación inicial
     glTranslatef(-s/2 + 1, 0, 0);
@@ -625,6 +631,54 @@ void poligonos3_M(int m){
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
+}
+
+// Ejercicio 3 de teoría del examen
+std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n){
+    std::cout << n << std::endl;
+
+    std::vector<int> adyacencias[n];
+    std::vector<int> nva;
+    nva.resize(n, 0);
+
+    bool encontrado[3];
+    for (auto tri : triangulos){
+        encontrado[0] = encontrado[1] = encontrado[2] = false;
+
+        // Adyacencias vértice 0 con vértices 1 y 2
+        for (auto ady: adyacencias[tri[0]])
+            if (ady == tri[1])
+                encontrado[0] = true;
+            else if (ady == tri[2])
+                encontrado[1] = true;
+        if (!encontrado[0]){
+            adyacencias[tri[0]].push_back(tri[1]);
+            adyacencias[tri[1]].push_back(tri[0]);
+            nva[tri[0]]++;
+            nva[tri[1]]++;
+        }
+        if (!encontrado[1]){
+            adyacencias[tri[0]].push_back(tri[2]);
+            adyacencias[tri[2]].push_back(tri[0]);
+            nva[tri[0]]++;
+            nva[tri[2]]++;
+        }
+
+        // Adyacencia vértice 1 con vértice 2
+        for (auto ady: adyacencias[tri[1]])
+            if(ady == tri[2])
+                encontrado[2] = true;
+
+        if (!encontrado[2]){
+            adyacencias[tri[2]].push_back(tri[1]);
+            adyacencias[tri[1]].push_back(tri[2]);
+            nva[tri[2]]++;
+            nva[tri[1]]++;
+        }
+
+    }
+
+    return nva;
 }
 
 //-----------------------------------------------------------------------
