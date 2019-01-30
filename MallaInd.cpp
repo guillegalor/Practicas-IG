@@ -536,9 +536,7 @@ CaraAtras::CaraAtras(){
 
 //-----------------------------------------------------------------------
 // Ejercicio 1 de teoría del examen
-
 // n \in [3,128]
-
 void poligonoNLados(int n){
     std::vector<Tupla3f> vertices;
     float alpha = 360.0/n;
@@ -680,6 +678,23 @@ std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n){
 
     return nva;
 }
+
+// Ejercicio 4 de teoría del examen
+    /* glMatrixMode(GL_MODELVIEW); */
+    /* glPushMatrix(); */
+    /* glLoadIdentity(); */
+
+    /* // Fijar matriz de vista */
+    /* gluLookAt(0,0,d, 0,0,0, 0,1,0); */
+
+    /* glMatrixMode(GL_PROJECTION); */
+    /* glPushMatrix(); */
+    /* glLoadIdentity(); */
+    /* gluPerspective(2 * arcocotangente(d-1), 1, n, f) // n entre 0 y d-1, f entre d+1, y el infinito */
+
+    /* glPopMatrix(); */
+    /* glMatrixMode(GL_MODELVIEW); */
+    /* glPopMatrix(); */
 
 //-----------------------------------------------------------------------
 // Examen Prácticas P4
