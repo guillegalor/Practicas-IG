@@ -153,6 +153,10 @@ bool P5_FGE_PulsarTeclaCaracter(  unsigned char tecla )
             camaras[camaraActiva5]->desplaZ(desp);
 
             break;
+        // Examen Prácticas Ejercicio 2
+        case 'R':
+            camaras[camaraActiva5]->persona_rotaciones = !camaras[camaraActiva5]->persona_rotaciones;
+            break;
 
         default:
             result = false ;

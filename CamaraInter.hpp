@@ -37,7 +37,6 @@ class CamaraInteractiva : public Camara
 {
     public:
         bool    examinar; // modo: true --> examinar, false --> primera persona (inicialmente {\bf false})
-        bool    persona_rotaciones; // true-->primera persona con rotaciones, false viceversa
         bool    perspectiva ; // true --> camara perspectiva, false --> cámara ortográfica
         float   ratio_yx_vp;  // aspect ratio del viewport (alto/ancho)
         float   longi,     // en modo examinar: ángulo (en radianes) en torno al eje Y (longitud) (inic. 0)
@@ -46,6 +45,9 @@ class CamaraInteractiva : public Camara
         float   dist ,     // en modo examinar: distancia entre el punto de atención y el observador
                 hfov_grad, // para cámaras perspectiva: angulo de apertura horizontal
                 dx,dy ;    // desplazamientos 'subpixel' para antialiasing (0 por inicialmente)
+
+        // Examen Prácticas Ejercicio 2
+        bool    persona_rotaciones; // true--> primera persona con rotaciones, false --> primera persona sin rotaciones
 
         // constructor de cámaras interactivas, los parámetros son:
         //

@@ -149,6 +149,7 @@ void CamaraInteractiva::moverHV( float nh, float nv )
             aten(Y) += nv*udesp;
         }
         else{
+                // Examen Prácticas Ejercicio 2
                 mcv.eje[0] = MAT_Rotacion(nh, mcv.eje[1][0], mcv.eje[1][1], mcv.eje[1][2]) * mcv.eje[0];
                 mcv.eje[2] = MAT_Rotacion(nh, mcv.eje[1][0], mcv.eje[1][1], mcv.eje[1][2]) * mcv.eje[2];
 
