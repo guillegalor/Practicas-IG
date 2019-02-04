@@ -169,7 +169,7 @@ Cilindro::Cilindro( const unsigned num_verts_per,
 }
 
 // *****************************************************************************
-// Constructor para el cilindro
+// Constructor para el cilindroide
 
 Cilindroide::Cilindroide(
         const float rad_base_sup,

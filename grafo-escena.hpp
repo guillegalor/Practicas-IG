@@ -285,4 +285,31 @@ class Dado : public NodoGrafoEscena{
         Dado();
 };
 
+// Examen Prácticas
+
+class Arbusto : public NodoGrafoEscenaParam{
+
+    class Rama: public NodoGrafoEscena{
+        public:
+            Rama();
+            Matriz4f* getArticulacion();
+    };
+
+    class Rama1: public NodoGrafoEscena{
+        Matriz4f* articulaciones[3];
+
+        public:
+            Rama1();
+            /*
+             * 0 Articulación rama total
+             * 1 Articulación Tronco Arriba
+             * 2 Articulación Tronco Abajo
+             */
+            Matriz4f* getArticulacion(unsigned i);
+    };
+
+    public:
+        Arbusto();
+};
+
 #endif // GRAFO_ESCENA_HPP

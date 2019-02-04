@@ -13,11 +13,11 @@
 using namespace std ;
 
 static unsigned objetoActivo3 = 0 ; // objeto activo: muneco(0)
-static constexpr int numObjetos3 = 1 ;
+static constexpr int numObjetos3 = 2 ;
 static bool animaciones = false;
 static unsigned parametroActivo = 0;
 
-static NodoGrafoEscenaParam* objetos3[numObjetos3] = {nullptr};
+static NodoGrafoEscenaParam* objetos3[numObjetos3] = {nullptr, nullptr};
 
 // ---------------------------------------------------------------------
 // Función para implementar en la práctica 1 para inicialización.
@@ -29,6 +29,7 @@ void P3_Inicializar(  )
     cout << "Creando objetos de la práctica 3 .... " << flush ;
 
     objetos3[0] = new Muneco();
+    objetos3[1] = new Arbusto();
 
     cout << "hecho." << endl << flush ;
 }

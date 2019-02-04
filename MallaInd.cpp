@@ -580,6 +580,7 @@ void poligonoNLados(int n){
 }
 
 // Ejercicio 2 de teoría del examen
+// 3 <= m <= 128
 void poligonos3_M(int m){
     float s = (m-3)*2.3+2;
     float t = 2;

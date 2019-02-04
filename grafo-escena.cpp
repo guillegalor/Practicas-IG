@@ -879,3 +879,128 @@ Dado::Dado(){
     agregar(new MaterialDadoP4);
     agregar(new DadoP4());
 }
+
+// Examen Prácticas
+Arbusto::Rama::Rama(){
+    agregar(MAT_Ident());
+
+    agregar(new Esfera(20, 20, true, true, false));
+    agregar(MAT_Rotacion(-90, 0, 0, 1));
+    agregar(MAT_Escalado(0.5, 4, 0.5));
+    agregar(new Cilindro(2, 20, true, true, false));
+    agregar(MAT_Escalado(2, 1.0/4, 2));
+    agregar(MAT_Traslacion(0, 4, 0));
+    agregar(new Esfera(20, 20, true, true, false));
+}
+
+Matriz4f* Arbusto::Rama::getArticulacion(){
+    return leerPtrMatriz(0);
+}
+
+Arbusto::Rama1::Rama1(){
+    agregar(MAT_Ident());
+    articulaciones[0] = leerPtrMatriz(0);
+    agregar(new Rama());
+
+    agregar(MAT_Traslacion(4, 0, 0));
+    Rama* r1 = new Rama();
+    Rama* r2 = new Rama();
+    articulaciones[1] = r1->getArticulacion();
+    articulaciones[2] = r2->getArticulacion();
+    agregar(r1);
+    agregar(r2);
+}
+
+Matriz4f* Arbusto::Rama1::getArticulacion(unsigned i){
+    return articulaciones[i];
+}
+
+Arbusto::Arbusto(){
+    int i_rot_total;
+    Rama1* r11 = new Rama1();
+    Rama1* r12 = new Rama1();
+
+    i_rot_total = agregar(MAT_Ident());
+    agregar(new Rama());
+    agregar(MAT_Traslacion(4, 0, 0));
+    agregar(r11);
+    agregar(r12);
+
+    Parametro rot1(
+            "Rotación total",
+            leerPtrMatriz(i_rot_total),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            22,
+            22,
+            0.1
+    );
+
+    Parametro rot2(
+            "Rotación total",
+            r11->getArticulacion(0),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            22,
+            22,
+            0.1
+    );
+
+    Parametro rot3(
+            "Rotación total",
+            r11->getArticulacion(1),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            22,
+            22,
+            0.1
+    );
+
+    Parametro rot4(
+            "Rotación total",
+            r11->getArticulacion(2),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            67,
+            22,
+            0.1
+    );
+
+    Parametro rot5(
+            "Rotación total",
+            r12->getArticulacion(0),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            67,
+            22,
+            0.1
+    );
+
+    Parametro rot6(
+            "Rotación total",
+            r12->getArticulacion(1),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            22,
+            22,
+            0.1
+    );
+
+    Parametro rot7(
+            "Rotación total",
+            r12->getArticulacion(2),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            67,
+            22,
+            0.1
+    );
+
+    parametros.push_back(rot1);
+    parametros.push_back(rot2);
+    parametros.push_back(rot3);
+    parametros.push_back(rot4);
+    parametros.push_back(rot5);
+    parametros.push_back(rot6);
+    parametros.push_back(rot7);
+}
