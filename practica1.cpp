@@ -68,5 +68,6 @@ void P1_DibujarObjetos( ContextoVis & cv )
     /* objeto[objetoActivo]->visualizarGL(cv); */
     /* poligonos3_M(6); */
     /* dibujaTriRecursiva(4, -2, 2, -2, 2, 1); */
-    CilindroViewport(5, 3, 7);
+    /* CilindroViewport(5, 3, 7); */
+    dibujarCuadradosRecursivo(3, 0);
 }

@@ -774,6 +774,39 @@ void CilindroViewport(int d, int n, int f){
 /*     } */
 /* } */
 
+void figura_simple(int color){
+    if (color == 0)
+        glColor3f(1,0,0);
+    else
+        glColor3f(0,1,0);
+
+    glBegin(GL_POLYGON);
+    glVertex3f(0,0,0);
+    glVertex3f(1,0,0);
+    glVertex3f(1,1,0);
+    glVertex3f(0,1,0);
+    glEnd();
+}
+
+// Ejercicio 32 Relación
+void dibujarCuadradosRecursivo(int n, int color){
+    figura_simple(color);
+
+    if(n > 1){
+        glPushMatrix();
+        glTranslatef(1,0,0);
+        glScalef(0.5, 0.5, 1);
+        dibujarCuadradosRecursivo(n-1, 0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(1,0.5,0);
+        glScalef(0.5, 0.5, 1);
+        dibujarCuadradosRecursivo(n-1, 1);
+        glPopMatrix();
+    }
+}
+
 //-----------------------------------------------------------------------
 // Examen Grado 2016
 
