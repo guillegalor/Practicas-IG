@@ -324,9 +324,9 @@ Cubo::Cubo()
         for (j = 0; j < 2; ++j) {
             for (k = 0; k < 2; ++k) {
                 tabla_verts.push_back (Tupla3f (
-                            i,
-                            j,
-                            k)
+                            i-0.5,
+                            j-0.5,
+                            k-0.5)
                         );
             }
         }
@@ -681,21 +681,136 @@ std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n){
 }
 
 // Ejercicio 4 de teoría del examen
-    /* glMatrixMode(GL_MODELVIEW); */
-    /* glPushMatrix(); */
-    /* glLoadIdentity(); */
+void DibujaCuadrado(){
+    glBegin(GL_POLYGON);
+    glVertex3f(-1,-1,1);
+    glVertex3f(1,-1,1);
+    glVertex3f(1,1,1);
+    glVertex3f(-1,1,1);
+    glEnd();
+}
+void CilindroViewport(int d, int n, int f){
+    GLint m_viewport[4];
+    glGetIntegerv( GL_VIEWPORT, m_viewport );
+    float ratio_yx = 1.0;
+    float x, y, ancho, alto, ax, ay;
 
-    /* // Fijar matriz de vista */
-    /* gluLookAt(0,0,d, 0,0,0, 0,1,0); */
+    ax = m_viewport[2];
+    ay = m_viewport[3];
 
-    /* glMatrixMode(GL_PROJECTION); */
-    /* glPushMatrix(); */
-    /* glLoadIdentity(); */
-    /* gluPerspective(2 * arcocotangente(d-1), 1, n, f) // n entre 0 y d-1, f entre d+1, y el infinito */
+    ancho = std::min(ax, (1/ratio_yx) * ay);
+    alto = std::min(ay, (ratio_yx) * ax);
 
-    /* glPopMatrix(); */
-    /* glMatrixMode(GL_MODELVIEW); */
-    /* glPopMatrix(); */
+    x = (ax - ancho)/2;
+    y = (ay - alto)/2;
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    gluLookAt(0,0,d, 0,0,0, 0,1,0);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+
+    float alpha = 1.0 / (d-1);
+    gluPerspective(2* atan(alpha), 1, n,f );
+
+    glViewport(x,y,ancho,alto);
+
+    // Dibujamos un cuadrado de 1x1 en el plano z = 1 en lugar del cilindro
+    DibujaCuadrado();
+
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+}
+
+// Ejercicio 5 de teoría del examen
+/*
+ * a) x^2 + z^2 = 1
+ * b) t^2(vx^2 + vz^2) + 2t(ox*vx + oz*vz) + (ox^2 + oz^2) = 1
+ */
+// TODO No acabado
+/* void interseccionRectaCilindro(Tupla3f o, Tupla3f v, Tupla3f& Sp1, Tupla3f& Sp2 ){ */
+/*     float a, b, c; */
+/*     float t1, t2; */
+/*     Tupla3f aux; */
+
+/*     a = v(X)*v(X) + v(Z)*v(Z); */
+/*     b = 2*(o(X)*v(X) + o(Z)*v(Z)); */
+/*     c = o(X)*o(X) + o(Z)*o(Z); */
+
+/*     t1 = ( -b + std::sqrt(b*b - 4*a*c) )/(2*a); */
+/*     t2 = ( -b - std::sqrt(b*b - 4*a*c) )/(2*a); */
+
+/*     float t1x, t1y, t1z, t2x, t2y, t2z; */
+
+/*     t1x = o(X) + t1*v(X); */
+/*     t1y = o(Y) + t1*v(Y); */
+/*     t1z = o(Z) + t1*v(Z); */
+
+/*     t2x = o(X) + t2*v(X); */
+/*     t2y = o(Y) + t2*v(Y); */
+/*     t2z = o(Z) + t2*v(Z); */
+
+/*     if (t1y >= 0 && t1y <= 1){ */
+/*         Sp1(X) = t1x; */
+/*         Sp1(Y) = t1y; */
+/*         Sp1(Z) = t1z; */
+/*     } */
+
+/*     if (t2y >= 0 && t2y <= 1){ */
+/*         Sp2(X) = t2x; */
+/*         Sp2(Y) = t2y; */
+/*         Sp2(Z) = t2z; */
+/*     } */
+
+/*     if (t2 < t1){ */
+/*         aux = Sp1; */
+/*         Sp1 = Sp2; */
+/*         Sp2 = Sp1; */
+/*     } */
+/* } */
+
+//-----------------------------------------------------------------------
+// Examen Grado 2016
+
+void dibujarTriangulo(float xmin, float xmax, float ymin, float ymax, int color){
+    glBegin(GL_TRIANGLES);
+
+    switch (color) {
+        case 1:
+            glColor3f(1,0,0) ;
+            break;
+        case 2:
+            glColor3f(0,1,0) ;
+            break;
+        case 3:
+            glColor3f(0,0,1) ;
+            break;
+    };
+
+    glVertex3f(xmin, ymin, 0);
+    glVertex3f(xmax, ymin, 0);
+    glVertex3f(xmin, ymax, 0);
+
+    glEnd();
+}
+
+void dibujaTriRecursiva(unsigned n, float xmin, float xmax, float ymin, float ymax, int color){
+    if (n == 1)
+        dibujarTriangulo(xmin, xmax, ymin, ymax, color);
+    else{
+        float xmed = (xmax+xmin)/2.0;
+        float ymed = (ymax+ymin)/2.0;
+
+        dibujaTriRecursiva(n-1, xmin, xmed, ymin, ymed, 1);
+        dibujaTriRecursiva(n-1, xmin, xmed, ymed, ymax, 2);
+        dibujaTriRecursiva(n-1, xmed, xmax, ymed, ymax, 3);
+    }
+}
 
 //-----------------------------------------------------------------------
 // Examen Prácticas P4

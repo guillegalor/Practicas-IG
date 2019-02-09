@@ -312,4 +312,15 @@ class Arbusto : public NodoGrafoEscenaParam{
         Arbusto();
 };
 
+// Ejercicio Examen Grado
+
+class CamaraRotante : public NodoGrafoEscenaParam{
+    class Objetivo: public NodoGrafoEscena{
+        public:
+            Objetivo();
+    };
+    public:
+        CamaraRotante();
+};
+
 #endif // GRAFO_ESCENA_HPP

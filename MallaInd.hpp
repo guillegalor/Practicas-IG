@@ -9,6 +9,7 @@
 #define IG_MALLAIND_HPP
 
 #include <vector>          // usar std::vector
+// Ejercicios Prácticas
 
 #include "Objeto3D.hpp"   // declaración de 'Objeto3D'
 
@@ -135,6 +136,14 @@ void poligonos3_M(int m);
 
 // Ejercicio 3 de teoría del examen
 std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n);
+
+// Ejercicio 4 de teoría del examen
+void DibujaCuadrado();
+void CilindroViewport(int d, int n, int f);
+
+// Ejercicio Examen Grado 2016
+void dibujarTriangulo(float xmin, float xmax, float ymin, float ymax, int color);
+void dibujaTriRecursiva(unsigned n, float xmin, float xmax, float ymin, float ymax, int color);
 
 // EXAMEN P4
 class DadoP4 : public MallaInd{

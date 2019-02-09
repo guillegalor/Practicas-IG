@@ -29,7 +29,7 @@ void P3_Inicializar(  )
     cout << "Creando objetos de la práctica 3 .... " << flush ;
 
     objetos3[0] = new Muneco();
-    objetos3[1] = new Arbusto();
+    objetos3[1] = new CamaraRotante();
 
     cout << "hecho." << endl << flush ;
 }

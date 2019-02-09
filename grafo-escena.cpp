@@ -1004,3 +1004,53 @@ Arbusto::Arbusto(){
     parametros.push_back(rot6);
     parametros.push_back(rot7);
 }
+
+CamaraRotante::CamaraRotante(){
+    unsigned indices[4];
+
+    indices[0] = agregar(MAT_Ident());
+    agregar(MAT_Traslacion(5, 0 , 0));
+
+    agregar(MAT_Escalado(0.3, 2.5, 0.3));
+    agregar(new Cilindro(2, 20, true, true, true));
+    agregar(MAT_Escalado(1.0/0.3, 1.0/2.5, 1.0/0.3));
+
+    agregar(MAT_Traslacion(0, 2.5, 0));
+    indices[1] = agregar(MAT_Ident());
+    indices[2] = agregar(MAT_Ident());
+    agregar(new Objetivo());
+
+    Parametro traslacion_objetivo(
+            "Traslación objetivo",
+            leerPtrMatriz(indices[1]),
+            [=] (float v) {return MAT_Traslacion(0, v, 0);},
+            true,
+            0,
+            0.5,
+            0.1
+    );
+
+    Parametro rotacion_objetivo(
+            "Rotación objetivo",
+            leerPtrMatriz(indices[2]),
+            [=] (float v) {return MAT_Rotacion(v, 0, 0, 1);},
+            true,
+            0,
+            30,
+            0.1
+    );
+
+    parametros.push_back(traslacion_objetivo);
+    parametros.push_back(rotacion_objetivo);
+};
+
+CamaraRotante::Objetivo::Objetivo(){
+    agregar(MAT_Escalado(1.5, 1, 1));
+    agregar(new Cubo());
+    agregar(MAT_Escalado(1.0/1.5, 1, 1));
+
+    agregar(MAT_Traslacion(-1.25, 0, 0));
+    agregar(MAT_Escalado(1.5, 0.25, 0.25));
+    agregar(MAT_Rotacion(-90, 0, 0, 1));
+    agregar(new Cono(2, 20, true, true, true));
+}

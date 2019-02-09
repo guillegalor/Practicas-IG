@@ -15,8 +15,7 @@
 // ---------------------------------------------------------------------
 // clase para objetos gráficos genéricos
 
-class MallaRevol : public MallaInd
-{
+class MallaRevol : public MallaInd{
     protected:
         void crearMallaRevol(
                 const std::vector<Tupla3f> & perfil_original,
