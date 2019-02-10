@@ -34,29 +34,29 @@ void P4_Inicializar(  )
 {
     cout << "Creando objetos de la práctica 4 .... " << flush ;
 
-    m = new MaterialCambiante(
-            {0.314, 0.784, 0.471},
-            0.0,
-            0.6,
-            0.4,
-            10,
-            {1.0,1.0,1.0},
-            0.0,
-            1.0,
-            0.0,
-            1.0
-            );
+    /* m = new MaterialCambiante( */
+    /*         {0.314, 0.784, 0.471}, */
+    /*         0.0, */
+    /*         0.6, */
+    /*         0.4, */
+    /*         10, */
+    /*         {1.0,1.0,1.0}, */
+    /*         0.0, */
+    /*         1.0, */
+    /*         0.0, */
+    /*         1.0 */
+    /*         ); */
 
     f = new FuenteLuzPosicional({10,-10,10}, {0, 1, 0, 1});
 
-    /* p4_fuentes.insertar(new FuenteLuzDireccional(-10, 30, Tupla4f{1, 1, 1, 1})); */
-    /* p4_fuentes.insertar(new FuenteLuzPosicional({0, 20, 0}, Tupla4f{0.4, 0.4, 0.4, 1})); */
-    p4_fuentes.insertar(new FuenteLuzDireccional(0, 0, {1, 1, 1, 1}));
+    p4_fuentes.insertar(new FuenteLuzDireccional(-10, 30, Tupla4f{1, 1, 1, 1}));
+    p4_fuentes.insertar(new FuenteLuzPosicional({0, 20, 0}, Tupla4f{0.4, 0.4, 0.4, 1}));
+    /* p4_fuentes.insertar(new FuenteLuzDireccional(0, 0, {1, 1, 1, 1})); */
     /* p4_fuentes.insertar(f); */
     objetos4[0] = new EscenaP4();
-    objetos4[1] = new Moneda();
-    objetos4[2] = new Test(m);
-    objetos4[3] = new Dado;
+    /* objetos4[1] = new Moneda(); */
+    /* objetos4[2] = new Test(m); */
+    /* objetos4[3] = new Dado; */
 
     cout << "hecho." << endl << flush ;
 }

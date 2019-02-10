@@ -30,7 +30,7 @@ void P2_Inicializar(  )
     cout << "Creando objetos de la práctica 2 .... " << flush ;
 
     objetos2[0] = new MallaPLY("../plys/beethoven.ply");
-    objetos2[1] = new MallaRevolRegular(10, 0.5, 3, 5);
+    objetos2[1] = new Cilindro(2, 20, true, false, false);
 
     //testear color
     objetos2[0]->fijarColorNodo({0,1,1});

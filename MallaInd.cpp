@@ -847,7 +847,7 @@ void gancho()
         {0.0, 2.0}
     };
     // dibujar:
-    glEnableClienteState( GL_VERTEX_ARRAY );
+    glEnableClientState( GL_VERTEX_ARRAY );
     glVertexPointer( 2, GL_FLOAT, 0, vertices.data() );
     glDrawArrays( GL_LINE_STRIP, 0, vertices.size() );
     glDisableClientState( GL_VERTEX_ARRAY );
