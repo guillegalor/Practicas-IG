@@ -633,12 +633,10 @@ void poligonos3_M(int m){
 }
 
 // Ejercicio 3 de teoría del examen
-std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n){
-    std::cout << n << std::endl;
-
-    std::vector<int> adyacencias[n];
+std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n_vertices){
+    std::vector<int> adyacencias[n_vertices];
     std::vector<int> nva;
-    nva.resize(n, 0);
+    nva.resize(n_vertices, 0);
 
     bool encontrado[3];
     for (auto tri : triangulos){
@@ -680,15 +678,21 @@ std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n){
     return nva;
 }
 
+// Radianes a grados
+float rad_to_deg(float rad){
+    return 180*rad/M_PI;
+}
+
 // Ejercicio 4 de teoría del examen
-void DibujaCuadrado(){
-    glBegin(GL_POLYGON);
+void DibujaTriangulo(){
+    glColor3f(0,1,0);
+    glBegin(GL_TRIANGLES);
     glVertex3f(-1,-1,1);
     glVertex3f(1,-1,1);
-    glVertex3f(1,1,1);
-    glVertex3f(-1,1,1);
+    glVertex3f(0,1,1);
     glEnd();
 }
+
 void CilindroViewport(int d, int n, int f){
     GLint m_viewport[4];
     glGetIntegerv( GL_VIEWPORT, m_viewport );
@@ -715,12 +719,12 @@ void CilindroViewport(int d, int n, int f){
     glLoadIdentity();
 
     float alpha = 1.0 / (d-1);
-    gluPerspective(2* atan(alpha), 1, n,f );
+    gluPerspective(rad_to_deg(2* atan(alpha)), 1, n,f );
 
     glViewport(x,y,ancho,alto);
 
     // Dibujamos un cuadrado de 1x1 en el plano z = 1 en lugar del cilindro
-    DibujaCuadrado();
+    DibujaTriangulo();
 
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);

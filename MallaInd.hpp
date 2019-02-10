@@ -138,7 +138,7 @@ void poligonos3_M(int m);
 std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n);
 
 // Ejercicio 4 de teoría del examen
-void DibujaCuadrado();
+void DibujaTriangulo();
 void CilindroViewport(int d, int n, int f);
 
 // Ejercicio 5 Relación
