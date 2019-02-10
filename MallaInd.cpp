@@ -788,6 +788,37 @@ void figura_simple(int color){
     glEnd();
 }
 
+//-----------------------------------------------------------------------
+// Ejercicio 5 Relación
+void cuadradoBlancoFondoAzul(){
+    glClearColor(0, 0, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLint m_viewport[4];
+    glGetIntegerv( GL_VIEWPORT, m_viewport );
+    float ratio_yx = 1.0;
+    float x, y, ancho, alto, ax, ay;
+
+    ax = m_viewport[2];
+    ay = m_viewport[3];
+
+    ancho = std::min(ax, (1/ratio_yx) * ay);
+    alto = std::min(ay, (ratio_yx) * ax);
+
+    x = (ax - ancho)/2;
+    y = (ay - alto)/2;
+
+    glViewport(x,y,ancho,alto);
+
+    glColor3f(1, 1, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(-ancho/2, -alto/2, 0);
+    glVertex3f(ancho/2, -alto/2, 0);
+    glVertex3f(ancho/2, alto/2, 0);
+    glVertex3f(-ancho/2, alto/2, 0);
+    glEnd();
+}
+
 // Ejercicio 32 Relación
 void dibujarCuadradosRecursivo(int n, int color){
     figura_simple(color);

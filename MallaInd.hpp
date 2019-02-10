@@ -141,6 +141,9 @@ std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n);
 void DibujaCuadrado();
 void CilindroViewport(int d, int n, int f);
 
+// Ejercicio 5 Relación
+void cuadradoBlancoFondoAzul();
+
 // Ejercicio 32 Relación
 void figura_simple(int color);
 void dibujarCuadradosRecursivo(int n, int color);

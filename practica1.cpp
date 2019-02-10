@@ -69,5 +69,6 @@ void P1_DibujarObjetos( ContextoVis & cv )
     /* poligonos3_M(6); */
     /* dibujaTriRecursiva(4, -2, 2, -2, 2, 1); */
     /* CilindroViewport(5, 3, 7); */
-    dibujarCuadradosRecursivo(3, 0);
+    /* dibujarCuadradosRecursivo(3, 0); */
+    cuadradoBlancoFondoAzul();
 }
