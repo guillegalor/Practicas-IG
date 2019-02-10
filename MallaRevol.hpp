@@ -79,4 +79,16 @@ class Cono : public MallaRevol
                 const bool crear_texturas);
 };
 
+// *****************************************************************************
+// Parcial 1 Prácticas
+class MallaRevolRegular : public MallaRevol
+{
+    public:
+        MallaRevolRegular(
+        const unsigned nperfiles,
+        const float r1,
+        const float r2,
+        const float nlados);
+};
+
 #endif

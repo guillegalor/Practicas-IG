@@ -237,3 +237,27 @@ Esfera::Esfera( const unsigned num_verts_per,
     crearMallaRevol (perfil_original, crear_tapas, crear_tapas, crear_texturas);
     calcular_normales();
 }
+
+// *****************************************************************************
+// n >= 3
+MallaRevolRegular::MallaRevolRegular(
+        const unsigned nperfiles,
+        const float r1,
+        const float r2,
+        const float nlados)
+    : MallaRevol ("Toroide")
+{
+
+    std::vector<Tupla3f> perfil_original;
+
+    for (int i = 0; i <= nlados; ++i){
+        perfil_original.push_back(MAT_Rotacion(i*360.0/nlados, 0, 0, 1)*Tupla3f({r1, 0, 0}));
+    }
+
+    for (auto& vertice : perfil_original){
+        vertice = vertice + Tupla3f({r2, 0, 0});
+    }
+
+    nper = nperfiles;
+    crearMallaRevol (perfil_original, false, false, false);
+}
