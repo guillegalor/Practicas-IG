@@ -634,10 +634,22 @@ void poligonos3_M(int m){
 
 // Ejercicio 3 de teoría del examen
 std::vector<int> calculaAdyacencias(std::vector<Tupla3i> triangulos, int n_vertices){
+    /*
+     * Array de vectores, en el que el vector i-ésimo almacena
+     * el indice de los vertices adyancentes al vertice i-ésimo
+     */
     std::vector<int> adyacencias[n_vertices];
+    /*
+     * Vector que almacena el número de adyacencias de cada vértice
+     */
     std::vector<int> nva;
     nva.resize(n_vertices, 0);
 
+    /*
+     * Encontrado[0] == true si la adyacencia entre el 1er y el 2do vertice del triangulo ya estaba registrada
+     * Encontrado[1] == true si la adyacencia entre el 1er y el 3er vertice del triangulo ya estaba registrada
+     * Encontrado[2] == true si la adyacencia entre el 2do y el 3er vertice del triangulo ya estaba registrada
+     */
     bool encontrado[3];
     for (auto tri : triangulos){
         encontrado[0] = encontrado[1] = encontrado[2] = false;
@@ -821,6 +833,24 @@ void cuadradoBlancoFondoAzul(){
     glVertex3f(ancho/2, alto/2, 0);
     glVertex3f(-ancho/2, alto/2, 0);
     glEnd();
+}
+
+// Ejercicio 24 Relación
+void gancho()
+{
+    // definir vértices
+    const std::vector<Tupla2f> vertices =
+    {   {0.0, 0.0},
+        {1.0, 0.0},
+        {1.0, 1.0},
+        {0.0, 1.0},
+        {0.0, 2.0}
+    };
+    // dibujar:
+    glEnableClienteState( GL_VERTEX_ARRAY );
+    glVertexPointer( 2, GL_FLOAT, 0, vertices.data() );
+    glDrawArrays( GL_LINE_STRIP, 0, vertices.size() );
+    glDisableClientState( GL_VERTEX_ARRAY );
 }
 
 // Ejercicio 32 Relación
