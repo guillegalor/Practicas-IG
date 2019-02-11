@@ -92,7 +92,6 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
         switch (entradas[i].tipo) {
             case TipoEntNGE::objeto:
                 if (cv.modoSeleccionFBO && leerIdentificador() >= 0) {
-                    std::cout << "Fijando color con identificador "<< leerIdentificador() << std::endl;
                     FijarColorIdent(leerIdentificador());
                 }
                 entradas[i].objeto->visualizarGL (cv);

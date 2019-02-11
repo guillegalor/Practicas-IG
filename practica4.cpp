@@ -10,14 +10,20 @@
 #include "practicas.hpp"
 #include "practica3.hpp"
 #include "practica4.hpp"
+#include "exextr1819.hpp"
 
 using namespace std ;
 
 // DONE: práctica 4: declaración de variables de la práctica 4 (static)
 // ....
+
+// numero de filas y columnas
+static constexpr int nc = 3;
+static constexpr int nf = 3;
+
 static unsigned objetoActivo4 = 0 ; // objeto activo: muneco(0)
-static constexpr int numObjetos4 = 4 ;
-static NodoGrafoEscena* objetos4[numObjetos4] = {nullptr, nullptr, nullptr};
+static constexpr int numObjetos4 = 2 ;
+static NodoGrafoEscena* objetos4[numObjetos4] = {nullptr, nullptr};
 MaterialCambiante* m = nullptr;
 FuenteLuzPosicional* f = nullptr;
 
@@ -53,7 +59,8 @@ void P4_Inicializar(  )
     p4_fuentes.insertar(new FuenteLuzPosicional({0, 20, 0}, Tupla4f{0.4, 0.4, 0.4, 1}));
     /* p4_fuentes.insertar(new FuenteLuzDireccional(0, 0, {1, 1, 1, 1})); */
     /* p4_fuentes.insertar(f); */
-    objetos4[0] = new EscenaP4();
+    objetos4[0] = new PrismasP4(nf, nc);
+    objetos4[1] = new EscenaP4();
     /* objetos4[1] = new Moneda(); */
     /* objetos4[2] = new Test(m); */
     /* objetos4[3] = new Dado; */

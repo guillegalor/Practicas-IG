@@ -9,8 +9,13 @@
 #include "tuplasg.hpp"   // Tupla3f
 #include "practicas.hpp"
 #include "practica3.hpp"
+#include "exextr1819.hpp"
 
 using namespace std ;
+
+// numero de filas y columnas
+static constexpr int nc = 3;
+static constexpr int nf = 4;
 
 static unsigned objetoActivo3 = 0 ; // objeto activo: muneco(0)
 static constexpr int numObjetos3 = 2 ;
@@ -28,8 +33,8 @@ void P3_Inicializar(  )
 {
     cout << "Creando objetos de la práctica 3 .... " << flush ;
 
-    objetos3[0] = new Muneco();
-    objetos3[1] = new CamaraRotante();
+    objetos3[0] = new PrismasP3(nf, nc);
+    objetos3[1] = new Muneco();
 
     cout << "hecho." << endl << flush ;
 }

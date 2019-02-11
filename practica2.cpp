@@ -12,13 +12,14 @@
 #include "Objeto3D.hpp"
 #include "MallaPLY.hpp"
 #include "MallaRevol.hpp"
+#include "exextr1819.hpp"
 
 using namespace std ;
 
 static unsigned objetoActivo2 = 0 ; // objeto activo: malla ply (0), malla revol (1)
-static constexpr int numObjetos2 = 2 ;
+static constexpr int numObjetos2 = 3 ;
 
-static Objeto3D * objetos2[numObjetos2] = { nullptr, nullptr };
+static Objeto3D * objetos2[numObjetos2] = { nullptr, nullptr, nullptr };
 
 // ---------------------------------------------------------------------
 // Función para implementar en la práctica 1 para inicialización.
@@ -29,11 +30,12 @@ void P2_Inicializar(  )
 {
     cout << "Creando objetos de la práctica 2 .... " << flush ;
 
-    objetos2[0] = new MallaPLY("../plys/beethoven.ply");
-    objetos2[1] = new Cilindro(2, 20, true, false, false);
+    objetos2[0] = new PrismaRegP2(7);
+    objetos2[1] = new PrismaRegP2(8);
+    objetos2[2] = new Cilindro(2, 20, true, false, false);
 
     //testear color
-    objetos2[0]->fijarColorNodo({0,1,1});
+    objetos2[0]->fijarColorNodo({0,1,0});
 
     cout << "hecho." << endl << flush ;
 }

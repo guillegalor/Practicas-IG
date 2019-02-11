@@ -11,10 +11,11 @@
 #include "practica1.hpp"
 #include "Objeto3D.hpp"
 #include "MallaInd.hpp"
+#include "exextr1819.hpp"
 
 static unsigned      objetoActivo       = 0 ; // objeto activo: cubo (0), tetraedro (1), otros....
-static constexpr int numObjetos         = 2 ; // numero de objetos creados para esta práctica
-static Objeto3D *    objeto[numObjetos] = { nullptr, nullptr }; // punteros a los objetos
+static constexpr int numObjetos         = 4 ; // numero de objetos creados para esta práctica
+static Objeto3D *    objeto[numObjetos] = { nullptr, nullptr, nullptr, nullptr }; // punteros a los objetos
 
 using namespace std ;
 
@@ -27,8 +28,10 @@ void P1_Inicializar(  )
 {
     cout << "Creando objetos de la práctica 1 .... " << flush ;
 
-    objeto[0] = new Tetraedro();
-    objeto[1] = new Cubo();
+    objeto[0] = new PrismaRegP1(5);
+    objeto[1] = new PrismaRegP1(6);
+    objeto[2] = new Tetraedro();
+    objeto[3] = new Cubo();
 
     //testear color
     objeto[0]->fijarColorNodo({1,0,1});

@@ -540,6 +540,16 @@ void ColFuentesLuz::activar(unsigned id_prog)
         }
 }
 
+// ind entre 0 y max_num_fuentes
+void ColFuentesLuz::activarFuente(unsigned ind){
+    // Activa la iluminación
+    glEnable(GL_LIGHTING);
+    glEnable(GL_NORMALIZE);
+
+    vpf[ind]->activar();
+
+}
+
 //----------------------------------------------------------------------
 FuenteLuz * ColFuentesLuz::ptrFuente( unsigned i )
 {

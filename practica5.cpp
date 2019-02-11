@@ -11,6 +11,7 @@
 #include "practica5.hpp"
 #include "grafo-escena.hpp"
 #include "CamaraInter.hpp"
+#include "exextr1819.hpp"
 
 using namespace std ;
 
@@ -22,10 +23,14 @@ using namespace std ;
 // desplazamiento
 static constexpr int desp = 1;
 
+// numero de filas y columnas
+static constexpr int nc = 3;
+static constexpr int nf = 3;
+
 // escena (igual que en la p4)
 static unsigned objetoActivo5 = 0 ; // objeto activo: muneco(0)
-static constexpr int numObjetos5 = 1 ;
-static NodoGrafoEscena* objetos5[numObjetos5] = {nullptr};
+static constexpr int numObjetos5 = 2 ;
+static NodoGrafoEscena* objetos5[numObjetos5] = {nullptr, nullptr};
 
 ColFuentesLuz p5_fuentes;
 
@@ -50,7 +55,8 @@ void P5_Inicializar(  int vp_ancho, int vp_alto )
     cout << "Creando objetos de la práctica 5 .... " << flush ;
     // DONE: práctica 5: inicializar las variables de la práctica 5 (incluyendo el viewport)
 
-    objetos5[0] = new EscenaP4();
+    objetos5[0] = new PrismasP5(nf, nc);
+    objetos5[1] = new EscenaP4();
     p5_fuentes.insertar(new FuenteLuzPosicional({0, 0, -15}, Tupla4f{0.4, 0.4, 0.4, 1}));
     p5_fuentes.insertar(new FuenteLuzDireccional(-10, 30, Tupla4f{1, 1, 1, 1}));
 
@@ -244,12 +250,13 @@ void P5_ClickIzquierdo( int x, int y )
         camaras[camaraActiva5]->modoExaminar(centro_wc);
         cout << "práctica 5: seleccionado objeto " << objeto->leerNombre()
             << " con centro " << centro_wc << endl;
-        if(ident == 5) std::cout << "bingo! has acertado en el dado" << std::endl;
+        cout << "\nNumero de fila = " << (ident-1)/nc << "\nNumero de columna = " << (ident-1)%nc <<endl;
     }
 
     else {
         cerr << ident << endl;
         cout << "práctica 5: no se ha encontrado el objeto seleccionado" << endl;
+        cout << "práctica 5: ningun prisma seleccionado" << endl;
     }
 
 }
